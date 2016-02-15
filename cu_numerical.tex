@@ -1,8 +1,8 @@
 % !TEX root = ./amsa_main.tex
 \section{Numerical Experiments}\label{sec:numerical}
-We illustrate the behavior of coordinate update algorithms for solving portfolio optimization, image processing and machine learning problems. Our primary goal is to show the efficiency of coordinate update compared to the corresponding full update algorithms. We will also illustrate that asynchronous parallel coordinate update algorithms are more scalable than their synchronous parallel counterparts. 
+We illustrate the behavior of coordinate update algorithms for solving portfolio optimization, image processing, and machine learning problems. Our primary goal is to show the efficiency of coordinate update compared to the corresponding full update algorithms. We will also illustrate that asynchronous parallel coordinate update algorithms are more scalable than their synchronous parallel counterparts. 
 
-Our first two experiments run on Mac OSX 10.9 with 2.4 GHz Intel Core i5 and 8 Gigabytes of RAM. The experiments were coded in Matlab. The sparse logistic regression experiment run on 1 to 16 threads on a machine with two 2.5Ghz 10-core Intel Xeon E5-2670v2 (20 cores in total) and $64$ Gigabytes of RAM. The experiment was coded in C++ with OpenMP enabled. We use the Eigen library\footnote{\url{http://eigen.tuxfamily.org}} for sparse matrix operations.
+Our first two experiments run on Mac OSX 10.9 with 2.4 GHz Intel Core i5 and 8 Gigabytes of RAM. The experiments were coded in Matlab. The sparse logistic regression experiment runs on 1 to 16 threads on a machine with two 2.5Ghz 10-core Intel Xeon E5-2670v2 (20 cores in total) and $64$ Gigabytes of RAM. The experiment was coded in C++ with OpenMP enabled. We use the Eigen library\footnote{\url{http://eigen.tuxfamily.org}} for sparse matrix operations.
 
 \cut{\subsection{Least Square}\label{lsqexperiment2}
 In this subsection, we compare the efficiency of four different coordinate update schemes (cyclic, cyclic shuffle, random, and greedy with Gauss-Southwell rule) with the full gradient descent method for solving the least square problem
@@ -50,7 +50,7 @@ For both full gradient descent method and greedy coordinate update method with G
 
 
 \subsection{Portfolio Optimization}
-In this subsection, we compare the performance of the 3S splitting scheme \eqref{eq:3op-portfolio} with the corresponding coordinate update algorithm \eqref{eq:3op-portfolio2} for solving the portfolio optimization problem \eqref{eq:portfolio}. In this problem, our goal is to distribute our investment resources to all the assets so that the investment risk is minimized and the expected return is greater than $r$. This test uses two datasets, which are summarized in Table \ref{tab:3s-data}. The NASDAQ dataset is collected through Yahoo! Finance. We collected one year (from 10/31/2014 to 10/31/2015) of historical closing prices for 2730 stocks. 
+In this subsection, we compare the performance of the 3S splitting scheme~\eqref{eq:3op-portfolio} with the corresponding coordinate update algorithm~\eqref{eq:3op-portfolio2} for solving the portfolio optimization problem \eqref{eq:portfolio}. In this problem, our goal is to distribute our investment resources to all the assets so that the investment risk is minimized and the expected return is greater than $r$. This test uses two datasets, which are summarized in Table \ref{tab:3s-data}. The NASDAQ dataset is collected through Yahoo! Finance. We collected one year (from 10/31/2014 to 10/31/2015) of historical closing prices for 2730 stocks. 
 
 \begin{table}[htbp]
 \centering
@@ -81,7 +81,7 @@ In our numerical experiments, for comparison purposes, we first obtain a high ac
         \caption{NASDAQ dataset}
         \label{fig:a}
     \end{subfigure} %
-    \caption{Compare the convergence of 3S full update with 3S coordinate update algorithm.}
+    \caption{Compare the convergence of 3S full update with 3S coordinate update algorithms.}
     \label{fig:3s_results}
 \end{figure}
 
@@ -123,7 +123,7 @@ We compare the performance of algorithm~\eqref{eqn:pd_tvl2} and its correspondin
 
 
 \subsection{$\ell_1$ Regularized Logistic Regression}
-In this subsection, we compare the performance of sync-parallel coordinate update with the async-parallel coordinate update for solving the sparse logistic regression problem 
+In this subsection, we compare the performance of sync-parallel coordinate update and the async-parallel coordinate update for solving the sparse logistic regression problem 
 \begin{equation}\label{eqn:log}
 \Min_{x \in \mathbb{R}^n} \lambda \|x\|_1 + \frac{1}{N} \sum_{i=1}^N \log\big(1 + \exp(-b_i \cdot a_i^{\top} x)\big),
 \end{equation}
@@ -142,7 +142,7 @@ where $\{(a_i, b_i)\}_{i=1}^N$ is the set of sample-label pairs with $b_i \in \{
  \end{tabular}
 \end{table}
 
-We let each coordinate hold roughly 50 features. {Since the total number of features is not divisible by 50, some coordinates have 51 features.} We let each thread draw a coordinate uniformly at random at each iteration. We stop all the tests after 10 epochs since they have nearly identical progress per iteration. %The size of the block of coordinates is set to 50. In each iteration, each core randomly draws a block and updates it.
+We let each coordinate hold roughly 50 features. {Since the total number of features is not divisible by 50, some coordinates have 51 features.} We let each thread draw a coordinate uniformly at random at each iteration. We stop all the tests after 10 epochs since they have nearly identical progress per epoch. %The size of the block of coordinates is set to 50. In each iteration, each core randomly draws a block and updates it.
 The step size is set to $\eta_k=0.9,\,\forall k$. Let $A = [a_1, \ldots, a_N]^{\top}$ and $b = [b_1, ..., b_N]^{\top}$. In global memory, we store $A, b$ and $x$. We also store the product $Ax$ in global memory so that the forward step can be efficiently computed. Whenever a coordinate of $x$ gets updated, $Ax$ is immediately updated at a low cost. Note that if $Ax$ is \emph{not} stored in global memory, every coordinate update will have to compute $Ax$ from scratch, which involves the entire $x$ and will be very expensive.  %Note that the renewal of $Ax$ can be computed  efficiently, and it enables ARock to have the same per epoch computational complexity as that of the sequential FBS.
 
 Table \ref{tab:log_time} gives the running times of  the sync-parallel and async-parallel implementations on the two datasets. We can observe that async-parallel achieves almost-linear speedup, but sync-parallel scales very poorly as we explain below.

@@ -1,20 +1,20 @@
 \subsubsection{3D Mesh Denoising}
 Follow an example in~\cite{repetti2015random}, we consider a 3D mesh described by their nodes $\bar{x}_i=(\bar{x}_i^X,\bar{x}_i^Y,\bar{x}_i^Z), i=1,2,...,n$, and the adjacency matrix $A\in\mathbb{R}^{n\times n}$. We let $\cV_i$  be the set of neighbours of node $i$. Noisy mesh nodes $z_i, i=1,2,...,n$  with the same adjacency matrix $A$ are observed. We try to recover the original mesh nodes by solving the following optimization problem \cite{repetti2015random}:
 \begin{equation}
-\text{minimize} ~\sum_{i=1}^n f_i(x_i)+\sum_{i=1}^n g_i(x_i)+\sum_{i,j:j\in \cV_{i}} h_{i,j}(x_{i}-x_{j}),
+\Min_{x} ~\sum_{i=1}^n f_i(x_i)+\sum_{i=1}^n g_i(x_i)+\sum_{i,j:j\in \cV_{i}} h_{i,j}(x_{i}-x_{j}),
 \end{equation}
-where $f_i$'s are differentiable data fidelity terms, $g_i$'s are box constraints, and $\sum_{i,j:j\in \cV_{i}} h_{i,j}(x_{i}-x_{j})$ is the total variation.
+where $f_i$'s are differentiable data fidelity terms, $g_i$'s are box constraints, and $\sum_{i,j:j\in \cV_{i}} h_{i,j}(x_{i}-x_{j})$ is the total variation on the mesh.
 
-We introduce a dual variable $s$ with coordinates $s_{i,j}$, for all (ordered) pairs of adjacent nodes $(i,j)$, and, based on the overlapping-block coordinate updating scheme $\eqref{pdoverlap}$, perform coordinate update:
+We introduce a dual variable $s$ with coordinates $s_{i,j}$, for all ordered pairs of adjacent nodes $(i,j)$, and, based on the overlapping-block coordinate updating scheme $\eqref{pdoverlap}$, perform coordinate update:
 \begin{equation}
 \left\{
 \begin{array}{l}
 \text{when }x_i\text{ is chosen, compute}\\
-\qquad \tilde{s}_{i,j}^{k+1}=\prox_{\gamma h_{i,j}^*} (s_{i,j}^k+\gamma x_i^k-\gamma x_j^k),\forall j\in\cV_i\\
-\qquad \tilde{s}_{j,i}^{k+1}=\prox_{\gamma h_{j,i}^*} (s_{j,i}^k+\gamma x_j^k-\gamma x_i^k),\forall j\in\cV_i\\
+\qquad \tilde{s}_{i,j}^{k+1}=\prox_{\gamma h_{i,j}^*} (s_{i,j}^k+\gamma x_i^k-\gamma x_j^k),\forall j\in\cV_i,\\
+\qquad \tilde{s}_{j,i}^{k+1}=\prox_{\gamma h_{j,i}^*} (s_{j,i}^k+\gamma x_j^k-\gamma x_i^k),\forall j\in\cV_i,\\
 \qquad \textnormal{and update}\\
 \qquad {x_i}^{k+1}=\prox_{\eta g_i}(x_i^k-\eta(\nabla f_i(x_i^k)+\sum_{j\in\cV_i}(2\tilde{s}_{i,j}^{k+1}-2\tilde{s}_{j,i}^{k+1}-s_{i,j}^k+{s}_{j,i}^{k}))),\\
-\qquad s_{i,j}^{k+1}=s_{i,j}^k+\frac{1}{2}(\tilde{s}_{i,j}^{k+1}-s_{i,j}^k),\forall j\in\cV_i\\
+\qquad s_{i,j}^{k+1}=s_{i,j}^k+\frac{1}{2}(\tilde{s}_{i,j}^{k+1}-s_{i,j}^k),\forall j\in\cV_i,\\
 \qquad s_{j,i}^{k+1}=s_{j,i}^k+\frac{1}{2}(\tilde{s}_{j,i}^{k+1}-s_{j,i}^k),\forall j\in\cV_i.
 \end{array}
 \right.\nonumber

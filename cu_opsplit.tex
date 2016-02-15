@@ -1,9 +1,9 @@
 % !TEX root = ./amsa_main.tex
 \subsection{Operator Splitting Schemes}\label{sec:splitting}
-Before we apply our discussions above to operator splitting schemes for new algorithms, we review several major operator splitting schemes and discuss their CF properties by using the results from \S\ref{sc:comb}. For basic operator concepts like monotonicity and cocoercivity, please refer to Appendix \ref{sec:op-concept}. The definitions of resolvent and reflective-resolvent operators $\cJ_{\cA}$ and $\cR_{\cA}$ are also given there, in \eqref{def-resolvent} and \eqref{def-ref} respectively. \cut{The coordinate update methods we propose, based on operator splitting schemes, all have convergence guarantee, at least for async-parallel (thus also stochastic) update \cite{Peng_2015_AROCK}. However, naively extending existing convergent algorithms to coordinate update schemes may result in divergence or wrong solutions; see also Appendix  \ref{sec:op-concept} for a counterexample.}  %goes over the definitions and properties of operators that are used to build  and ensure their convergence.
+Before we apply our discussions above to operator splitting schemes for new algorithms, we review several major operator splitting schemes and discuss their CF properties by using the results from \S\ref{sc:comb}. For basic operator concepts like monotonicity and cocoercivity, please refer to Appendix \ref{sec:op-concept}. The definitions of resolvent and reflective-resolvent operators $\cJ_{\cA}$ and $\cR_{\cA}$ are also given there, in~\eqref{def-resolvent} and~\eqref{def-ref}, respectively. \cut{The coordinate update methods we propose, based on operator splitting schemes, all have convergence guarantee, at least for async-parallel (thus also stochastic) update \cite{Peng_2015_AROCK}. However, naively extending existing convergent algorithms to coordinate update schemes may result in divergence or wrong solutions; see also Appendix  \ref{sec:op-concept} for a counterexample.}  %goes over the definitions and properties of operators that are used to build  and ensure their convergence.
 
 Consider the following problem: given three operators $\cA,\cB,\cC$, possibly set-valued,  \begin{equation}\label{eqn:3s_problem}
-\text{find } x \in \HH \qquad \text{ such that }  \qquad 0 \in \cA x + \cB x +\cC x,
+\text{find } x \in \HH \qquad \text{ such that }  \qquad 0 \in \cA x + \cB x +\cC x.
 \end{equation}
 This is a high-level abstraction of many problems. The study began in the 1960s, and since then a large number of algorithms and applications have been introduced. We review a few general methods in this subsection.
 
@@ -30,15 +30,15 @@ for solving the problem $0\in\cB x+\cC x$. When $\cA=\cB$, $\TFBS$ and $\TBFS$ a
 \textbf{Douglas-Rachford Splitting (DRS):} Letting $\cC=0$, $\TS$ reduces to 
   \begin{equation}\label{eq:DRS}\TDRS:=\cI-\cJ_{\gamma \cB}+\cJ_{\gamma\cA}\circ(2\cJ_{\gamma \cB}-\cI)=\frac{1}{2}(\cI+\cR_{\gamma\cA}\circ \cR_{\gamma\cB})
   \end{equation}
-introduced in \cite{douglas1956DRS} for solving the problem $0\in\cA x+\cB x$. A more general splitting is the  relaxed Peaceman-Rachford splitting (RPRS) with $\lambda\in[0,1]$:
+introduced in \cite{douglas1956DRS} for solving the problem $0\in\cA x+\cB x$. A more general splitting is the  Relaxed Peaceman-Rachford Splitting (RPRS) with $\lambda\in[0,1]$:
  \begin{equation}
 \cT_{\text{RPRS}} = (1 - \lambda)\, \cI + \lambda \, \cR_{\gamma \cA} \circ \cR_{\gamma \cB},
 \end{equation}
-which recovers $\TDRS$ by setting $\lambda=\frac{1}{2}$ and Peaceman-Rachford splitting (PRS) \cite{peaceman1955PRS} by $\lambda=1$.
+which recovers $\TDRS$ by setting $\lambda=\frac{1}{2}$ and Peaceman-Rachford Splitting (PRS) \cite{peaceman1955PRS} by $\lambda=1$.
 
-\textbf{Forward-Douglas-Rachford Splitting (FDRS):} Let $V$ be  a linear subspace, and $\cN_V$ and $\cP_V$ be the normal cone and projection operators, respectively. Letting $\cB=\cN_V$ and $\cC=\cP_V\circ\tilde{\cC}\circ\cP_V$, $\TS$ reduces to
- $$\TFDRS=\cI-\cP_V+\cJ_{\gamma\cA}\circ(2\cP_V-\cI-\gamma \cP_V\circ\tilde{\cC}\circ\cP_V)$$
-introduced in \cite{briceno2015FDRS} for solving the problem $0\in\cA\,x+\tilde{\cC}\,x+\cN_V\,x$.
+\textbf{Forward-Douglas-Rachford Splitting (FDRS):} Let $V$ be  a linear subspace, and $\cN_V$ and $\cP_V$ be the normal cone and projection operator, respectively. The FDRS~\cite{briceno2015FDRS} 
+ $$\TFDRS=\cI-\cP_V+\cJ_{\gamma\cA}\circ(2\cP_V-\cI-\gamma \cP_V\circ\tilde{\cC}\circ\cP_V),$$
+aims at finding a $x$ such that $0\in\cA\,x+\tilde{\cC}\,x+\cN_V\,x$. If an optimal $x$ exists, we have $x\in V$ and $\cN_Vx$ is the orthogonal complement of $V$. Therefore, the problem is equivalent to finding $x$ such that $0\in\cA\,x+\cP_V\circ\tilde{\cC}\circ\cP_V\,x+\cN_V\,x$. Thus, $\TS$ recovers $\TFDRS$ by letting $\cB=\cN_V$ and $\cC=\cP_V\circ\tilde{\cC}\circ\cP_V$.
 
 \textbf{Forward-Backward-Forward Splitting (FBFS):} Composing $\TFBS$ with one more forward step gives $\TFBFS$ introduced in \cite{FBF_Tseng}:
 \begin{align}\label{eqn:fbf}
@@ -79,7 +79,7 @@ If $\nabla f$ is CF and $\prox_{\gamma g}$ is (nearly-)separable (e.g., $g(x)=\|
 %\end{example}
 
 \DIFdelbegin %DIFDELCMD < \begin{example}[ADMM]%%%
-\DIFdelend \DIFaddbegin \begin{example}[alternating direction method of multipliers (ADMM)]\DIFaddend \label{alg:admm} Setting $X=\RR^m$ simplifies \eqref{eq:opt-example} to 
+\DIFdelend \DIFaddbegin \begin{example}[Alternating Direction Method of Multipliers (ADMM)]\DIFaddend \label{alg:admm} Setting $X=\RR^m$ simplifies \eqref{eq:opt-example} to 
 \begin{equation}\label{eq:compx-y}
 \Min_{x,y}~f(x)+g(y),\quad\St~ x-y=0.
 \end{equation} 
@@ -92,12 +92,12 @@ The ADMM method iterates:
 &s^{k+1}=s^k+\frac{1}{\gamma}(x^{k+1}-y^{k+1}).
 \end{align}
 \end{subequations}
-(The iterations can be generalized to handle the constraints $Ax-By=b$.) The dual problem of \eqref{eq:compx-y} is $\min_s f^*(-s)+g^*(s)$, where $f^*$ is the convex conjugate of $f$. Letting $\cA=-\partial f^*(-\cdot)$ and $\cB=\partial g^*$ in \eqref{eq:DRS} recovers the iteration  \eqref{eq:admmx-y} through (see the derivation in Appendix \ref{sec:drs-admm})
+(The iteration can be generalized to handle the constraint $Ax-By=b$.) The dual problem of \eqref{eq:compx-y} is $\min_s f^*(-s)+g^*(s)$, where $f^*$ is the convex conjugate of $f$. Letting $\cA=-\partial f^*(-\cdot)$ and $\cB=\partial g^*$ in \eqref{eq:DRS} recovers the iteration  \eqref{eq:admmx-y} through (see the derivation in Appendix \ref{sec:drs-admm})
 \begin{align*}
 %&s^k=\cJ_{\gamma \cB}(t^k),\\
 &t^{k+1}=\TDRS(t^k)=t^k-\cJ_{\gamma \cB}(t^k)+\cJ_{\gamma\cA}\circ(2\cJ_{\gamma \cB}-\cI)(t^k).
 \end{align*}  %If $\prox_{\gamma f}$ is easy-to-compute, and $\prox_{\gamma g}$ is separable, then the ADMM iteration  is CF.
-From the results in \S\ref{sc:comb}, a sufficient condition for the above iteration to be CF is that $\cJ_{\gamma\cA}$ is (nearly-)separable and $\cT_{\gamma\cB}$ being CF. 
+From the results in \S\ref{sc:comb}, a sufficient condition for the above iteration to be CF is that $\cJ_{\gamma\cA}$ is (nearly-)separable and $\cJ_{\gamma\cB}$ being CF. 
 \end{example}
 
 

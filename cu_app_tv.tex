@@ -18,9 +18,12 @@ We consider the following Total Variation (TV) image processing model
 \Min_{x}~\lambda \|x\|_{\text{TV}} + \frac{1}{2} \|A\,x - b\|^2,
 \end{equation}
 where $x\in \RR^n$ is the vector representation of the unknown image, $A$ is an $m \times n$ matrix describing the transformation from the image to the measurements, and $b \in \RR^m$ is the given measurements with noise. Let $(\nabla_i^h,\nabla_i^v)$ be the discrete gradient at pixel $i$. Then the TV semi-norm $\|\cdot\|_{\text{TV}}$ in the isotropic and anisotropic fashions are, respectively,
-\begin{equation}
-\|x\|_{\text{TV}} = {\sum_{i} \sqrt{(\nabla_i^h x)^2 + (\nabla_i^v x)^2},}\quad  \| {x\|_{\text{TV}} = \|} \nabla x\|_1 = \sum_{i} \left(|\nabla_i^h x| + |\nabla_i^v x|\right).
-\end{equation}
+\begin{subequations}
+\begin{align}
+\|x\|_{\text{TV}} &= {\sum_{i} \sqrt{(\nabla_i^h x)^2 + (\nabla_i^v x)^2},}\\
+  \| x\|_{\text{TV}} &= \| \nabla x\|_1 = \sum_{i} \left(|\nabla_i^h x| + |\nabla_i^v x|\right).
+	\end{align}
+\end{subequations}
 %DIF >  or in the anisotropic fashion
 %DIF >  \begin{equation}
 %DIF >  \|x\|_{\text{TV}} = \|\nabla x\|_1 = \sum_{i} \left(|\nabla_i^h x| + |\nabla_i^v x|\right).
@@ -38,14 +41,14 @@ where $x\in \RR^n$ is the vector representation of the unknown image, $A$ is an 
 %
 %
 %Let $x \in \RR^n$ be the vector representation of the unknown image and $b \in \RR^m$ be the given measurements. Here $A$ is a $m \times n$ matrix describing the direct transformation from the image to the measurements. 
-{Consider applications in which $A$ is a sparse matrix. For example, in CT image reconstruction, $A$ models the discrete Radon transform. Each row describes an line integral, and as each line  only intersects with  a few pixels, there are many non-zeros in each row. For image deblurring, $A$ models a convolution kernel, and each row is sparse if the size of the kernel is small. 
+{Consider applications in which $A$ is a sparse matrix. For example, in CT image reconstruction, $A$ models the discrete Radon transform. Each row describes a line integral, and as each line  only intersects with  a few pixels, there are many zeros in each row. For image deblurring, $A$ models a convolution kernel, and each row is sparse if the size of the kernel is small. 
 %$A$ depends on the imaging modality used; for example, in Computed Tomography (CT), $A$ is the discrete Radon transform, with each row describing an integral along one straight line, and all the elements in $A$ are nonnegative. 
 
 For simplicity, we use the anisotropic TV for analysis and in the numerical experiment in \S~\ref{sec:tv}. It is {slightly more complicated for the isotropic TV. Introducing the following notation:
 $$B \DIFaddbegin \DIFadd{:}\DIFaddend = \begin{pmatrix} \nabla \\ A \end{pmatrix}, \quad h (p, q) \DIFaddbegin \DIFadd{:}\DIFaddend = \lambda \|p\|_1 + \frac{1}{2} \|q - b\|^2, $$
  {we can reformulate }\eqref{eqn:tvl2} \DIFaddend as
-$$\Min_x ~ h(B\,x) = h(\nabla x, A \, x)，$$
-which {reduces to the form of~\eqref{pdproblem} with $f=g=0$. Based on its definition, the convex conjugate and proximal operator of $h(p, q)$ are, respectively, 
+$$\Min_x ~ h(B\,x) = h(\nabla x, A \, x),$$
+which {reduces to the form of~\eqref{pdproblem} with $f=g=0$. Based on its definition, the convex conjugate of $h(p, q)$ and its proximal operator are, respectively, 
 \begin{align}
 h^* (s, t) &= \iota_{\|\cdot\|_{\infty} \leq \lambda} (s) + \frac{1}{2} \|t + b\|^2 - \frac{1}{2} \|b\|^2, \\
 \prox_{\gamma h^*} (s, t) &= \prj_{\|\cdot\|_{\infty} \leq \lambda} (s) + \frac{1}{1 + \gamma} (t - \gamma b). 

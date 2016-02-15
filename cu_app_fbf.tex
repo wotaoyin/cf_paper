@@ -19,19 +19,19 @@ I & -e & 0
 x\\
 y\\
 s
-\end{bmatrix}}_{\mbox{operator}~\cC}
+\end{bmatrix}}_{\mbox{operator}~\cC}.
 \end{equation}
 
 Applying the FBFS scheme \eqref{eqn:fbf} to~\eqref{pro:decentral} yields the following full update:
 \begin{subequations}
 \begin{align}
-x_i^{k+1} &= \prox_{\gamma f_i}(x_i^k-\gamma s_i^k)+\gamma^2 x_i^{k}-\gamma^2 y^k-2\gamma s_i^k \label{fbfs_a} \\
+x_i^{k+1} &= \prox_{\gamma f_i}(x_i^k-\gamma s_i^k)+\gamma^2 x_i^{k}-\gamma^2 y^k-2\gamma s_i^k, \label{fbfs_a} \\
 y^{k+1} &= (1+m\gamma^2)y^k +3\gamma \sum_j s_j^k -\gamma^2 \sum_jx_j^k,\\
 s_i^{k+1} &= s_i^k-2\gamma x_i^k-\gamma \prox_{\gamma f_i}(x_i^k-\gamma s_i^k)+3\gamma y^k+ \gamma^2 \sum_js_j^k, \label{fbfs_c}
 \end{align}
 \end{subequations}
 {where }\eqref{fbfs_a} {and }\eqref{fbfs_c} {are applied to all $i=1,\ldots,m$.
-Hence, for each $i$, } we group  $x_i$ and $s_i$ together and assign them on agent $i$.  {We let the master agent } maintain $\sum_j s_j$ and $\sum_j x_j$. Therefore, {in the FBFS coordinate update, updating any $(x_i,s_i)$ needs only $y$ and $\sum_j s_j$ from the master agent, and updating $y$ is done on the master node.
+Hence, for each $i$, } we group  $x_i$ and $s_i$ together and assign them on agent $i$.  {We let the master agent } maintain $\sum_j s_j$ and $\sum_j x_j$. Therefore, {in the FBFS coordinate update, updating any $(x_i,s_i)$ needs only $y$ and $\sum_j s_j$ from the master agent, and updating $y$ is done on the master agent.
 
 %can consider $(x_i,s_i)$ as one coordinate and store each pair of such variables on one agent. Updating $(x_i,s_i)$ will need the latest value of $y$ from the master node only, and updating $y$ will need the latest values all  $(x_i,y_i)$ from all the agents. However, the information needed is just the summation of $x_i$ and $s_i$, which is easy to update. 
 

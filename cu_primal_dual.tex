@@ -4,7 +4,7 @@
 \begin{equation}
 \underset{x\in\mathbb{H}}{\text{\normalfont minimize }} f(x)+g(x)+h(Ax),\label{pdproblem}
 \end{equation}
-{with primal-dual splitting algorithms and its coordinate updates, where $f$ is differentiable %, $g$ and $h$ are possibly nondifferentiable, 
+{with primal-dual splitting algorithms and their coordinate updates, where $f$ is differentiable %, $g$ and $h$ are possibly nondifferentiable, 
 and $A$ is a ``$p$-by-$m$" linear operator from $\mathbb{H}=\HH_1\times\cdots\times\HH_m$ to $\mathbb{G}=\GG_1\times\cdots\times\GG_p$.
 %$\Box$ is the infimal convolution operator defined as $(h\Box l)(y)=\inf_{z\in\GG} h(z)+l(y-z)$. 
 \cut{[do we mention saddle-point and VI at the end of this section?]} Problem~\eqref{pdproblem} abstracts many applications in image processing and machine learning.
@@ -18,7 +18,7 @@ which can be written in the form of $\eqref{pdproblem}$ with $f=\frac{1}{2}\|B\c
 More examples with formulation \eqref{pdproblem} will be given in \S\ref{sec:emp}. %Definitions and examples are given in the subsection $\ref{sec:emp}$. 
 In general, primal-dual methods are capable of solving complicated problems involving constraints and the compositions of proximable and linear maps.
 
-In many applications, although $h$ is  proximable, $h\circ A$  is generally non-proximable and non-differentiable. To avoid using the slow subgradient method,  we can consider the  primal-dual splitting approaches to separate $h$ and $A$ so that $\prox_{h}$ can be applied. 
+In many applications, although $h$ is  proximable, $h\circ A$  is generally non-proximable and non-differentiable. To avoid using slow subgradient methods,  we can consider the  primal-dual splitting approaches to separate $h$ and $A$ so that $\prox_{h}$ can be applied. 
 %From the given examples, we can see in many applications $h$ is not differentiable. In that case, it is also hard to evaluate the proximal operator of $h\circ A$. We need to find a way to separate $h$ and $A$. 
 \cut{
 The first approach is \emph{variable splitting}: first rewrite the problem~\eqref{pdproblem} as $$\Min_{x,y}\, f(x)+g(x)+h(y),\quad \St~ y=Ax,$$ and then apply ADMM~\eqref{eq:admmx-y}. The $y$-subproblem of ADMM reduces to computing $\prox_{h}$. The $x$-subproblem of ADMM has the form 
@@ -39,12 +39,12 @@ Introducing the dual variable $s\in\mathbb{G}$ and applying the biconjugation pr
 %and use the property $s\in \partial h\Box\partial l)\circ Ax\Leftrightarrow Ax\in \partial h^*(s)+\partial l^*(s)$ and $l^*$ is %differentiable
 \begin{equation}
 0\in\bigg(\underbrace{\begin{bmatrix}
-\nabla f(x)\\
+\nabla f\\
 0
 \end{bmatrix}}_{\mbox{operator}~\cA}+\underbrace{
 \begin{bmatrix}
-\partial g(x)\\
-\partial h^*(s)
+\partial g\\
+\partial h^*
 \end{bmatrix}+\begin{bmatrix}
 0&A^\top\\
 -A&0
@@ -97,7 +97,7 @@ x^{k+1}=\prox_{\eta g}(x^k-\eta(\nabla f(x^k)+A^\top(2s^{k+1}-s^k))),
 %\end{array}
 %\right.\label{vucondatemp}
 %\end{equation}
-which explicitly applies $A$ and $A^\top$ and updates $s,x$ in a Gauss-Seidel style. \footnote{By the Moreau identity: $\prox_{\gamma h^*}=\cI -\gamma \prox_{\frac{1}{\gamma}h}(\frac{\cdot}{\gamma})$, one can compute $\prox_{\frac{1}{\gamma} h}$ instead of $\prox_{\gamma h^*}$. The latter inherits the same separability properties from the former.}
+which explicitly applies $A$ and $A^\top$ and updates $s,x$ in a Gauss-Seidel style~\footnote{By the Moreau identity: $\prox_{\gamma h^*}=\cI -\gamma \prox_{\frac{1}{\gamma}h}(\frac{\cdot}{\gamma})$, one can compute $\prox_{\frac{1}{\gamma} h}$ instead of $\prox_{\gamma h^*}$. The latter inherits the same separability properties from the former.}.
 We introduce an operator $\TVC:\HH\times\GG\to \HH\times\GG$ and write 
 $$\mbox{iteration \eqref{vucondat}}\quad\Longleftrightarrow\quad z^{k+1}=\TVC(z^k).$$ 
 
@@ -112,17 +112,17 @@ Switching the orders of  $x$ and $s$ yields the following algorithm: %, $x$ and 
 \begin{equation}
 \left\{
 \begin{array}{l}
-x^{k+1}=\prox_{\eta g}(x^k-\eta(\nabla f(x^k)+A^\top s^k))\\
-s^{k+1}=\prox_{\gamma h^*} (s^k+\gamma A(2x^{k+1}-x^k))
+x^{k+1}=\prox_{\eta g}(x^k-\eta(\nabla f(x^k)+A^\top s^k)),\\
+s^{k+1}=\prox_{\gamma h^*} (s^k+\gamma A(2x^{k+1}-x^k)),
 \end{array}
 \right.{\text{ as }z^{k+1}=\cT'_{\textnormal{CV}} z^k.}\label{vucondat2}
 \end{equation}
 %\end{remark}
 It is known from \cite{combettes2014forward,davis2014convergence} that both $\eqref{vucondat}$ and $\eqref{vucondat2}$  reduce to iterations of nonexpansive operators (under a special metric), i.e., $\TVC$ is  nonexpansive; see Appendix~\ref{sec:vc-op} for the reasoning. %For simplicity, our discussion below only focuses on \eqref{vucondat}.
 \begin{remark}
-Similar primal-dual algorithms can be used to solve  problems  that are more other than $\eqref{pdproblem}$ such as saddle point problems~\cite{lebedev1967duality,mclinden1974extension,briceno2013monotone} and variational inequalities~\cite{tseng1991applications}. Our coordinate update algorithms below apply to these problems as well.
+Similar primal-dual algorithms can be used to solve other problems such as saddle point problems~\cite{lebedev1967duality,mclinden1974extension,briceno2013monotone} and variational inequalities~\cite{tseng1991applications}. Our coordinate update algorithms below apply to these problems as well.
 \end{remark}
-\subsection{Primal-dual coordinate update algorithms}\label{sec:pdcu}
+\subsection{Primal-dual Coordinate Update Algorithms}\label{sec:pdcu}
 In this subsection, we make the following assumption.
 \begin{assumption}
 Functions $g$ and $h^*$ are separable and proximable. Specifically, $$g(x)=\displaystyle\sum_{i=1} ^m g_i(x_i)\quad\mbox{and}\quad h^*(y)=\displaystyle\sum_{j=1}^ph^*_i(y_i).$$\label{pdassum}
@@ -226,12 +226,12 @@ Therefore, $\nops{\{z^k,Ax\}}{\{z^+,Ax^+\}}=O\big(\frac{1}{m+p}\nops{z^k}{\TVC z
 %where the $s$ update depends on the $x$ update. We can design coordinate updating algorithms based on this algorithm and it is favorable when $A$ has sparse rows in stead of sparse columns.
 %\end{remark}
 %Next we will study a special case where we can decouple $x$ and $s$.
-\subsection{Extended monotropic programming}\label{sec:emp}
+\subsection{Extended Monotropic Programming}\label{sec:emp}
 The extended monotropic program is the problem
 \begin{equation}
-\begin{array}{l}
-\underset{x\in\mathbb{H}}{\text{minimize  }} ~g_1(x_1)+g_2(x_2)+\cdots+g_m(x_m)+f(x)\\
-\text{subject to } A_1x_1+A_2x_2+\cdots+A_mx_m=b,
+\begin{array}{rl}
+\underset{x\in\mathbb{H}}{\text{minimize  }} &~g_1(x_1)+g_2(x_2)+\cdots+g_m(x_m)+f(x),\\
+\St &~A_1x_1+A_2x_2+\cdots+A_mx_m=b,
 \end{array}\label{emp}
 \end{equation}
 where $x = (x_1, \ldots, x_m) \in \HH=\HH_1\times\ldots \times \HH_m$ with $\HH_i$ being Euclidean spaces. It generalizes linear, quadratic,  second-order cone programs by allowing  general objective functions $g_i$ and $f$.
@@ -246,10 +246,10 @@ where $U$ is a symmetric positive semidefinite matrix, $X=\{x:x_i \geq 0~\forall
 Then, \eqref{qp} is a special case of \eqref{emp}\cut{ $$\underset{x\in\mathbb{R}^n}{\textnormal{minimize }} \frac{1}{2}x^\top Ux+c^\top x+\iota_{X}(x)+\iota_{\{b\}}(Ax).$$}
 with  $g_i(x_i)=\iota_{\cdot\geq 0}(x_i)$, $f(x)=\frac{1}{2}x^\top Ux+c^\top x$ and $h=\iota_{\{b\}}$.
 \end{example}
-\begin{example}[SOCP]
-The second-order cone program
+\begin{example}[Second Order Cone Programming (SOCP)]
+The SOCP
 \begin{align*}
-\underset{x\in\mathbb{R}^m}{\textnormal{minimize }} ~c^\top x,&\quad\St~ Ax=b\\
+\underset{x\in\mathbb{R}^m}{\textnormal{minimize }} ~c^\top x,&\quad\St~ Ax=b,\\
 &\hspace{56pt} x\in X=Q_1\times \cdots\times Q_{n},
 \end{align*}
 (where the number of cones $n$ may not be equal to the number of blocks $m$,) can be written in the form of \eqref{emp}: $\Min_{x\in\mathbb{R}^m} \iota_X(x)+c^\top x+\iota_{\{b\}}(Ax).$ %Details of SOCP can be found in section $\ref{sec:socp}$. 
@@ -264,11 +264,11 @@ The second-order cone program
 %\end{array}
 %\right.
 %\end{equation}
-Applying the iteration $\eqref{vucondat}$ to the problem $\eqref{emp}$ and eliminating $s^{k+1}$ from the second row yields the Jacobi-style update (denoted as $\cT_\textnormal{emp}$):
+Applying iteration $\eqref{vucondat}$ to problem $\eqref{emp}$ and eliminating $s^{k+1}$ from the second row yield the Jacobi-style update (denoted as $\cT_\textnormal{emp}$):
 \begin{equation}
 \left\{
 \begin{array}{l}
-s^{k+1}=s^k+\gamma (Ax^k-b)\\
+s^{k+1}=s^k+\gamma (Ax^k-b),\\
 x^{k+1}=\prox_{\eta g}(x^k-\eta(\nabla f(x^k)+A^\top s^k+2\gamma A^\top Ax^k-2\gamma A^\top b)).
 \end{array}
 \right.\label{pdemp}
@@ -282,8 +282,8 @@ Note that $x^{k+1}$ no longer depends on $s^{k+1}$, making it more convenient to
 In general, when the $s$ update is affine, we can plug the $s$ update into the $x$ update and decouple $s^{k+1}$ and $x^{k+1}$. It is the case when $h$ is affine and quadratic in problem \eqref{pdproblem}.
 \end{remark}
 One sufficient condition for $\cT_\textnormal{emp}$  to be CF is $\prox_g\in\cC_1$ i.e., separable. Indeed, we have $\cT_\textnormal{emp}=\cT_1\circ\cT_2$, where $$\cT_1=\begin{bmatrix}
-\cI\\\prox_{\eta g}
-\end{bmatrix},\quad \cT_2\begin{bmatrix}
+\cI & 0\\0&\prox_{\eta g}
+\end{bmatrix}, \cT_2\begin{bmatrix}
 s\\x
 \end{bmatrix}=\begin{bmatrix}
 s+\gamma (Ax-b)\\
@@ -305,15 +305,15 @@ x-\eta(\nabla f(x)+A^\top s+2\gamma A^\top Ax-2\gamma A^\top b)
 %\begin{remark}
 %All the above schemes have provable convergence but we neglect them due to the purpose of this paper. The efficiency of the schemes are increasing from the first one to the last one since less and less information is discarded. When $m_j=1$ for every $j$, the second and the third scheme will be the same
 %\end{remark}
-\subsection{Overlapping-block coordinate updates}
-{In the coordinate update scheme proposed in \S\ref{sec:pdcu}, updating $x_i$ involves computing $s^{k+1}$ but the result is discard (see the proof of Proposition \ref{prop1}, item 1). This is because of  $x_i$'s and $s_j$'s are coupled through the matrix $A$.
+\subsection{Overlapping-block Coordinate Updates}
+{In the coordinate update scheme proposed in \S\ref{sec:pdcu}, updating $x_i$ involves computing $s^{k+1}$ but the result is discarded (see the proof of Proposition \ref{prop1}, item 1). This is because $x_i$'s and $s_j$'s are coupled through the matrix $A$.
 
 We define, for each $i$,  $\JJ(i)\subset \{1,2,\ldots, p\}$ as the set of indices $ j$ such that $A^\top_{i,j}\neq 0$, and, for each $j$,  $\II(j)\subset\{1,2,\ldots,m\}$ as the set of indices of $i$ such that $A_{j,i}\neq 0$. We also let $m_j:=|\II(j)|$, and assume $m_j\neq 0,\forall j=1,2,\ldots, p$ without loss of generality.
 %otherwise we can simply delete the $j$th column of $A$ without affecting the solution of problem $\eqref{pdproblem}$.
 
 We arrange the coordinates of $z=[x;s]$ into $m$ (overlapping) blocks. The $i$th block consists of the coordinate $x_i$ and  $s_j$ for all $j\in\JJ(i)$. We propose a block coordinate update scheme based on $\eqref{vucondat}$. Because the blocks overlap, the $s_j$ update is relaxed with parameters $\rho_{i,j}\ge 0$ that satisfy  $$\sum_{i\in \II(j)}\rho_{i,j}=1,~~\forall j=1,2,\ldots, p,$$ so that the aggregated effect is to update $s_j$ without scaling. (Following the
 %Krasnosel'ski$\breve{\text{i}}$-Mann 
-KM iteration\cite{krasnosel1955two}, we can also assign a relaxation parameter $\eta_k$ for the $x_i$ update; then, the $s_j$ update should be relaxed with $\rho_{i,j}\eta_k$.)
+KM iteration~\cite{krasnosel1955two}, we can also assign a relaxation parameter $\eta_k$ for the $x_i$ update; then, the $s_j$ update should be relaxed with $\rho_{i,j}\eta_k$.)
 
 %The new coordinate update scheme will work in the following manner: every time we choose a coordinate $x_i$ of $x$; compute the needed $s_j$'s (those with $j\in\JJ(i)$) and update them with scaling parameters $\rho_{i,j}\geq 0$; then update $x_i$ using the computed $s_j$.
 Our update scheme is proposed as: 
@@ -321,9 +321,9 @@ Our update scheme is proposed as:
 \left\{
 \begin{array}{l}
 \text{when the }i\text{th coordinate is chosen, compute}\\
-\tilde{s_j}^{k+1}=\prox_{\gamma h_j^*} (s_j^k+\gamma (Ax^k)_j),~\mbox{for all}~ j\in\JJ(i)\\
-\tilde{x_i}^{k+1}=\prox_{\eta g_i}(x_i^k-\eta(\nabla_i f(x^k)+\sum_{j\in\JJ(i)}A_{i,j}^\top(2\tilde{s}_j^{k+1}-s_j^k)))\\
-\text{update }x_i^{k+1}=x_i^k+(\tilde{x}_i^{k+1}-x_i^k) \\
+\tilde{s_j}^{k+1}=\prox_{\gamma h_j^*} (s_j^k+\gamma (Ax^k)_j),~\mbox{for all}~ j\in\JJ(i),\\
+\tilde{x_i}^{k+1}=\prox_{\eta g_i}(x_i^k-\eta(\nabla_i f(x^k)+\sum_{j\in\JJ(i)}A_{i,j}^\top(2\tilde{s}_j^{k+1}-s_j^k))),\\
+\text{update }x_i^{k+1}=x_i^k+(\tilde{x}_i^{k+1}-x_i^k), \\
 \text{update }s_j^{k+1}=s_j^k+\rho_{i,j}(\tilde{s}_j^{k+1}-s_j^k),~\mbox{for all}~ j\in\JJ(i).
 \end{array}
 \right.\label{pdoverlap}
@@ -339,7 +339,7 @@ The use of relaxation parameters $\rho_{i,j}$ makes our scheme different from th
 \end{remark}
 Following the assumptions and arguments in \S$\ref{sec:pdcu}$, if we maintain $Ax$, the cost for each block coordinate update is $O(p)+\nops{x}{\nabla_i f(x)}$, which is $O(\frac{1}{m}\nops{z}{\TVC z})$. Therefore the coordinate update scheme \eqref{pdoverlap} is computationally worthy.
 
-Typical choices of $\rho_{i,j}$ include: (1) one of the $\rho_{i,j}$'s is 1 for each $j$, others all equal to 0. This can be viewed as assigning $s_j$ fully to the block containing $x_i$.
+Typical choices of $\rho_{i,j}$ include: (1) one of the $\rho_{i,j}$'s is 1 for each $j$, others all equal to 0. This can be viewed as assigning $s_j$ fully to a block containing $x_i$.
 %\begin{equation}
 %\left\{
 %\begin{array}{l}
@@ -371,33 +371,81 @@ They produced a new matrix $\bar{A}$ based on $A$, with only one nonzero entry i
 \begin{equation}
 \underset{x\in\mathbb{H}}{\text{minimize }} f(x)+g(x)+\bar{h}(\bar{A}x)\label{fbpdproblem}
 \end{equation}
-has the same solution as $\eqref{pdproblem}$. The they solve $\eqref{fbpdproblem}$ by the scheme $\eqref{pdoverlap}$. Because they have $m_j=1$, every dual variable coordinate is only associated with one primal variable coordinate. 
+has the same solution as $\eqref{pdproblem}$. Then they solve $\eqref{fbpdproblem}$ by the scheme $\eqref{pdoverlap}$. Because they have $m_j=1$, every dual variable coordinate is only associated with one primal variable coordinate. 
 They create non-overlap blocks of $z$ by duplicating each dual variable coordinate $s_j$ multiple times. The computation cost for each block coordinate update of their algorithm is the same as $\eqref{pdoverlap}$, but more memory is needed since duplicated copies of each $s_j$ are stored and updated.
 \end{remark}
 
-%
-%%\subsection{the duplication trick}
-%%In their paper \cite{?}, Fercoq and Bianchi introduced a duplication trick, using which they change problem $\eqref{pdproblem}$(with $l=0$) to an equivalent one, which they can solve using algorithm $\eqref{vucondat}$ with $m_j=1$ for every $j$. We illustrate their idea briefly here.
-%%We define $\cG_j=\otimes_{r\in\II(j)}\GG_j,\forall j=1,2,\ldots,p$ with $m_j$ copies of $\GG_j$, and $\cG=
-%%\cG_1\times \cG_2\times\cdots\cG_p$. We write elements of $\cG_j$ as $\vs_j=(\vs_j(i_1),\ldots,\vs_j(i_{m_j}))$ with $i_r\in\II(j)$, and elements of $\cG$ as $\vs=(\vs_1,\ldots,\vs_p)$. Define $D(m)=\text{diag}(m_1,\ldots,m_p)$, Fercoq and Bianchi proved there exists a (column averaging) linear operator $S:\cG\to\GG$ and a linear operator $K:\HH\to\cG$, such that $A=D(m)SK$ and $K$ couples every small block $\vs_j(r)$ of $\vs\in\cG$ with only one block of $x$. They defined $\bar{h}=h\circ(D(m)S)$, then problem $\eqref{pdproblem}$ becomes 
-%%\begin{equation}
-%%\underset{x\in\mathbb{H}}{\text{minimize }}  f(x)+g(x)+\bar{h}(Kx) 
-%%\end{equation} 
-%%We can develop a block coordinate update algorithm using the second or the third scheme listed above and get the algorithm in \cite{?}:
-%%\begin{equation}
-%%\left\{
-%%\begin{array}{l}
-%%\text{choose }x^0\in\HH,\vs^0\in\cG\\
-%%\text{For all }i=1,2,\ldots,m \text{, define }w_i^0=\sum_{j\in\JJ(i)}A^\top_{j,i}\vs_j^{0}(i)\\
-%%\text{For all }j=1,2,\ldots,p \text{, define }t_j^0=\frac{1}{m_j}\sum_{i\in\II(j)}\vs_j^{0}(i)\\
-%%\text{when }x_i\text{ is chosen to be updated, compute}\\
-%%\tilde{s_j}^{k+1}=\prox_{\gamma h_j^*} (t_j^k+\gamma Ax^k),\forall j\in\JJ(i)\\
-%%\tilde{x_i}^{k+1}=\prox_{\eta g_i}(x_i^k-\eta(\nabla_i f(x^k)+2\sum_{j\in\JJ(i)}A_{j,i}^\top\tilde{s}_j^{k+1}-w_i^k))\\
-%%\text{update }x_i^{k+1}=x_i^k+\eta_k(\tilde{x}_i^{k+1}-x_i^k) \\
-%%\text{update }\vs_j^{k+1}(i)=\vs_j^k(i)+\eta_k(\tilde{s}_j^{k+1}-\vs_j^k(i)),\forall j\in\JJ(i)\\
-%%\text{update }w_i^{k+1}=w_i^k+\sum_{j\in\II(j)}A^\top_{j,i}(\vs_j^{k+1}(i)-\vs_j^{k}(i))\\
-%%\text{update }t_j^{k+1}=t_j^k+\frac{1}{m_j}(\vs_j^{k+1}(i)-\vs_j^{k}(i)),\forall j\in\JJ(i)
-%%\end{array}
-%%\right.
-%%\end{equation}
-%%Next we consider a special case of $\eqref{pdproblem}$ which also has a lot of applications. We will see in that case the primal variable $x$ and the dual variable $s$ can be totally decoupled.
+\rev{
+\subsection{Async-parallel Primal Dual Coordinate Update Algorithms and Their Convergence}}
+\rev{
+In this section we propose some primal dual coordinate update algorithms based on  \cite{Peng_2015_AROCK} and state their convergence theorems. We assume a shared memory architecture and allow delays and inconsistent reading (see below for explanations).\\
+\begin{algorithm}[H]\label{alg:asyn_core}
+%\SetAlgoLined
+\SetKwInOut{Input}{Input}\SetKwInOut{Output}{output}
+\Input{$z^0\in\HH\times\GG$,  $K>0$, a discrete distribution $(q_1,\ldots,q_{m+p})$
+with $\sum_{i=1}^{m+p}q_i=1$ and $q_i>0,\forall i$, } set global iteration
+counter $k=0$\; \While{$k < K$, every agent asynchronously and continuously}{
+  select $i_k\in\{1,\ldots,m+p\}$ with $\mathrm{Prob}(i_k=i)=q_i$\;%from $\{1,
+  % ..., m\}$ under a discrete positive distribution\; $\hat{x}^k\gets$ reads the variable $x$\;
+  % computes $\Delta x=-\frac{\eta_k}{mp_{i_k}} S_{i_k}\hat{x}^k$; ~(see \eqref{eqn:asyn_update}--\eqref{eqn:inconsist} for definitions)\;
+  % adds $(\Delta x)_{i_k}$ to the component $x_{i_k}$ of the variable $x$\;
+  perform an update to $z_{i_k}$ according to  \eqref{eqn:asyn_update}\;
+  update the global counter $k \leftarrow k+1$\;
+ }
+ \caption{Async-parallel primal dual coordinate update algorithm using $\TVC$}
+\end{algorithm}
+
+Whenever an agent updates a coordinate, the global iteration number $k$ increases by one.
+
+The $k$th update is applied to $z_{i_k}$, with $i_k,k=1,2,...$ being independent random variables. $z_i=x_i$ when $i\leq m$ and $z_i=s_{i-m}$ when $i>m$.  Each coordinate update has
+the form:
+\begin{equation}
+\label{eqn:asyn_update}
+\left\{
+\begin{array}{l}
+z_{i_k}^{k+1} = z_{i_k}^k - \frac{\eta_k}{(m+p)q_{i_k}} \, (\hat{z}_{i_k}-(\TVC \hat{z}^k)_{i_k}),\\
+z_i^{k+1}=z_i^k,\quad \forall i\neq i_k,
+\end{array}
+\right.
+\end{equation}
+where $\eta_k$ is the step size, $z^k$ denotes the state of $z$ in global memory just before the update~\eqref{eqn:asyn_update} is applied, and $\hat{z}^k$ is the result that $z$ in global memory is read by an agent to its local cache. Due to possible updates to $z$ by other agents, $\hat{z}^k$
+can be different from $z^k$. We refer the reader to~\cite[Section 1.2]{Peng_2015_AROCK} for more details.\\
+
+We also propose an async-parallel primal dual algorithm using the \\overlapping-block coordinate update~\eqref{pdoverlap}:\\
+\begin{algorithm}[H]\label{alg:asyn_overlap}
+%\SetAlgoLined
+\SetKwInOut{Input}{Input}\SetKwInOut{Output}{output}
+\Input{$z^0\in\HH\times\GG$,  $K>0$, a discrete distribution $(q_1,\ldots,q_{m})$
+with $\sum_{i=1}^{m}q_i=1$ and $q_i>0,\forall i$, } set global iteration
+counter $k=0$\; \While{$k < K$, every agent asynchronously and continuously}{
+  select $i_k\in\{1,\ldots,m\}$ with $\mathrm{Prob}(i_k=i)=q_i$\;%from $\{1,
+  % ..., m\}$ under a discrete positive distribution\; $\hat{x}^k\gets$ reads the variable $x$\;
+  % computes $\Delta x=-\frac{\eta_k}{mp_{i_k}} S_{i_k}\hat{x}^k$; ~(see \eqref{eqn:asyn_update}--\eqref{eqn:inconsist} for definitions)\;
+  % adds $(\Delta x)_{i_k}$ to the component $x_{i_k}$ of the variable $x$\;
+  Compute $\tilde{s}_j^{k+1},\forall j\in\JJ(i_k)$ and  $\tilde{x}_{i_k}^{k+1}$ according to $\eqref{pdoverlap}$\;
+  update $x_i^{k+1}=x_i^k+\frac{\eta_k}{mq_{i_k}}(\tilde{x}_i^{k+1}-x_i^k)$\;
+  update $s_j^{k+1}=s_j^k+\frac{\rho_{i,j}\eta_k}{mq_{i_k}}(\tilde{s}_j^{k+1}-s_j^k),~\mbox{for all}~ j\in\JJ(i_k)$\;
+  update the global counter $k \leftarrow k+1$\;
+ }
+ \caption{Async-parallel primal dual overlapping-block coordinate update algorithm using $\TVC$}
+\end{algorithm}
+Here we still allow inconsistent delays, so the $\tilde{x}_{i_k}$ and $\tilde{s}_j^{k+1}$ are computed using some $\hat{z}^k$.
+\begin{remark}
+For the shared memory architecture, it is recommended to set all but one $\rho_{i,j}$'s to $0$.
+\end{remark}
+Now we state the convergence theorem for Algorithm \ref{alg:asyn_core} and \ref{alg:asyn_overlap}.
+\begin{thm}\label{thm:async-convergence}
+Let $Z^*$ be the set of optimal solutions of problem \eqref{pdproblem} and let $(z^k)_{k\geq0}\subset \HH\times\GG$ be the sequence generated by Algorithm \ref{alg:asyn_core} or Algorithm \ref{alg:asyn_overlap} under the following conditions:
+\begin{enumerate}[(i)]
+\item $f,g,h^*$ are closed proper convex functions and $f$ is differentiable with $\nabla f$ $\beta$-Lipschitz continuous;
+\item the delay for every coordinate is bounded by a positive number $\tau$, i.e. for every $1\leq i\leq m+p$, $\hat{z}^{k}_{i}=z_i^{k-d_{i}^k}$ for some $0\leq d_{i}^k\leq\tau$;
+\item $\eta_k
+\in [\eta_{\min}, \eta_{\max}]$ for certain $\eta_{\min},\eta_{\max}>0$.
+\end{enumerate}
+We have with probability 1, $(z^k)_{k\geq 0}$ converges to a $Z^*$-valued random variable.
+\end{thm} 
+The explicit formula for $\eta_{\min},\eta_{\max}$, the proof and some other remarks are included in Appendix \ref{pf:pdasync}.
+\begin{remark}
+When there is only one agent and we have no delay, the async-parallel algorithms we propose become stochastic coordinate update algorithms, and their convergence is a direct consequence of Theorem~\ref{thm:async-convergence}.
+\end{remark}
+}

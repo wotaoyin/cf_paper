@@ -85,7 +85,7 @@ x^{k+1}_{i} = x_i^k,&\text{for all } i\not= i_k.
 $$
 Sequential updates have been long known for special types of problems and their corresponding operators $\cT$, for example, the Gauss-Seidel iteration for solving linear equations, alternating projection \cite{von1949rings,bauschke1993convergence} for finding a point in the intersection of two sets,  ADMM \cite{glowinski1975ADMM, gabay1976ADMM} for solving monotropic programs, and Douglas-Rachford Splitting (DRS) \cite{douglas1956DRS}  for finding a zero to the sum of two operators. (ADMM and DRS also introduce and update additional variables.) 
 
-In optimization,  \emph{coordinate descent} algorithms, at each iteration, minimize the function $f(x_1,\ldots,x_n)$ by fixing all by one variable. Let $$x_{-i}:=(x_1,\ldots,x_{i-1},x_{i+1},\ldots,x_n),$$
+In optimization,  \emph{coordinate descent} algorithms, at each iteration, minimize the function $f(x_1,\ldots,x_n)$ by fixing all but one variable. Let $$x_{-i}:=(x_1,\ldots,x_{i-1},x_{i+1},\ldots,x_n),$$
 collect all but the $i$th coordinate of $x$. Coordinate descent updates take one of the following forms:
 \begin{subequations}\label{coordes}
 \begin{align}
@@ -101,17 +101,17 @@ which are called \emph{direct} update, \emph{proximal} update,  \emph{gradient} 
 
 \textbf{Sequential-update literature.} Coordinate descent algorithms date back to the 1950s~\cite{hildreth1957quadprog}, when the \emph{cyclic} update-order was used. Its convergence has been established under a variety of cases, for both convex and nonconvex objective functions; see~\cite{Warga-63,zadeh1970note, Sargent-Sebastian-73,Han-88,luo1992convergence, Tseng-93, Grippo-Sciandrone-00, Tseng-01, razaviyayn2013unified, beck2013convergence, hong2015iteration, wright2015coordinate}. Proximal updates are studied in~\cite{Grippo-Sciandrone-00, attouch2010proximal} and developed into prox-gradient updates in~\cite{tseng2009_CGD, tseng2009block-linear, bolte2014proximal} and mixed updates in~\cite{XY_2013_multiblock}.
 
-The \emph{stochastic} update-order appeared in~\cite{nesterov2012cd} and then~\cite{richtarik2014iteration, Lu_Xiao_rbcd_2015}. Recently,~\cite{XY_2014_ecd,Xu2015_APG_NTD} compared the convergence speeds of cyclic and stochastic orders. The gradient update has been relaxed to  stochastic gradient update for large-scale problems in~\cite{DangLan-SBMD, XY_2015_bsg}. 
+The \emph{stochastic} update-order appeared in~\cite{nesterov2012cd} and then~\cite{richtarik2014iteration, Lu_Xiao_rbcd_2015}. Recently,~\cite{XY_2014_ecd,Xu2015_APG_NTD} compared the convergence speeds of cyclic and stochastic update-orders. The gradient update has been relaxed to  stochastic gradient update for large-scale problems in~\cite{DangLan-SBMD, XY_2015_bsg}. 
 
 The \emph{greedy} update-order leads to fewer total iterations but is often impractical since it requires a lot of effort to calculate  scores for all the coordinates. However, there are cases where calculating the scores is easy~\cite{bertsekas1999nonlinear, li2009gcoord, wu2008coordinate} and the save in the total iterations significantly outweighs the effort \cite{tseng2009_CGD, dhillon2011nearest, PYY_2013_GRock, schmidt2014coordinate}. 
 
-\textbf{A simple test.} Although our purpose is not to compare different update orders, we feel necessary to make them concrete for the reader. For simplicity, we adopt the least squares problem
+\textbf{A simple test.} Although our purpose is not to compare different update-orders, we feel necessary to make them concrete for the reader. For simplicity, we adopt the least squares problem
 $$\Min_{x} \frac{1}{2} \|A x - b\|^2,$$
 where $A \in \RR^{p \times m}$ and $b \in \RR^p$ are Gaussian random, to numerically demonstrate the advantages of coordinate updates over the  full update of  gradient descent:
 $$x^{k+1} = x^k - \eta_k A^{\top}(A x^k - b).$$
 The four coordinate update schemes are: cyclic, cyclic permutation, random, and greedy under the Gauss-Southwell rule. 
-In the full update, the step size $\eta_k$ is set to the theoretical upper bound $\frac{2}{\|A\|_2^2}$. For each coordinate update to $x_i$, the step size $\eta_k$ is set to $\frac{1}{(A^{\top}A)_{ii}}$. All of the full and coordinate updates have same \emph{per-epoch} complexity, so we plot the objective errors in Figure \ref{fig:ls_full_vs_coord}. 
-Note that the performance of coordinate update algorithms depend on many factors such as condition number, the level of coupling among different coordinates, whether greedy selection can be efficiently made, as well as the amount of memory move needed. The demonstration here is limited. 
+In the full update, the step size $\eta_k$ is set to the theoretical upper bound $\frac{2}{\|A\|_2^2}$. For each coordinate update to $x_i$, the step size $\eta_k$ is set to $\frac{1}{(A^{\top}A)_{ii}}$. All of the full and coordinate updates have the same \emph{per-epoch} complexity, so we plot the objective errors in Figure \ref{fig:ls_full_vs_coord}. 
+Note that the performance of coordinate update algorithms depend on many factors such as the condition number, the level of coupling among different coordinates, whether greedy selections can be efficiently made, as well as the amount of data move needed. The demonstration here is limited. 
 \begin{figure}[!htbp] \centering
 \includegraphics[width=50mm]{./figs/randn_matrix_cropped}
 
@@ -164,13 +164,13 @@ Asynchronous delay occurs if, after an agent reads $x$ yet before it completes u
 
 %Here, $d_k$ is a scalar in the \emph{consistent} case and a vector in the \emph{atomically inconsistent} case. In the former case, the delays of the entries of $x^{k-d_k}$ are consistent, namely,  $x^{k-d_k}=[x^{k-d_k}_1,\ldots,x^{k-d_k}_n]$. \emph{Atomic inconsistency}, on the other hand, allows inconsistent delays: $x^{k-d_k}=[x^{k-d_{k,1}}_1,\ldots,x^{k-d_{k,n}}_n]$, where $d_k\in\NN^n$ is a vector and $n$ is the number of block coordinates. Inconsistency occurs when multiple agents read and write the entries of $x$ simultaneously, but  atomicity of $x_i$ ensures that all the sub-entries or bits of  $x_i$ are read and written at once and thus stay consistent.
 
-The sync-parallel update is a special case of the async-parallel update where the number of agents equals $|\II_k|$ and  the asynchronous delay is uniformly zero.
+\remove{The sync-parallel update is a special case of the async-parallel update where the number of agents equals $|\II_k|$ and  the asynchronous delay is uniformly zero.}
 
 \textbf{Parallel-update literature.} 
 Async-parallel methods can be traced back to~\cite{chazan1969chaotic} for linear systems. For function minimization,~\cite{bertsekas1989parallel} introduced an async-parallel gradient-projection method. Convergence rates are obtained in~\cite{tseng1991rate-asyn}.  
 Recently, \cite{bradley2011parallel,richtarik2012parallel} developed parallel randomized methods. 
 
-For fixed-point problems, async-parallel methods date back to~\cite{Baudet_1978_asynchronous} in 1978. In  the pre-2010 methods \cite{BMR1997asyn-multisplit,bertsekas1983distributed,Baz200591,el1998flexible} and the review~\cite{Frommer2000201}, each agent updates its own subset of coordinates. Convergence is established under the \emph{absolute Lipschitz contractive} condition and its variants~\cite{bertsekas1983distributed}. Papers~\cite{Baz200591,Baz1998429} show convergence for async-parallel iterations with simultaneous reading and writing to the same set of components. Unbounded but stochastic delays are considered in~\cite{Strikwerda2002125}.
+For fixed-point problems, async-parallel methods date back to~\cite{Baudet_1978_asynchronous} in 1978. In  the pre-2010 methods \cite{BMR1997asyn-multisplit,bertsekas1983distributed,Baz200591,el1998flexible} and the review~\cite{Frommer2000201}, each agent updates its own subset of coordinates. Convergence is established under the \emph{$P$-contraction} condition and its variants~\cite{bertsekas1983distributed}. Papers~\cite{Baz200591,Baz1998429} show convergence for async-parallel iterations with simultaneous reading and writing to the same set of components. Unbounded but stochastic delays are considered in~\cite{Strikwerda2002125}.
 
 Recently, random coordinate selection appeared in~\cite{Patrick_2015} for fixed-point problems. The works \cite{nedic2001distributed,recht2011hogwild,liu2013asynchronous,liu2014asynchronous,hsieh2015passcode} introduced async-parallel stochastic methods for function minimization.
 For fixed-point problems,~\cite{Peng_2015_AROCK} introduced  async-parallel stochastic methods, as well as several applications.  
@@ -178,7 +178,7 @@ For fixed-point problems,~\cite{Peng_2015_AROCK} introduced  async-parallel stoc
 \subsubsection{Contributions of this paper} 
 The paper systematically discusses the CF structures found in both single and composite operators underlying many interesting applications. We introduce approaches to recognize CF operators and develop coordinate-update algorithms based on them. 
 We provide a variety of applications to illustrate our approaches. 
-In particular, we obtain new coordinate-update algorithms for image deblurring, portfolio optimization, second order conic programming, as well as tensor decomposition. Our analysis also provides guidance to the implementation of coordinate-update algorithms by specifying how to compute certain operators and maintain certain quantities in memory. 
+In particular, we obtain new coordinate-update algorithms for image deblurring, portfolio optimization, second order cone programming, as well as tensor decomposition. Our analysis also provides guidance to the implementation of coordinate-update algorithms by specifying how to compute certain operators and maintain certain quantities in memory. 
  
 This paper does \emph{not} focus on the convergence perspective of coordinate update algorithms (or coordinate descent for function minimization). In general, in fixed-point algorithms, the iterate convergence is ensured by the monotonic decrease of the distance between the iterates and the solution set, while in minimization problems, the objective value convergence is ensured by the monotonic decrease of a certain energy function. The reader is referred to the existing literature for details. 
 

@@ -2,41 +2,41 @@
 \subsubsection{Second-Order Cone Programming}\label{sec:socp}
 SOCP extends LP by incorporating second-order cones. A second-order cone in $\RR^n$ is $$Q=\big\{(x_1,x_2,\ldots,x_n)\in\RR^n:\|(x_2,\ldots,x_n)\|_2\le x_1\big\}.$$  
 Given a point $v\in\RR^n$, let  $\rho_1^v:=\|(v_2,\ldots,v_n)\|_2$ and $\rho_2^v:=\frac{1}{2}(v_1+\rho_1^v)$}. Then, the projection {of  $v$ to $Q$ {returns $0$ if $v_1<-\rho_1$, returns $v$ if $v_1 \ge \rho_1$, and returns $(\rho_2^v,\frac{\rho_2^v}{\rho_1^v}\cdot(v_2,\ldots,v_n))$ otherwise. Therefore, if we define the scalar couple:
-$$(\xi_1^v,\xi_2^v) = \begin{cases}(0,0),&\quad v_1<-\rho_2^v\\
-(1,1), &\quad v_1 \ge \rho_2^v\\
-\big(\rho_2^v,\frac{\rho_2^v}{\rho_1^v}\big),&\quad \mbox{otherwise}\end{cases}
+$$(\xi_1^v,\xi_2^v) = \begin{cases}(0,0),&\quad v_1<-\rho_2^v,\\
+(1,1), &\quad v_1 \ge \rho_2^v,\\
+\big(\rho_2^v,\frac{\rho_2^v}{\rho_1^v}\big),&\quad \mbox{otherwise},\end{cases}
 $$
-then we have $u=\Proj_{Q}(v) = \big(\xi_1 ^vv_1,\,\xi_2^v\cdot (v_2,\ldots,v_n)\big)$. Based on this, we have 
+then we have $u=\prj_{Q}(v) = \big(\xi_1 ^vv_1,\,\xi_2^v\cdot (v_2,\ldots,v_n)\big)$. Based on this, we have 
 \begin{proposition}\label{prop:socproj}
 \begin{enumerate}
-\item Let $v\in\RR^{n}$ and $v^+ := v+ (\boldsymbol e_i)\nu$ for any $\nu\in\RR$. Then, given $\rho_1^v,\rho_2^v,\xi_1^v,\xi_2^v$ {defined above}, it takes $O(1)$ operations to obtain $\rho_1^{v^+},\rho_2^{v^+},\xi_1^{v^+},\xi_2^{v^+}$. 
-\item Let $v\in\RR^{n}$ and $A=[a_1~A_2]\in\RR^{m\times n}$, where $a_1\in\RR^m,A_2\in\RR^{m\times (n-1)}$. Given $\rho_1^v,\rho_2^v,\xi_1^v,\xi_2^v$, we have $$A(2\cdot\Proj_{Q}(v)-I)=((2\xi_1 ^v-1)v_1)\cdot a_1 + (2\xi_2-1)\cdot A_2 (v_2,\ldots,v_n)^T.$$
+\item Let $v\in\RR^{n}$ and $v^+ := v+ \nu e_i$ for any $\nu\in\RR$. Then, given $\rho_1^v,\rho_2^v,\xi_1^v,\xi_2^v$ {defined above}, it takes $O(1)$ operations to obtain $\rho_1^{v^+},\rho_2^{v^+},\xi_1^{v^+},\xi_2^{v^+}$. 
+\item Let $v\in\RR^{n}$ and $A=[a_1~A_2]\in\RR^{m\times n}$, where $a_1\in\RR^m,A_2\in\RR^{m\times (n-1)}$. Given $\rho_1^v,\rho_2^v,\xi_1^v,\xi_2^v$, we have $$A(2\cdot\prj_{Q}(v)-v)=((2\xi_1 ^v-1)v_1)\cdot a_1 + (2\xi_2^v-1)\cdot A_2 (v_2,\ldots,v_n)^T.$$
 \end{enumerate}
 \end{proposition}
-By the proposition, if $\cT_1$ is an affine operator, then in the composition $\cT_1\circ \Proj_{Q}$, {the computation of $\Proj_{Q}$ is cheap as long as we maintain $\rho_1^v,\rho_2^v,\xi_1^v,\xi_2$.
+By the proposition, if $\cT_1$ is an affine operator, then in the composition $\cT_1\circ \prj_{Q}$, {the computation of $\prj_{Q}$ is cheap as long as we maintain $\rho_1^v,\rho_2^v,\xi_1^v,\xi_2^v$.
 
 Given $x,c\in\RR^n$, $b\in\RR^m$, and $A\in\RR^{m\times n}$, the standard-form SOCP is
 \begin{subequations}\label{eq:socp}
 \begin{align}
-\Min_x~c^\top x,&\quad\St~ Ax=b\\
-&\hspace{56pt} x\in X=Q_1\times \cdots\times Q_{\bar{n}}
+\Min_x~c^\top x,&\quad\St~ Ax=b,\\
+&\hspace{56pt} x\in X=Q_1\times \cdots\times Q_{\bar{n}},
 \end{align}
 \end{subequations}
 where each $Q_i$ is a second-order cone, and $\bar{n}\not=n$ in general.
-The problem \eqref{eq:socp} is equivalent to 
+The problem~\eqref{eq:socp} is equivalent to 
 $$\Min_x \big(c^\top  x+\iota_{A\cdot =b}(x)\big)+\iota_X(x),$$
-to which we can apply the DRS iteration $z^{k+1} = \TDRS (z^k)$ (see \eqref{eq:DRS}), in which $\cT_1 = \Proj_X$ and $\cT_2$ is a linear operator given by 
-$$\cT_2(x) = \argmin_y ~ c^\top y+\frac{1}{2}y^\top Cy +  \frac{1}{2\gamma}\|y-x\|^2\quad \St~ Ax=b.$$
+to which we can apply the DRS iteration $z^{k+1} = \TDRS (z^k)$ (see \eqref{eq:DRS}), in which $\cJ_1 = \prj_X$ and $\cT_2$ is a linear operator given by 
+$$\cJ_2(x) = \argmin_y ~ c^\top y+  \frac{1}{2\gamma}\|y-x\|^2\quad \St~ Ay=b.$$
 Assume that the matrix $A$ has full row-rank (otherwise, $Ax=b$ has either redundant rows or no solution). 
-Then, in \eqref{eq:DRS}, we have $\cR_{\cT_2}(x)= Bx+d$, where $B:=\cI-2A^\top (AA^\top )^{-1}A$ and $d:=2A^\top (AA^\top )^{-1}(b+\gamma Ac)-2\gamma c$.
+Then, in~\eqref{eq:DRS}, we have $\cR_{2}(x)= Bx+d$, where $B:=I-2A^\top (AA^\top )^{-1}A$ and $d:=2A^\top (AA^\top )^{-1}(b+\gamma Ac)-2\gamma c$.
 
 It is easy to apply coordinate updates to $z^{k+1} = \TDRS (z^k)$ following Proposition \ref{prop:socproj}. Specifically, by maintaining the scalars $\rho_1^v,\rho_2^v,\xi_1^v,\xi_2^v$ for each $v=x_i\in Q_i$ during  coordinate updates, the computation of the projection can be completely avoided. We pre-compute $(AA^\top )^{-1}$ and cache the matrix $B$ and vector $d$. Then, $\TDRS$ is CF. 
 
-It trivial to extend this method for  SOCPs with a quadratic objective:
+It is trivial to extend this method for  SOCPs with a quadratic objective:
 \begin{align*}
-\Min_x~c^\top x+\frac{1}{2}x^\top Cx,&\quad\St~ Ax=b,~ x\in X=Q_1\times \cdots\times Q_{\bar{n}}
+\Min_x~c^\top x+\frac{1}{2}x^\top Cx,&\quad\St~ Ax=b,~ x\in X=Q_1\times \cdots\times Q_{\bar{n}},
 \end{align*}
-because $\cT_2$ is still linear.  Clearly, this method applies to linear programs as they are special SOCPs.
+because $\cJ_2$ is still linear.  Clearly, this method applies to linear programs as they are special SOCPs.
 
 Note that many LPs and SOCPs have sparse matrices $A$, which deserve further investigation. In particular, we may prefer not to form $(AA^\top )^{-1}$ and use the results in \S\ref{sec:emp} instead.
 

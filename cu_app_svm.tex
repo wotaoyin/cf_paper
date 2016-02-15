@@ -1,10 +1,13 @@
 % !TEX root = ./amsa_main.tex
 \subsubsection{Support Vector Machine}\label{sec:svm}
-Given the training data $\{(a_i,\beta_i)\}_{i=1}^m$ with $\beta_i\in\{+1, -1\},\,\forall i$, the kernel support vector machine \cite{scholkopf2001learning} is the problem
+Given the training data $\{(a_i,\beta_i)\}_{i=1}^m$ with $\beta_i\in\{+1, -1\},\,\forall i$, the kernel support vector machine \cite{scholkopf2001learning} is 
 \begin{equation}\label{eq:ksvm}
-\Min_{x,\xi,y} \frac{1}{2}\|x\|_2^2+C\sum_{i=1}^m \xi_i,\ \st\  \beta_i(x^\top\phi(a_i)-y)\ge 1-\xi_i,\, \xi_i\ge 0,\, i=1,\ldots,m,
+\begin{array}{rl}
+\Min\limits_{x,\xi,y} &\frac{1}{2}\|x\|_2^2+C\sum_{i=1}^m \xi_i,\\
+ \st\ & \beta_i(x^\top\phi(a_i)-y)\ge 1-\xi_i,\, \xi_i\ge 0,\, i=1,\ldots,m,
+\end{array}
 \end{equation}
-where $\phi$ is a vector-to-vector map, mapping each data $a_i$ to a point in a (possibly) higher-dimensional space. If $\phi(a)=a$, then \eqref{eq:ksvm} reduces to the linear support vector machine. The models \eqref{eq:ksvm}  can be interpreted as finding a hyperplane $\{w:x^\top w-y=0\}$ to roughly separate two sets of points $\{\phi(a_i):\beta_i=1\}$ and $\{\phi(a_i):\beta_i=-1\}$. 
+where $\phi$ is a vector-to-vector map, mapping each data $a_i$ to a point in a (possibly) higher-dimensional space. If $\phi(a)=a$, then \eqref{eq:ksvm} reduces to the linear support vector machine. The model~\eqref{eq:ksvm}  can be interpreted as finding a hyperplane $\{w:x^\top w-y=0\}$ to roughly separate two sets of points $\{\phi(a_i):\beta_i=1\}$ and $\{\phi(a_i):\beta_i=-1\}$. 
 
 The dual problem of \eqref{eq:ksvm} is
 \begin{equation}\label{eq:dksvm}
@@ -19,7 +22,7 @@ where we can take $\gamma_i=\frac{1}{Q_{ii}}$.
 
 \subsubsection*{Biased (general) case} In this case, the mode \eqref{eq:ksvm} has $y\in\RR$, so the hyperplane $\{w:x^\top w-y=0\}$ may not pass the origin and is called \emph{biased}. Then,  the dual problem \eqref{eq:dksvm} retains the linear constraint $\sum_i \beta_i s_i=0$. In this case, we apply the primal-dual splitting scheme \eqref{vucondat} or the three-operator splitting scheme \eqref{3s}.
 
-The coordinate update based on primal-dual splitting is:
+The coordinate update based on the primal-dual splitting is:
 \begin{subequations}\label{eq:pd-svm}
 \begin{align}
 t^{k+1}=&\,t^k+\gamma\sum_{i=1}^m \beta_i s_i^k,\label{eq:pd-svm-t}\\
@@ -43,11 +46,12 @@ u^{k+1}=&u^k+\eta_k\left(\prj_{D_1}\big(2s^{k+1}-u^k-\gamma (Qs^{k+1}-e)\big)-s^
 \end{align}
 \end{subequations}
 where $s$ is just an intermediate variable.
-Let $\tilde{\beta}:=\frac{\beta}{\|\beta\|_2}$ and $w:=\tilde{\beta}^\top u$. Then $\prj_{D_2}(u)=(I-\tilde{\beta}\tilde{\beta}^\top)u$. Hence, $s^{k+1}=u^k-w^k\tilde{b}$. Plugging it into \eqref{eq:3op-svm-u}, yields the coordinate update:
+Let $\tilde{\beta}:=\frac{\beta}{\|\beta\|_2}$ and $w:=\tilde{\beta}^\top u$. Then $\prj_{D_2}(u)=(I-\tilde{\beta}\tilde{\beta}^\top)u$. Hence, $s^{k+1}=u^k-w^k\tilde{\beta}$. Plugging it into~\eqref{eq:3op-svm-u} yields the coordinate update:
 \begin{subequations}\label{eq:3op-svm2}
 \begin{align*}
 s^{k+1}_i=&u^k_i-w^k\tilde{\beta}_i,\\
-u^{k+1}_i=&u^k_i+\eta_k\left(\prj_{[0,C]}\left(u^k_i-2w^k\tilde{\beta}_i-\gamma \big(q_i^\top u^k- w^k (q_i^\top \tilde{\beta})-1\big)\right)-u^k_i+w^k\tilde{\beta}_i\right).
+u^{k+1}_i=&u^k_i+\eta_k\left(\prj_{[0,C]}\left(2s_i^{k+1}-u^k_i-\gamma \big(q_i^\top u^k- w^k (q_i^\top \tilde{\beta})-1\big)\right)-s_i^{k+1}\right).
+%u^{k+1}_i=&u^k_i+\eta_k\left(\prj_{[0,C]}\left(u^k_i-2w^k\tilde{\beta}_i-\gamma \big(q_i^\top u^k- w^k (q_i^\top \tilde{\beta})-1\big)\right)-u^k_i+w^k\tilde{\beta}_i\right).
 \end{align*}
 \end{subequations}
 We can maintain $w$ and renew it as $w^{k+1}=w^k+\tilde{\beta}_i(u_i^{k+1}-u_i^k)$ whenever $u_i$ is updated. The intermediate variable $s_i$ is not kept throughout iterations.
