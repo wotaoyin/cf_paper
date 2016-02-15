@@ -73,13 +73,13 @@ In our numerical experiments, for comparison purposes, we first obtain a high ac
     \begin{subfigure}[b]{0.45\linewidth}
         \includegraphics[width=60mm]{./figs/synth_data_f_err_cropped}
         \caption{Synthesis dataset}
-        \label{fig:a}
+        \label{fig:3s_synth}
     \end{subfigure} %
     \quad
     \begin{subfigure}[b]{0.45\linewidth}
         \includegraphics[width=60mm]{./figs/real_data_f_err_cropped}
         \caption{NASDAQ dataset}
-        \label{fig:a}
+        \label{fig:3s_real}
     \end{subfigure} %
     \caption{Compare the convergence of 3S full update with 3S coordinate update algorithms.}
     \label{fig:3s_results}
@@ -95,27 +95,23 @@ We compare the performance of algorithm~\eqref{eqn:pd_tvl2} and its correspondin
     	\centering
         \includegraphics[width=0.9\linewidth]{./figs/phantom_img}
          \caption{Phantom image}\label{fig:pds_a}		
-        \label{fig:a}
     \end{subfigure} %
     \quad
     \begin{subfigure}{0.45\linewidth}
     	\centering
         \includegraphics[width=0.9\linewidth]{./figs/phantom_pds_img}
          \caption{Recovered by PDS}\label{fig:pds_b}		        
-        \label{fig:a}
     \end{subfigure} %
     \begin{subfigure}{0.45\linewidth}
     	\centering
         \includegraphics[width=0.9\linewidth]{./figs/phantom_pds_coord_img}
          \caption{Recovered by PDS coord}\label{fig:pds_c}		        
-        \label{fig:a}
     \end{subfigure} %
     \quad
     \begin{subfigure}{0.45\linewidth}
     	\centering
         \includegraphics[width=\linewidth]{./figs/phantom_func_val_cropped}
          \caption{Objective function value}\label{fig:pds_d}		                
-        \label{fig:a}
     \end{subfigure} %    
     \caption{CT image reconstruction.}
     \label{fig:pds_results}
