@@ -1,0 +1,60 @@
+% !TEX root = ./main.tex
+\section*{Notation}
+
+\begin{table}[htbp]
+ \caption{\label{tab:notation}}
+ \begin{tabular}{ll}
+  \toprule
+  Notation & Explanation \\
+  \midrule
+  $\HH,\GG$ & Hilbert spaces ($\HH$ for primal, $\GG$ for dual) \\
+  %& dual Hilbert space \\
+  $\HH_i,\GG_i$ &``smaller'' Hilbert spaces \\
+  % &``smaller'' dual Hilbert space \\
+  $\II := \{i_1, ..., i_m \} \subseteq \{1, .., n\}$  & subset of coordinate indexes\\
+  $X, Y$ & feasible sets \\
+  \midrule
+  $\cS, \cT, \cA, \cB$ & operators \\ 
+  $\cI$ & identity map \\
+  $\cU$ & sampling operator \\
+  $\cJ_{\cT} := (\cI + \cT) ^ {-1}$ & resolvent of $\cT$ \\ 
+  $\cR_{\cT} := 2 \cJ_{\cT} - \cI$ & reflection of $\cT$ \\ 
+  $\cT_{\alpha} := (1 - \alpha) \cI + \alpha \cT$ & $\alpha$-averaged operator\\
+%  $\cS := \cI - \cT$ & auxiliary operator \\
+  $\TFBS$ & forward-backward splitting operator \\
+  $\TBFS$ & backward-forward splitting operator \\
+  $\TDRS$ & Douglas-Rachford splitting operator \\
+  $\TPRS$ & Peaceman-Rachford splitting operator \\
+  %$\cT_{\text{RPRS}}$ & Relaxed Peaceman-Rachford splitting operator \\
+  $\TFBFS$ & forward-backward-forward splitting operator \\
+  $\TFDRS$ & forward-Douglas-Rachford splitting operator \\
+  
+  \midrule
+  $x, y$ & primal variables \\
+  $s, t$ & dual variables \\
+  $z$ & aggregation of variables \\ 
+  \midrule
+  $\eta, \gamma$ & step sizes\\
+  $L$ & Lipschitz constant\\
+  $\alpha$ & $\alpha$-average constant \\
+  $\beta$ & cocoercive constant \\
+  $\lambda$ & relaxation parameter \\
+  $m$ & number of coordinates for primal variable\\
+  $n$ & dimension of a finite primal dimensional space \\
+  $p$ & number of coordinates for dual variable\\ 
+  $q$ & dimension of a finite dual dimensional space \\
+  \midrule
+  $I$ & identity matrix \\
+  $A, B$ & matrix \\
+  $M$ & metric for primal-dual methods \\
+  \midrule
+  $\circ$ & composition\\
+  $\times$ & Cartesian product \\
+  $(\cdot)^k$ & superscript $k$ as iteration counter \\
+  $(\cdot)_i$ & subscript $i$ as coordinate index\\
+  \bottomrule
+ \end{tabular}
+\end{table}
+
+
+%\end{section}

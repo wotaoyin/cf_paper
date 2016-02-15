@@ -1,0 +1,184 @@
+%% it's a sample file!
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL amsa_main_1.tex   Fri Jan  1 10:13:06 2016
+%DIF ADD amsa_main_2.tex   Thu Dec 31 17:10:20 2015
+%% please use corressponding template
+
+\documentclass[amsa]{ipart}
+
+\newif\ifamsa % declare the amsa switch
+\amsatrue     % set the switch to true
+
+\RequirePackage[OT1]{fontenc}
+\RequirePackage{amsthm,amsmath,amssymb}
+\RequirePackage[numbers,square]{natbib} %
+\RequirePackage[colorlinks]{hyperref}
+
+\newtheorem{thm}{Theorem}
+\def\SM#1#2{\sum_{#1\in #2}}
+\def\FL#1{\left\lfloor #1 \right\rfloor}
+\def\FR#1#2{{\frac{#1}{#2}}}
+
+% settings
+\pubyear{0000}
+\volume{0}
+\issue{0}
+\firstpage{1}
+\lastpage{54}
+
+\received{\smonth{1} \sday{1}, \syear{2016}} %DIF >
+
+\input{macros} % put all macros there
+\usepackage{amsmath}
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFaddtex}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdeltex}[1]{{\protect\color{red}\sout{#1}}}                      %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF HYPERREF PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{\texorpdfstring{\DIFaddtex{#1}}{#1}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{\texorpdfstring{\DIFdeltex{#1}}{}} %DIF PREAMBLE
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+
+\begin{document}
+
+\begin{frontmatter}
+\title{Coordinate Friendly Structures, Algorithms and Applications \thanksref{T1}}
+%\runtitle{CF: Structures, Algorithms, and Applications}
+\thankstext{T1}{This work is supported by NSF Grants DMS-1317602 and ECCS-1462398.}
+\runtitle{Coordinate Friendly Structures, Algorithms, and Applications}
+
+\begin{aug}
+\author{\fnms{Zhimin} \snm{Peng}\ead[label=e1]{zhimin.peng@math.ucla.edu}},
+\address{PO Box 951555\\
+UCLA Math Department\\
+Los Angeles, CA 90095 \\
+\printead{e1}}
+\author{\fnms{Tianyu} \snm{Wu}\ead[label=e2]{wuty11@math.ucla.edu}},
+\address{PO Box 951555\\
+UCLA Math Department\\
+Los Angeles, CA 90095 \\
+\printead{e2}}
+\author{\fnms{Yangyang} \snm{Xu}\ead[label=e3]{yangyang@ima.umn.edu}},
+\address{207 Church St SE \\
+University of Minnesota, Twin Cities \\
+Minneapolis, MN 55455 \\
+\printead{e3}}
+\author{\fnms{Ming} \snm{Yan}\ead[label=e4]{yanm@math.msu.edu}},
+\address{Department of Computational Mathematics, Science and Engineering\\
+Department of Mathematics\\
+Michigan State University \\
+East Lansing, MI 48824 \\
+\printead{e4}}
+\and
+\author{\\\fnms{Wotao} \snm{Yin}
+\ead[label=e5]{wotaoyin@math.ucla.edu}}
+\address{PO Box 951555\\
+UCLA Math Department\\
+Los Angeles, CA 90095 \\
+\printead{e5}}
+
+%\thankstext{t1}{Some comment.}
+%\thankstext{t2}{First supporter of the project.}
+%\thankstext{t3}{Second supporter of the project.}
+% \runauthor{Zhimin Peng, Tianyu Wu, Yangyang Xu, Ming Yan, Wotao Yin}
+
+\affiliation{Some University and Another University}
+
+\end{aug}
+
+\begin{abstract}
+\input{cu_abstract}
+\end{abstract}
+
+%\begin{keyword}[class=AMS]
+%\kwd[Primary ]{00K00}
+%\kwd{00K01}
+%\kwd[; secondary ]{00K02}
+%\end{keyword}
+
+\begin{keyword}
+\kwd{coordinate update}
+\kwd{fixed-point, operator splitting}
+\kwd{parallel}
+\kwd{asynchronous}
+\end{keyword}
+\end{frontmatter}
+
+\newpage
+
+%\input{cu_notation}
+
+\input{cu_intro}
+
+\input{cu_properties}
+
+%\input{cu_single_bcf}
+
+
+\input{cu_comp_bcf}
+
+\input{cu_primal_dual}
+
+%\input{cu_trans}
+
+\input{cu_app_summary}
+
+\subsection{Machine Learning}
+\input{cu_app_emp_risk}
+
+\input{cu_app_svm}
+
+\input{cu_app_glasso}
+
+\subsection{Imaging}
+
+\input{cu_app_tv}
+
+\input{cu_app_3dmesh}
+
+\subsection{Finance}
+
+\input{cu_app_portfolio}
+
+\subsection{Distributed Computing}
+
+\input{cu_app_fbf}
+
+\subsection{Dimension Reduction}
+
+\input{cu_app_nmf}
+
+\subsection{Stylized Optimization}
+\input{cu_app_socp}
+
+\input{cu_numerical}
+
+\input{cu_conclusion}
+
+%\section*{Acknowledgements}
+%We would like to thank the two anonymous reviewers, the associate editor for there constructive and helpful comments.
+
+\bibliographystyle{spmpsci}
+\bibliography{OpSplit,asyn,bcd_ref}
+
+\appendix
+\input{appendix.tex}
+
+
+\end{document}

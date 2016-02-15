@@ -1,0 +1,175 @@
+\section{Some Key Concepts of Operator}\label{sec:op-concept}
+In this section, we go over a few key concepts in monotone operator theory and operator splitting theory.
+\cut{some of them and discuss when they are CF. First, %We first give some definitions.
+}
+
+\begin{definition}[monotone operator]\label{def:max-mon-op}
+A \emph{set-valued} operator $\cT:\HH\rightrightarrows\HH$ is \emph{monotone} if
+$\langle x-y, u-v\rangle\ge 0,\ \forall x,y\in\HH,\, u\in \cT x,\, v\in\cT y.$
+Furthermore, $\cT$ is \emph{maximally monotone} if its graph $\Grph(T)=\{(x,u)\in \HH\times\HH: u\in \cT x\}$ is not strictly contained in the graph of any other monotone operator. 
+\end{definition}
+
+\begin{example}\label{exmp:mon-op}
+An important maximally monotone operator is the subdifferential $\partial f$ of a closed proper convex function $f$.
+\end{example}
+
+\begin{definition}[nonexpansive operator]
+An operator $\cT:\HH\to\HH$ is \emph{nonexpansive} if
+$\|\cT x-\cT y\|\le\|x-y\|,\ \forall x, y\in\HH.$ We say $\cT$ is averaged, or $\alpha$-averaged, if there is one nonexpansive operator $\cR$ such that $\cT=(1-\alpha)\cI+\alpha\cR$ for some $0<\alpha<1$.  A $\frac{1}{2}$-averaged operator $\cT$ is also called \emph{firmly-nonexpansive}.
+%and $\cT$ is \emph{firmly nonexpansive} if
+%$\|u-v\|^2\le\langle u-v,x-y\rangle,\ \forall u\in \cT(x), \forall v\in \cT(y).$ 
+\end{definition}
+By definition, a nonexpansive operator is single-valued. Let $\cT$ be averaged. If $\cT$ has a fixed point, the iteration \eqref{fpi} converges to a fixed point; otherwise, the iteration diverges unboundedly. Now let  $\cT$ be nonexpansive. The convergence is guaranteed~\cite{krasnosel1955two} after damping: $x^{k+1} = x^k-\eta(x^k- \cT x^k)$, for any $0<\eta<1$. 
+
+\begin{example}
+A common firmly-nonexpansive operator is the resolvent of a maximally monotone map $\cT$, written as 
+\begin{equation}\label{def-resolvent}\cJ_\cT := (\cI+\cT)^{-1}.
+\end{equation} Given $x\in\HH$, $\cJ_\cT(x) =  \{y:x\in y+\cT y\}$. (By monotonicity of $\cT$, $\cJ_\cT$ is a singleton, and by maximality of $\cT$, $\cJ_\cT(x)$ is well defined for all $x\in\HH$. ) A reflective resolvent is \begin{equation}\label{def-ref}\cR_{\cJ}:= 2\cJ_\cT-\cI.
+\end{equation}
+\end{example}
+
+\begin{definition}[proximal map]\label{def-prox-map}
+The \emph{proximal map} for function $f$ is a special resolvent and defined as:
+\begin{equation}\label{def-prox}\prox_{\gamma f}(y) = \argmin_x \big\{f(x)+\frac{1}{2\gamma}\|x-y\|^2 \big\},
+\end{equation}
+where $\gamma > 0$. The first-order variational condition of the minimization yields $\prox_{\gamma f}(y)=(\cI+\gamma\partial f)^{-1}$; hence, $\prox_{\gamma f}$ is firmly-nonexpansive. When $x\in\RR^m$ and $\prox_{\gamma f}$ can be computed in $O(m)$ or $O(m\log m)$, we call $f$ \emph{proximable}.
+
+Examples of proximal functions include $\ell_1,\ell_2,\ell_\infty$-norms, several matrix norms, the owl-norm \cite{davis2015n}, (piece-wise) linear functions, certain quadratic functions, and many more.
+\end{definition}
+
+\begin{example}
+ A special proximal map is the projection map. Let $X$ be a nonempty closed convex set, and $\iota_S$ be its indicator function. Minimizing $\iota_S(x)$  enforces $x\in S$,  so $\prox_{\gamma \iota_S}$ reduces to the projection map $\prj_{S}$ for any $\gamma>0$. Therefore, $\prj_{S}$ is also firmly nonexpansive.
+ \end{example}
+
+\cut{A firmly nonexpansive operator is always nonexpansive and maximally monotone \cite[Example 20.27]{B-C2011cvx-mon}. }
+
+\begin{definition}[$\beta$-cocoercive operator]
+An operator $\cT:\HH\to\HH$ is \emph{$\beta$-cocoercive} if 
+$\langle x-y, \cT x-\cT y\rangle \ge \beta \|\cT x-\cT y\|^2,\ \forall x,y\in\HH.$ 
+\end{definition}
+
+\begin{example}
+A special example of  cocoercive operator is the gradient of a smooth function. Let $f$ be a differentiable function. Then $\nabla f$ is $\beta$-Lipschitz continuous \emph{if and only if} $\nabla f$ is $\frac{1}{\beta}$-cocoercive \cite[Corollary 18.16]{B-C2011cvx-mon}. \cut{If $\cT$ is $\beta$-cocoercive, $\beta \cT$ must be firmly nonexpansive \cite[Remark 4.24]{B-C2011cvx-mon}, and $\cT$ is maximally monotone.}
+\end{example}
+\cut{
+At last we give a counterexample to show naively extending existing algorithms to coordinate update schemes may result in divergence or wrong solutions.
+\begin{example}
+Consider the problem:
+\begin{equation}
+\begin{array}{l}
+\underset{x_1,x_2\in\RR^m}{\textnormal{minimize  }} ~f(x_1)+g(x_2)\\
+\textnormal{subject to } x_1-x_2=0,
+\end{array}\label{c-e}
+\end{equation}
+We define $x=\begin{bmatrix}
+x_1\\
+x_2
+\end{bmatrix},A=[I_m ~-I_m],F(x)=f(x_1)+g(x_2)$. $\eqref{c-e}$ can be solved by using $\eqref{pdemp}$:
+\begin{equation}
+\left\{
+\begin{array}{l}
+s^{k+1}=s^k+\gamma Ax^k\\
+x^{k+1}=\prox_{\eta F}(x^k-\eta(A^\top s^k+2\gamma A^\top Ax^k))
+\end{array}\label{c-efull}
+\right.
+\end{equation}
+Where $s^k\in \RR^m,k=1,2,\ldots$ is a dual variable.
+Defining $t^k=A^\top s^k$, $\eqref{c-efull}$ can be written as
+\begin{equation}
+\left\{
+\begin{array}{l}
+t^{k+1}=t^k+\gamma A^\top Ax^k\\
+x^{k+1}=\prox_{\eta F}(x^k-\eta(t^k+2\gamma A^\top Ax^k))
+\end{array}\label{c-efull2}
+\right.
+\end{equation}
+Both $\eqref{c-efull}$ and $\eqref{c-efull2}$ (with $t^0=A^Ts^0$) converge in practice and so does coordinate update versions of $\eqref{c-efull}$. But our experiments show that coordinate update versions of $\eqref{c-efull2}$ do not converge to the solution of problem $\eqref{c-e}$. A key factor is that with full update versions of $\eqref{c-efull}$ and $\eqref{c-efull2}$, as well as coordinate update versions of $\eqref{c-efull}$, $t^k$ always stay in the image of $A^T$. But with coordinate update versions of $\eqref{c-efull2}$, $t^k$ do not always stay in the image of $A^T$, which causes trouble.
+\end{example}
+}
+\section{Derivation of ADMM from the DRS update}\label{sec:drs-admm}
+We derive the ADMM update in \eqref{eq:admmx-y} from the DRS update \begin{subequations}\label{eqop}
+\begin{align}
+s^k=&\ \cJ_{\eta \cB}(t^k),\label{eqop-s}\\
+t^{k+1}=&\ \left(\frac{1}{2}(2\cJ_{\eta\cA}-\cI)\circ(2\cJ_{\eta \cB}-\cI)+\frac{1}{2}\cI\right)(t^k)\label{eqop-t},
+\end{align}
+\end{subequations} 
+where $\cA=-\partial f^*(-\cdot)$ and $\cB=\partial g^*$.
+
+
+Note \eqref{eqop-s} is equivalent to $t^k\in s^k+\eta \partial g^*(s^k)$, i.e., there is $y^k\in \partial g^*(s^k)$ such that $t^k = s^k+\eta y^k$, so
+\begin{equation}\label{tempeq1}
+t^k-\eta y^k=s^k\in\partial g(y^k).
+\end{equation} 
+In addition, \eqref{eqop-t} can be written as
+\begin{align}
+t^{k+1}=&\ \cJ_{\eta\cA}(2s^k-t^k)+t^k-s^k\cr
+=&\ s^k+(\cJ_{\eta\cA}-\cI)(2s^k-t^k)\cr
+=&\ s^k+(\cI-(\cI+\eta\partial f^*)^{-1})(t^k-2s^k)\cr
+=&\ s^k+\eta(\eta\cI+\partial f)^{-1}(t^k-2s^k)\cr
+=&\ s^k+\eta(\eta\cI+\partial f)^{-1}(\eta y^k-s^k),\label{tempeq2}
+\end{align} 
+where in the fourth equality, we have used Moreau's Identity \cite{rockafellar1997convex}: $(\cI+\partial h)^{-1}+(\cI+\partial h^*)^{-1}=\cI$ for any closed convex function $h$. Let
+\begin{equation}\label{up-x}
+x^{k+1}=(\eta\cI+\partial f)^{-1}(\eta y^k-s^k)=(\cI+\frac{1}{\eta}\partial f)^{-1}(y^k-\frac{1}{\eta}s^k).
+\end{equation}
+Then \eqref{tempeq2} becomes
+\begin{equation*}
+t^{k+1}=s^k+\eta x^{k+1},
+\end{equation*}
+and 
+\begin{equation}\label{up-s}
+s^{k+1}\overset{\eqref{tempeq1}}=t^{k+1}-\eta y^{k+1}=s^k+\eta x^{k+1}-\eta y^{k+1},
+\end{equation}
+which together with $s^{k+1}\in\partial g(y^{k+1})$ gives
+\begin{equation}\label{up-y}
+y^{k+1}=(\eta\cI+\partial g)^{-1}(t^k+\eta x^{k+1})=(\cI+\frac{1}{\eta}\partial g)^{-1}(x^{k+1}+\frac{1}{\eta}s^k).
+\end{equation}
+Hence, from \eqref{up-x}, \eqref{up-s}, and \eqref{up-y}, the ADMM update in \eqref{eq:admmx-y} is equivalent to the DRS update in \eqref{eqop} with $\eta=\frac{1}{\gamma}$.
+\section{Representing the Condat-V\~{u} Algorithm as a Nonexpansive Operator}\label{sec:vc-op}
+We show how to derive the Condat-V\~{u} algorithm $\eqref{vucondat}$ by applying a forward-backward operator to the optimality condition $\eqref{pdkkt}$:
+\begin{equation}
+0\in\underbrace{\begin{bmatrix}
+\nabla f(x)\\
+0
+\end{bmatrix}}_{\mbox{operator}~\cA}+\underbrace{
+\begin{bmatrix}
+\partial g(x)\\
+\partial h^*(s)
+\end{bmatrix}+\begin{bmatrix}
+0&A^\top\\
+-A&0
+\end{bmatrix}\begin{bmatrix}
+x\\
+s
+\end{bmatrix}}_{\mbox{operator}~\cB}.
+\end{equation} 
+It can be written as $0\in\cA z+\cB z$ after we define $z=\begin{bmatrix}x\\ s\end{bmatrix}$. Let $M$ be a symmetric positive definite matrix, we have
+\begin{align*}
+&0\in\cA z+\cB z\\
+\Leftrightarrow& Mz-\cA z \in Mz+\cB z\\
+\Leftrightarrow& z-M^{-1}\cA z \in z+M^{-1}\cB z\\
+\Leftrightarrow& z=(\cI+M^{-1}\cB)^{-1}\circ(\cI-M^{-1}\cA)z.
+\end{align*}
+Convergence and other results can be found in \cite{davis2014convergence}. The last equivalent relation is due to $M^{-1}\cB$ being a maximally monotone operator. We let $$M=\begin{bmatrix}
+\frac{1}{\eta}I&A^\top\\
+A&\frac{1}{\gamma}I
+\end{bmatrix}\succ 0$$
+and iterate $$z^{k+1}=\cT z^k=(\cI+M^{-1}\cB)^{-1}\circ(\cI-M^{-1}\cA)z^k.$$
+We have $Mz^{k+1}+\tilde{\cB}z^{k+1}= Mz^k-\cA z^k$:
+$$\left\{\begin{array}{ll}
+\frac{1}{\eta}x^k \textcolor{red}{ +A^\top s^{k}}- \nabla f(x^k)&\in \frac{1}{\eta}x^{k+1} \textcolor{red}{+ A^\top s^{k+1}}+\textcolor{blue}{A^\top s^{k+1}}+\nabla g (x^{k+1}),\\ 
+\frac{1}{\gamma}s^k \textcolor{red}{+ A~ x^{k~}}&\in \frac{1}{\gamma}s^{k+1}\textcolor{red}{+ A~ x^{k+1~}} -\textcolor{blue}{A ~x^{k+1}} ~+\nabla h^*(s^{k+1}),
+\end{array}\right.$$
+which is equivalent to
+$$\left\{
+\begin{array}{l}
+s^{k+1}=\prox_{\gamma h^*} (s^k+\gamma Ax^k)\\
+x^{k+1}=\prox_{\eta g}(x^k-\eta(\nabla f(x^k)+A^\top(2s^{k+1}-s^k)))
+\end{array}
+\right.$$
+Now we derived the Condat-V\~{u} algorithm. With proper choice of $\eta$ and $\gamma $, the forward-backward operator $\cT=(\cI+M^{-1}\cB)^{-1}\circ(\cI-M^{-1}\cA)$ can be shown to be $\alpha$-averaged if we use the inner product $\langle z_1,z_2\rangle_M=z_1^\top Mz_2$ and norm $\|z\|_M=\sqrt{z^\top Mz}$ on the space of $z=\begin{bmatrix}x\\ s\end{bmatrix}$. More details can be found in~\cite{davis2014convergence}.
+
+If we change the matrix $M$ to $\begin{bmatrix}
+\frac{1}{\eta}I&-A^\top\\
+-A&\frac{1}{\gamma}I
+\end{bmatrix}$, the other algorithm $\eqref{vucondat2}$ can be derived in the same way.

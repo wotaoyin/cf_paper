@@ -1,0 +1,28 @@
+\subsection{Problem Setup}
+Throughout this paper, we consider the following fixed point problem
+\begin{equation}\label{eqn:fix_point_set}
+\text{find } x^* \in \HH \qquad \text{ such that }  \qquad \cT x^* = x^*,
+\end{equation}
+where $\HH$ is a real Hilbert space, and $\cT: \HH \rightarrow \HH$ is a map. In general, the full fixed point update scheme is the following
+\begin{equation}\label{eqn:fixed_itr}
+x^{k+1} = \cT x^k.
+\end{equation}
+The full fixed point update requires evaluating the entire operator $\cT$ on the point $x^k$ in each iteration, which might be computationally expensive for some huge scale problems. Compared to the full fixed point update \eqref{eqn:fixed_itr}, BC update is the following
+\begin{equation}\label{eqn:bc_update}
+x^{k+1} = \cS_{i^k} \circ \cT x^k,
+\end{equation}
+where $S_i: \HH \rightarrow \HH$ denotes the down sampling operator to the $i$th block coordinate, i.e.,
+\begin{equation}\label{eqn:ds_op}
+\cS_i \, x = \underbrace{(0, ..., 0, x_i, 0, ..., 0)}_{m \text{~blocks}}.
+\end{equation}
+So \eqref{eqn:bc_update} means $i_k$th block coordinates is selected and updated. In general, there are three different ways to choose $i_k$ in each iteration, including cyclic selection, greedy selection, and random selection. Greedy selection rule usually requires to evaluate the entire vector $\cT x^k$, and then select only one block of coordinates to update according to some predefined rule. This selection rule has higher per iteration computational complexity, however, it might converges faster than the other two selection schemes \cite{??}. \commzp{Do we want to focus on random selection?} This paper focuses on the random selection, where each block of coordinates is selected with the same probability $\frac{1}{m}$. To enable parallelization, we assume that there are $p$  processors ($p < m$). In each iteration, instead of updating one block coordinate, each processor randomly selects an index $i_j^k \in \{1, ..., m\}$, where $j = 1, ..., p$, then they make the following update in parallel
+\begin{equation}\label{eqn:pa_bc_update}
+x^{k+1} = \cS_{i_j^k} \circ \cT \, x^k, ~~~~\text{for all $j=1, ..., p.$}
+\end{equation}
+
+It is worth noting that both the sequential BC update \eqref{eqn:bc_update} and the parallel BC update make sense only when computing $\cS_i \circ \cT x$ for different $i$ is \emph{significantly easier} than computing $\cT x$. Otherwise, we would rather make the full update instead of discarding the already computed information. Our goal is to identify some maps $\cT$ for which separately computing $\cS_i \circ \cT$ for different $i$ is significantly easier than computing $\cT$. That means $\cT$ shall allow block coordinate parallelization with no or little extra effort. To simplify the terminology, we make the following definition.
+\begin{definition}[\commzp{CU is not defined} CU-friendly map]
+A map $\cT: \HH \rightarrow \HH$ is \emph{CU-friendly}, if evaluating $S_i \circ \cT x$ is significantly easier than evaluating $\cT x$ for all $i$.
+\end{definition}
+
+We distinguish two different cases: single CU-friendly map and composite CU-friendly map.

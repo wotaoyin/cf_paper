@@ -1,0 +1,81 @@
+% !TEX root = ./main.tex
+\begin{section}{Single Coordinate Friendly Maps}
+In this section, we consider several different types of single BC-friendly maps. Our starting point is based on the following observation. 
+\begin{subsection}{Coordinate separable maps}
+Assume $\HH = \HH_1 \times \cdots \times \HH_m$, where $m > 0 $ is the number of blocks. If $\cT: \HH \rightarrow \HH$ satisfies the following
+$$\cT = \begin{bmatrix}\cT_1 & & \\ & \ddots& \\ & & \cT_m\end{bmatrix},$$
+where $\cT_i: \HH_i \rightarrow \HH_i$, then $\cT$ is called block-separable. We denote $\cT$ as $\cT=\cT_{1}\times\cdots\times \cT_{m}$. Thus, computing $\cS_i \circ \cT x$ takes no extra effort, since
+$$(\cS_i \circ \cT) x = (\cT x)_i = \cT_i x_i.$$
+The computation only involves a block of coordinates $x_i$ and a small operator $\cT_i$.  It would be embarrassingly parallelization, since the block of coordinates and the $\cT_i$s are independent with each other, and the computation can be carried out without any communication. So block-separable maps are BC-friendly.
+\end{subsection}
+\begin{example}[Block diagonal matrix]
+The following block diagonal matrix 
+$$A = \begin{bmatrix}A_1 & & \\ & \ddots& \\ & & A_m\end{bmatrix}$$
+is BC-friendly.
+\end{example}
+
+\begin{example}[Block-separable function]
+If $f: \mathbb{R}^n \rightarrow \mathbb{R}$ is a block-separable function, that is, 
+$$f(x) = \sum_{i=1}^m f_i(x_i),$$
+where $x = (x_1; \cdots; x_m)$, then both $\nabla f$ and $\prox_{\gamma f}$ are block-separable maps, in fact, we have
+$$\nabla f(x) = \begin{bmatrix} \nabla f_1 (x_1) \\ \vdots \\ \nabla f_m(x_m) \end{bmatrix}, \qquad \prox_{\gamma f}(x) = \begin{bmatrix}  \prox_{\gamma f_1} (x_1) \\ \vdots \\  \prox_{\gamma f_m}(x_m) \end{bmatrix}.$$
+Here, the proximal operator $\prox_{f} (x)$ is defined as the following
+$$\prox_{f} (x) = \argmin_{y \in \mathbb{R}^n} f(x) + \frac{1}{2} \|x - y\|^2.$$
+\end{example}
+
+\begin{example}[Affine maps]
+If $\cT$ is block-separable and $b \in \HH$ is a constant, then the map $\cT x + b$ is also BC-separable. 
+\end{example}
+
+\begin{example}[Linear combination of maps]
+The linear combination of block separable maps with any other BC-friendly maps is also BC-friendly. For example, $I - \gamma \, \nabla f$ is BC-friendly if $\nabla f$ is BC-friendly. 
+\end{example}
+
+
+\begin{subsection}{Sparsely supported maps}
+\begin{definition}[Sparsely supported map]
+Let $I_i$ be a subset of $\{1, ..., m\}$. Consider $\cT: \HH \rightarrow \HH$ that satisfies
+\begin{equation}
+(\cS_i \circ \cT) x = (\cT x)_i = \cT_i(\{x_j\}_{j\in I_i}).
+\end{equation}
+That is evaluating $(\cT x)_i$ only requires knowledge of those components of $x_j \in I_i$. If the maximum cardinality $\max_{i} |I_i| < c$ and $c \ll m$, then $\cT$ is said to be \emph{sparsely supported}. 
+\end{definition}
+Since for all $i$, evaluating $(\cS_i \circ \cT) x$ only requires reading a few BC of $x$, hence it is significantly easier than computing $\cT x$. As a consequence, sparsely supported maps are BC-friendly. 
+
+\begin{example}[Block banded matrix]
+A (block) banded matrix, such as
+$$A = \begin{bmatrix}A_{11} & A_{12} & \\ A_{21}& A_{22} & \ddots \\ & \ddots & \ddots & A_{m-1,m}\\&  & A_{m,m-1} & A_{m,m}\end{bmatrix},$$
+is a sparse supported map. Some of the block banded matrix comes from finite difference scheme for solving differential equations, and inverse covariance matrix. 
+\end{example}
+
+\begin{example}[Gradient of sparse separable cost functions]
+If $f: \mathbb{R}^n \rightarrow \mathbb{R}$ is a sparse separable function, that is,
+$$f(x) = \sum_{e \in E} f_e (x_e),$$
+where $e$ denotes a small subset of $\{1, ..., m\}$ and $x_e$ is the values of the vector $x$ on the indices $e$. Note that the cost function of many machine learning problems are sparse in the sense that each cost function only depends on a very small number of components $x$. So the component of the gradient of $f(x)$ will also only depend on a few block of coordinates of $x$.
+\end{example}
+
+\begin{subsection}{Finite dimensional affine maps}
+Let $\cT:\mathbb{R}^n \rightarrow \mathbb{R}^n $, and $\cT(x) = A x + b$. Then $\cS_i \circ (\cT x) = a_i^T x + b_i$, where $a_i, b_i$ are the $i$th block rows of $A$, and $b$ respectively. Observe that the complexity of $\cS_i \circ (\cT x)$ is $O(m n)$, however, the complexity for evaluating $\cT x$ is $O(n^2)$. We can choose $m \ll n$, then the affine map $\cT$ is BC-friendly. The extra cost we pay for parallelization is that $x$ needs to be read $n/m$ times instead of once compared to the serial implementation.
+\end{subsection}
+
+
+
+\end{subsection}
+
+\begin{subsection}{Proximal friendly maps}
+A function $r$ is \emph{proximal friendly} if the following problem  {\color{blue} is not difficult, (or say has closed form representation.)}
+\begin{equation}
+\prox_r(x) = \argmin_{y} r(y) + \frac{1}{2} \|x - y\|^2.
+\end{equation}
+As we have shown before, if $r(x)$ is block separable, then the $\prox_r$ is also block separable. Examples of such include $\ell_1$ norm, indicate function of box constraints $\{x ~|~ a \leq x \leq b\}$, and the $\ell_{2,1}$ norm. Some other non separable examples but easy to evaluate their proximal map include indicate function of $\ell_2$ ball, $\ell_1$ ball, and indicate function of the probability simplex $\{x~|~ \sum_{i=1}^n x_i = 1, x_i \geq 0\}$. The proximal maps correspond to the projection of the sets. 
+
+
+
+\end{subsection}
+
+\begin{subsection}{Easy-to-update maps}
+
+\end{subsection}
+
+
+\end{section}
