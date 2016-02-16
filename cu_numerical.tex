@@ -86,31 +86,31 @@ In our numerical experiments, for comparison purposes, we first obtain a high ac
 \end{figure}
 
 \subsection{Computed Tomography Image Reconstruction}\label{sec:tv}
-We compare the performance of algorithm~\eqref{eqn:pd_tvl2} and its corresponding coordinate version on Computed Tomography (CT) image reconstruction. We choose the standard Shepp-Logan phantom of size $256\times 256$ as the input image and apply the Siddon's algorithm~\cite{Siddon} to form the sinogram data. There are 90 parallel beam projections and, for each projection, there are 362 measurements. Then the sinogram data is corrupted with Gaussian noise. We formulate the image reconstruction problem in the form of~\eqref{eqn:tvl2}. The primal-dual full update corresponds to \eqref{eqn:pd_tvl2}. For coordinate update, the block size for $x$ is set to 256, which corresponds to a column of the image. The dual variables $s, t$ are also partitioned into 256 blocks accordingly. A block of $x$ and the corresponding blocks of $s$ and $t$ are bundled together as a single block. In each iteration, a bundled block is randomly chosen and updated. The reconstruction results are shown in Figure~\ref{fig:pds_results}. After 100 epochs, the image recovered by the coordinate version is better than that by~\eqref{eqn:pd_tvl2}. As shown in Figure~\ref{fig:pds_d}, the coordinate version converges faster than~\eqref{eqn:pd_tvl2}.
+We compare the performance of algorithm~\eqref{eqn:pd_tvl2} and its corresponding coordinate version on Computed Tomography (CT) image reconstruction. We generate a thorax phantom of size $284\times 284$ to simulate spectral CT measurements.  We then apply the Siddon's algorithm~\cite{Siddon} to form the sinogram data. There are 90 parallel beam projections and, for each projection, there are 362 measurements. Then the sinogram data is corrupted with Gaussian noise. We formulate the image reconstruction problem in the form of~\eqref{eqn:tvl2}. The primal-dual full update corresponds to \eqref{eqn:pd_tvl2}. For coordinate update, the block size for $x$ is set to 284, which corresponds to a column of the image. The dual variables $s, t$ are also partitioned into 284 blocks accordingly. A block of $x$ and the corresponding blocks of $s$ and $t$ are bundled together as a single block. In each iteration, a bundled block is randomly chosen and updated. The reconstruction results are shown in Figure~\ref{fig:pds_results}. After 100 epochs, the image recovered by the coordinate version is better than that by~\eqref{eqn:pd_tvl2}. As shown in Figure~\ref{fig:pds_d}, the coordinate version converges faster than~\eqref{eqn:pd_tvl2}.
 
 %For the numerical experiments, we choose the two dimensional Shepp-Logan phantom of dimension $256 \times 256$. The sampling matrix is obtained by ???(Ming, can you comment on this?). The sonogram data is corrupted with Gaussian noise. We present the results using 90 views. The reconstructions results are shown in Figure \ref{fig:pds_results}. We can see that within 100 epochs, the reconstructed image by PDS coordinate update method is better than the one by PDS. Figure \ref{fig:pds_d} also shows that PDS coordinate update method converges faster than PDS. 
 
 \begin{figure}[!htb] \centering
     \begin{subfigure}{0.45\linewidth}
     	\centering
-        \includegraphics[width=0.9\linewidth]{./figs/phantom_img}
+        \includegraphics[width=0.9\linewidth]{./figs/origin_img}
          \caption{Phantom image}\label{fig:pds_a}		
     \end{subfigure} %
     \quad
     \begin{subfigure}{0.45\linewidth}
     	\centering
-        \includegraphics[width=0.9\linewidth]{./figs/phantom_pds_img}
+        \includegraphics[width=0.9\linewidth]{./figs/new_fig_pds_img}
          \caption{Recovered by PDS}\label{fig:pds_b}		        
     \end{subfigure} %
     \begin{subfigure}{0.45\linewidth}
     	\centering
-        \includegraphics[width=0.9\linewidth]{./figs/phantom_pds_coord_img}
+        \includegraphics[width=0.9\linewidth]{./figs/new_fig_pds_coord_img}
          \caption{Recovered by PDS coord}\label{fig:pds_c}		        
     \end{subfigure} %
     \quad
     \begin{subfigure}{0.45\linewidth}
     	\centering
-        \includegraphics[width=\linewidth]{./figs/phantom_func_val_cropped}
+        \includegraphics[width=\linewidth]{./figs/new_fig_func_val}
          \caption{Objective function value}\label{fig:pds_d}		                
     \end{subfigure} %    
     \caption{CT image reconstruction.}
