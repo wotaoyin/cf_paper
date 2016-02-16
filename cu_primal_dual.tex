@@ -54,7 +54,7 @@ s
 \end{bmatrix}}_{z},\label{pdkkt}
 \end{equation}
 %If we define $z=\begin{bmatrix}x\\ s\end{bmatrix}$, the above condition can be written as $0\in\cA z+\cB z$.
-which we shorten as $0\in\cA z+\cB z$.
+which we shorten as $0\in\cA z+\cB z$, with $z\in\HH\times\GG=:\FF$.
 
 \cut{\begin{remark}
 In a variant of problem $\eqref{pdproblem}$\cite{}, $h(Ax)$ is replaced by $(h\Box l)(Ax)$ with $l$ a strongly convex function (thus $l^*$ is differentiable). $\Box$ is the infimal convolution operator defined as $(h\Box l)(y)=\inf_{z\in\GG} h(z)+l(y-z)$, which is used, for example, in dual smoothing\cite{?}. Because $s\in (\partial h\Box\partial l)(Ax)\Leftrightarrow Ax\in \partial h^*(s)+\partial l^*(s)$, $\eqref{pdkkt}$ becomes: $0\in\begin{bmatrix}
@@ -98,7 +98,7 @@ x^{k+1}=\prox_{\eta g}(x^k-\eta(\nabla f(x^k)+A^\top(2s^{k+1}-s^k))),
 %\right.\label{vucondatemp}
 %\end{equation}
 which explicitly applies $A$ and $A^\top$ and updates $s,x$ in a Gauss-Seidel style~\footnote{By the Moreau identity: $\prox_{\gamma h^*}=\cI -\gamma \prox_{\frac{1}{\gamma}h}(\frac{\cdot}{\gamma})$, one can compute $\prox_{\frac{1}{\gamma} h}$ instead of $\prox_{\gamma h^*}$. The latter inherits the same separability properties from the former.}.
-We introduce an operator $\TVC:\HH\times\GG\to \HH\times\GG$ and write 
+We introduce an operator $\TVC:\FF\to \FF$ and write 
 $$\mbox{iteration \eqref{vucondat}}\quad\Longleftrightarrow\quad z^{k+1}=\TVC(z^k).$$ 
 
 %\begin{remark}
@@ -369,7 +369,7 @@ Typical choices of $\rho_{i,j}$ include: (1) one of the $\rho_{i,j}$'s is 1 for 
 In their paper \cite{fercoq2015coordinate}, Fercoq and Bianchi proposed a different primal-dual coordinate update algorithm. 
 They produced a new matrix $\bar{A}$ based on $A$, with only one nonzero entry in each row, i.e. $m_j=1$ for each $j$. They also modify $h$ to $\bar{h}$ so that the problem
 \begin{equation}
-\underset{x\in\mathbb{H}}{\text{minimize }} f(x)+g(x)+\bar{h}(\bar{A}x)\label{fbpdproblem}
+\underset{x\in\mathbb{H}}{\textnormal{minimize }} f(x)+g(x)+\bar{h}(\bar{A}x)\label{fbpdproblem}
 \end{equation}
 has the same solution as $\eqref{pdproblem}$. Then they solve $\eqref{fbpdproblem}$ by the scheme $\eqref{pdoverlap}$. Because they have $m_j=1$, every dual variable coordinate is only associated with one primal variable coordinate. 
 They create non-overlap blocks of $z$ by duplicating each dual variable coordinate $s_j$ multiple times. The computation cost for each block coordinate update of their algorithm is the same as $\eqref{pdoverlap}$, but more memory is needed since duplicated copies of each $s_j$ are stored and updated.
@@ -382,7 +382,7 @@ In this section we propose some primal dual coordinate update algorithms based o
 \begin{algorithm}[H]\label{alg:asyn_core}
 %\SetAlgoLined
 \SetKwInOut{Input}{Input}\SetKwInOut{Output}{output}
-\Input{$z^0\in\HH\times\GG$,  $K>0$, a discrete distribution $(q_1,\ldots,q_{m+p})$
+\Input{$z^0\in\FF$,  $K>0$, a discrete distribution $(q_1,\ldots,q_{m+p})$
 with $\sum_{i=1}^{m+p}q_i=1$ and $q_i>0,\forall i$, } set global iteration
 counter $k=0$\; \While{$k < K$, every agent asynchronously and continuously}{
   select $i_k\in\{1,\ldots,m+p\}$ with $\mathrm{Prob}(i_k=i)=q_i$\;%from $\{1,
@@ -403,19 +403,20 @@ the form:
 \label{eqn:asyn_update}
 \left\{
 \begin{array}{l}
-z_{i_k}^{k+1} = z_{i_k}^k - \frac{\eta_k}{(m+p)q_{i_k}} \, (\hat{z}_{i_k}-(\TVC \hat{z}^k)_{i_k}),\\
+z_{i_k}^{k+1} = z_{i_k}^k - \frac{\eta_k}{(m+p)q_{i_k}} \, (\hat{z}^k_{i_k}-(\TVC \hat{z}^k)_{i_k}),\\
 z_i^{k+1}=z_i^k,\quad \forall i\neq i_k,
 \end{array}
 \right.
 \end{equation}
 where $\eta_k$ is the step size, $z^k$ denotes the state of $z$ in global memory just before the update~\eqref{eqn:asyn_update} is applied, and $\hat{z}^k$ is the result that $z$ in global memory is read by an agent to its local cache. Due to possible updates to $z$ by other agents, $\hat{z}^k$
 can be different from $z^k$. We refer the reader to~\cite[Section 1.2]{Peng_2015_AROCK} for more details.\\
-
+When there is only one agent and no delay,  all algorithms proposed in this section become stochastic coordinate update algorithms, and their convergence is a direct consequence of our convergence theorem~\ref{thm:async-convergence}. Moreover, our convergence analysis also applies to sync-parallel algorithms.
+ 
 We also propose an async-parallel primal dual algorithm using the \\overlapping-block coordinate update~\eqref{pdoverlap}:\\
 \begin{algorithm}[H]\label{alg:asyn_overlap}
 %\SetAlgoLined
 \SetKwInOut{Input}{Input}\SetKwInOut{Output}{output}
-\Input{$z^0\in\HH\times\GG$,  $K>0$, a discrete distribution $(q_1,\ldots,q_{m})$
+\Input{$z^0\in\FF$,  $K>0$, a discrete distribution $(q_1,\ldots,q_{m})$
 with $\sum_{i=1}^{m}q_i=1$ and $q_i>0,\forall i$, } set global iteration
 counter $k=0$\; \While{$k < K$, every agent asynchronously and continuously}{
   select $i_k\in\{1,\ldots,m\}$ with $\mathrm{Prob}(i_k=i)=q_i$\;%from $\{1,
@@ -435,7 +436,7 @@ For the shared memory architecture, it is recommended to set all but one $\rho_{
 \end{remark}
 Now we state the convergence theorem for Algorithm \ref{alg:asyn_core} and \ref{alg:asyn_overlap}.
 \begin{thm}\label{thm:async-convergence}
-Let $Z^*$ be the set of optimal solutions of problem \eqref{pdproblem} and let $(z^k)_{k\geq0}\subset \HH\times\GG$ be the sequence generated by Algorithm \ref{alg:asyn_core} or Algorithm \ref{alg:asyn_overlap} under the following conditions:
+Let $Z^*$ be the set of optimal solutions of problem \eqref{pdproblem} and let $(z^k)_{k\geq0}\subset \FF$ be the sequence generated by Algorithm \ref{alg:asyn_core} or Algorithm \ref{alg:asyn_overlap} under the following conditions:
 \begin{enumerate}[(i)]
 \item $f,g,h^*$ are closed proper convex functions and $f$ is differentiable with $\nabla f$ $\beta$-Lipschitz continuous;
 \item the delay for every coordinate is bounded by a positive number $\tau$, i.e. for every $1\leq i\leq m+p$, $\hat{z}^{k}_{i}=z_i^{k-d_{i}^k}$ for some $0\leq d_{i}^k\leq\tau$;
@@ -445,7 +446,4 @@ Let $Z^*$ be the set of optimal solutions of problem \eqref{pdproblem} and let $
 We have with probability 1, $(z^k)_{k\geq 0}$ converges to a $Z^*$-valued random variable.
 \end{thm} 
 The explicit formula for $\eta_{\min},\eta_{\max}$, the proof and some other remarks are included in Appendix \ref{pf:pdasync}.
-\begin{remark}
-When there is only one agent and we have no delay, the async-parallel algorithms we propose become stochastic coordinate update algorithms, and their convergence is a direct consequence of Theorem~\ref{thm:async-convergence}.
-\end{remark}
 }
