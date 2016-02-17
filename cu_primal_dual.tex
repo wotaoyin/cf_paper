@@ -305,7 +305,7 @@ x-\eta(\nabla f(x)+A^\top s+2\gamma A^\top Ax-2\gamma A^\top b)
 %\begin{remark}
 %All the above schemes have provable convergence but we neglect them due to the purpose of this paper. The efficiency of the schemes are increasing from the first one to the last one since less and less information is discarded. When $m_j=1$ for every $j$, the second and the third scheme will be the same
 %\end{remark}
-\subsection{Overlapping-block Coordinate Updates}
+\subsection{Overlapping-block Coordinate Updates}\label{sec:overlap}
 {In the coordinate update scheme proposed in \S\ref{sec:pdcu}, updating $x_i$ involves computing $s^{k+1}$ but the result is discarded (see the proof of Proposition \ref{prop1}, item 1). This is because $x_i$'s and $s_j$'s are coupled through the matrix $A$.
 
 We define, for each $i$,  $\JJ(i)\subset \{1,2,\ldots, p\}$ as the set of indices $ j$ such that $A^\top_{i,j}\neq 0$, and, for each $j$,  $\II(j)\subset\{1,2,\ldots,m\}$ as the set of indices of $i$ such that $A_{j,i}\neq 0$. We also let $m_j:=|\II(j)|$, and assume $m_j\neq 0,\forall j=1,2,\ldots, p$ without loss of generality.
@@ -321,8 +321,8 @@ Our update scheme is proposed as:
 \left\{
 \begin{array}{l}
 \text{when the }i\text{th coordinate is chosen, compute}\\
-\tilde{s_j}^{k+1}=\prox_{\gamma h_j^*} (s_j^k+\gamma (Ax^k)_j),~\mbox{for all}~ j\in\JJ(i),\\
-\tilde{x_i}^{k+1}=\prox_{\eta g_i}(x_i^k-\eta(\nabla_i f(x^k)+\sum_{j\in\JJ(i)}A_{i,j}^\top(2\tilde{s}_j^{k+1}-s_j^k))),\\
+\tilde{s}_j^{k+1}=\prox_{\gamma h_j^*} (s_j^k+\gamma (Ax^k)_j),~\mbox{for all}~ j\in\JJ(i),\\
+\tilde{x}_i^{k+1}=\prox_{\eta g_i}(x_i^k-\eta(\nabla_i f(x^k)+\sum_{j\in\JJ(i)}A_{i,j}^\top(2\tilde{s}_j^{k+1}-s_j^k))),\\
 \text{update }x_i^{k+1}=x_i^k+(\tilde{x}_i^{k+1}-x_i^k), \\
 \text{update }s_j^{k+1}=s_j^k+\rho_{i,j}(\tilde{s}_j^{k+1}-s_j^k),~\mbox{for all}~ j\in\JJ(i).
 \end{array}
@@ -378,7 +378,18 @@ They create non-overlap blocks of $z$ by duplicating each dual variable coordina
 \rev{
 \subsection{Async-parallel Primal Dual Coordinate Update Algorithms and Their Convergence}}
 \rev{
-In this section we propose some primal dual coordinate update algorithms based on  \cite{Peng_2015_AROCK} and state their convergence theorems. We assume a shared memory architecture and allow delays and inconsistent reading (see below for explanations).\\
+In this section, we propose two async-parallel primal dual coordinate update algorithms based on~\cite{Peng_2015_AROCK} and state their convergence results. 
+When there is only one agent, all algorithms proposed in this section become stochastic coordinate update algorithms~\cite{Patrick_2015}, and their convergence is a direct consequence of Theorem~\ref{thm:async-convergence}. Moreover, our convergence analysis also applies to sync-parallel algorithms.
+
+
+
+The two algorithms are based on Sections~\ref{sec:pdcu} and~\ref{sec:overlap}, respectively.
+
+
+%We assume a shared memory architecture and allow delays and inconsistent reading (see below for explanations).
+
+
+
 \begin{algorithm}[H]\label{alg:asyn_core}
 %\SetAlgoLined
 \SetKwInOut{Input}{Input}\SetKwInOut{Output}{output}
@@ -396,8 +407,7 @@ counter $k=0$\; \While{$k < K$, every agent asynchronously and continuously}{
 \end{algorithm}
 
 Whenever an agent updates a coordinate, the global iteration number $k$ increases by one.
-
-The $k$th update is applied to $z_{i_k}$, with $i_k,k=1,2,...$ being independent random variables. $z_i=x_i$ when $i\leq m$ and $z_i=s_{i-m}$ when $i>m$.  Each coordinate update has
+The $k$th update is applied to $z_{i_k}$, with $i_k$ being independent random variables. $z_i=x_i$ when $i\leq m$ and $z_i=s_{i-m}$ when $i>m$.  Each coordinate update has
 the form:
 \begin{equation}
 \label{eqn:asyn_update}
@@ -409,10 +419,10 @@ z_i^{k+1}=z_i^k,\quad \forall i\neq i_k,
 \right.
 \end{equation}
 where $\eta_k$ is the step size, $z^k$ denotes the state of $z$ in global memory just before the update~\eqref{eqn:asyn_update} is applied, and $\hat{z}^k$ is the result that $z$ in global memory is read by an agent to its local cache. Due to possible updates to $z$ by other agents, $\hat{z}^k$
-can be different from $z^k$. We refer the reader to~\cite[Section 1.2]{Peng_2015_AROCK} for more details.\\
-When there is only one agent and no delay,  all algorithms proposed in this section become stochastic coordinate update algorithms, and their convergence is a direct consequence of our convergence theorem~\ref{thm:async-convergence}. Moreover, our convergence analysis also applies to sync-parallel algorithms.
+can be different from $z^k$. We refer the reader to~\cite[Section 1.2]{Peng_2015_AROCK} for more details.
  
-We also propose an async-parallel primal dual algorithm using the \\overlapping-block coordinate update~\eqref{pdoverlap}:\\
+The async-parallel algorithm using the overlapping-block coordinate update~\eqref{pdoverlap} is in Algorithm~\ref{alg:asyn_overlap}.
+
 \begin{algorithm}[H]\label{alg:asyn_overlap}
 %\SetAlgoLined
 \SetKwInOut{Input}{Input}\SetKwInOut{Output}{output}
@@ -430,20 +440,21 @@ counter $k=0$\; \While{$k < K$, every agent asynchronously and continuously}{
  }
  \caption{Async-parallel primal dual overlapping-block coordinate update algorithm using $\TVC$}
 \end{algorithm}
-Here we still allow inconsistent delays, so the $\tilde{x}_{i_k}$ and $\tilde{s}_j^{k+1}$ are computed using some $\hat{z}^k$.
+Here we still allow inconsistent delays, so $\tilde{x}_{i_k}$ and $\tilde{s}_j^{k+1}$ are computed using some $\hat{z}^k$.
 \begin{remark}
-For the shared memory architecture, it is recommended to set all but one $\rho_{i,j}$'s to $0$.
+For the shared memory architecture, it is recommended to set all but one $\rho_{i,j}$'s to $0$ for any $i$.
 \end{remark}
-Now we state the convergence theorem for Algorithm \ref{alg:asyn_core} and \ref{alg:asyn_overlap}.
+
+%Now we state the convergence theorem for Algorithm~\ref{alg:asyn_core} and~\ref{alg:asyn_overlap}.
 \begin{thm}\label{thm:async-convergence}
-Let $Z^*$ be the set of optimal solutions of problem \eqref{pdproblem} and let $(z^k)_{k\geq0}\subset \FF$ be the sequence generated by Algorithm \ref{alg:asyn_core} or Algorithm \ref{alg:asyn_overlap} under the following conditions:
+Let $Z^*$ be the set of optimal solutions of problem~\eqref{pdproblem} and $(z^k)_{k\geq0}\subset \FF$ be the sequence generated by Algorithm \ref{alg:asyn_core} or Algorithm \ref{alg:asyn_overlap} under the following conditions:
 \begin{enumerate}[(i)]
-\item $f,g,h^*$ are closed proper convex functions and $f$ is differentiable with $\nabla f$ $\beta$-Lipschitz continuous;
+\item $f,g,h^*$ are closed proper convex functions. In addition, $f$ is differentiable and $\nabla f$ is Lipschitz continuous with $\beta$;
 \item the delay for every coordinate is bounded by a positive number $\tau$, i.e. for every $1\leq i\leq m+p$, $\hat{z}^{k}_{i}=z_i^{k-d_{i}^k}$ for some $0\leq d_{i}^k\leq\tau$;
 \item $\eta_k
 \in [\eta_{\min}, \eta_{\max}]$ for certain $\eta_{\min},\eta_{\max}>0$.
 \end{enumerate}
-We have with probability 1, $(z^k)_{k\geq 0}$ converges to a $Z^*$-valued random variable.
+Then $(z^k)_{k\geq 0}$ converges to a $Z^*$-valued random variable with probability 1.
 \end{thm} 
-The explicit formula for $\eta_{\min},\eta_{\max}$, the proof and some other remarks are included in Appendix \ref{pf:pdasync}.
+The explicit formulas for $\eta_{\min}$ and $\eta_{\max}$, the proof of Theorem~\ref{thm:async-convergence}, and some other remarks are included in Appendix \ref{pf:pdasync}.
 }
