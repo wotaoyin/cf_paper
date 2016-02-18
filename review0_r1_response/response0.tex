@@ -28,10 +28,47 @@ We would like to thank the associate editor for the time and efforts in putting 
 Let us summarize the big changes in this new version:
 \begin{itemize}
 \item We corrected all of the typos based on the first reviewer's comments. 
-\item We added convergence proof for coordinate friendly primal dual method. 
-\item We added new numerical experiments to demonstrate the superior of coordinate friendly method over the start-of-the-art method. 
+\item We added new async-parallel primal-dual coordinate-update algorithms in Section 4.4 and their convergence proof in Appendix D.
+\item We added a new numerical experiment in Section 6.2 to demonstrate the superior of coordinate friendly methods over the start-of-the-art method. 
 \end{itemize}
+\section{Response to reviewer 2}
+This paper discusses coordinate update methods, which are useful for solving
+large-scale problems that admit a fixed-point formulation, including various
+coordinate descent methods in optimization, solution of linear systems of
+equations, and many operator splitting algorithms. In particular, the authors
+introduce several notions of Coordinate Friendly (CF) operators, discuss
+composite and combination of CF operators, use them to characterize several
+classical and recent operator splitting schemes, and also obtain some new
+coordinate update methods. These methods are illustrated by examples from
+machine learning, imaging, finance, and distributed computing, among others.
 
+\textbf{Comment 1:} The focus of this paper is on summarizing the components and composition of
+efficient coordinate-update methods, and largely ignore convergence guarantees.
 
+\rev{\textbf{Response:} In this paper we study coordinate-update algorithms for the fixed-point problem $x=\cT x$, which generalizes many problems. We focus on the favorable structures of the operator $\cT$ which make coordinate-update computationally worthy. The fixed-point formulation is general enough that we can recover most coordinate-update methonds. However, we also obtain new coordinate-update algorithms based on operator splitting schemes for which no coordinate-update algorithms have been developed. We apply our new coordinate-update algorithms to problems that were never treated with coordinate-update methods before, for example, second-order cone programming, nonnegative matrix factorization, image processing, portfolio optimization, etc. We also provide new coordinate-update approaches for problems which were treated before with coordinate-update methods, for instance, support vector machines and group Lasso. Moreover, our overlapping-block coordinate update scheme for primal-dual algorithms has never appeared in the literature. As for convergence guarantees, in this revision, we proved the convergence of our primal-dual coordinate-update schemes under the async-parallel algorithmic framework (which includes the stochastic coordinate selection rule as a special case). The convergence of other coordinate-update schemes is omitted due to page limit, but they all converge under the async-parallel algorithmic framework according to the previous work \cite{Peng_2015_AROCK}.}
 
+\textbf{Comment 2:} On one hand, this seems to be a timely topic given the recent flurry of
+research activities on coordinate update methods and their applications, and
+the materials presented may help the understanding of the common theme of
+these methods, especially for practitioners. 
+
+\rev{\textbf{Response:} The idea of coordinate-update methods is long existing, as well as the various application problems in mathematics, engineering, and other fields. For many of the application problems, coordinate-update algorithms were never proposed to solve them, yet our numerical experiments show that they have strong performance. One of the aims of our paper is to bridge the gap between coordinate-update theory and the applications. To our understanding it suits the theme of the Annals of Mathematical Sciences and Applications, which is a journal about both theory and applications.}
+
+\textbf{Comment 3:} But on the other hand, I feel
+there is not enough innovative ideas other than summarizing several well-known
+structure of coordinate update methods, and the technical depth of this paper
+does not reach the high-quality of a first-class journal on mathematical
+sciences. 
+
+\rev{\textbf{Response:} As we mentioned in the response to Comment 1, we developed a large number of new coordinate-update algorithms for various applications. We added new primal-dual coordinate-update algorithms as well as their proof in this revision. Our technical contribution also includes identifyng the problems with nonexpansive operators and then developing CF algorithms for them, based on the CF analysis of operators. Formal CF analysis, especially that for composite operators, has never appeared in the literature, although it appears to be simple to understand.}
+
+\textbf{Comment 4:} From a more application oriented view, there is no sufficient
+justification (either theoretical or empirical) for the efficiency of the
+derived algorithms, nor comparison with state of the arts for the particular
+applications discussed. Thus it is not clear how useful they will become,
+other than illustrating some general ideas.
+
+\rev{\textbf{Response:} In the original version, we already included numerical results for 3 different coordinate-update algorithms applied to problems arising from 3 different areas. We compared the performance of our coordinate-update algorithms with the corresponding full-update algorithms, which are themselves state-of-the-art methods. The numerical experiments have shown the advantage of coordinate-update algorithms. In our third numerical experiment, we compare the async-parallel algorithmic framework with the sync-parallel algorithmic framework and achieve significant speedup through the async-parallel framework. In this revision, we changed our second example to a new instance of CT image, and the coordinate-update algorithm still showed its efficiency.}
+\bibliographystyle{plain}
+\bibliography{response0}
 \end{document}
