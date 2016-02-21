@@ -239,7 +239,7 @@ $q_{\min}=\min_iq_i>0$, and $|J(k)|$ be the number of elements in $J(k)$.
 It is shown in~\cite{davis2014convergence} that with proper choices of $\eta$ and $\gamma$, $\TVC$ is nonexpansive under the norm induced by $M$. Then Lemma~\ref{lemma:a-avg} shows that $\cS$ is 1/2-cocoercive under the same norm.
 \begin{lemma}\label{lemma:a-avg} An operator $\cT:\FF\to\FF$ is nonexpansive under the induced norm by $M$ if and only if $\cS = \cI - \cT$ is {${1}/{2}$-cocoercive} under the same norm, i.e.,
 \begin{equation}\label{eqn:alpha_avg}
-\langle z-\tilde{z},\cSz- \cS\tilde{z}\rangle_M \ge \frac{1}{2}\|\cSz- \cS\tilde{z}\|_M^2,\quad
+\langle z-\tilde{z},\cS z- \cS\tilde{z}\rangle_M \ge \frac{1}{2}\|\cS z- \cS\tilde{z}\|_M^2,\quad
 {\forall~z,\tilde{z}\in\FF}.
 \end{equation}
 \end{lemma}
@@ -324,7 +324,7 @@ and
 z^{d+1})\rangle_M\cr \overset{\eqref{eqn:def_bar_x}}=&\textstyle\langle \cS
 \hat{z}^{k}, z^* - \hat{z}^k\rangle_M + \frac{1}{\eta_k}\sum_{d\in J(k)}\langle
 z^k-\bar{z}^{k+1}, z^{d} - z^{d+1}\rangle_M\cr \le&\textstyle \langle \cS
-\hat{z}^{k}-\cSz^*, z^* - \hat{z}^k\rangle_M+\frac{1}{2\eta_k}\sum_{d\in
+\hat{z}^{k}-\cS z^*, z^* - \hat{z}^k\rangle_M+\frac{1}{2\eta_k}\sum_{d\in
 J(k)}\big(\frac{1}{\sigma}\|z^k-\bar{z}^{k+1}\|_M^2+ \sigma\|z^{d} -
 z^{d+1}\|_M^2\big)\cr \overset{\eqref{eqn:alpha_avg}}\le&\textstyle
 -\frac{1}{2}\|\cS \hat{z}^{k}\|_M^2+\frac{1}{2\eta_k}\sum_{d\in
@@ -373,7 +373,7 @@ Let
 where $z^{k}=z^{0}$ for $k<0$. With
 \begin{equation}\label{eqn:xi}
 \textstyle \xi_k(\vz^*) := \|\vz^k-\vz^*\|_U^2=\|z^{k} - z^*\|_M^2 +
-\frac{\sqrt{q_{\min}}}{\kappa}\sum_{i=k-\tau}^{k-1} (i-(k-\tau)+1) \|
+\sqrt{q_{\min}\over \kappa}\sum_{i=k-\tau}^{k-1} (i-(k-\tau)+1) \|
 x^{i} - x^{i+1}\|_M^2,
 \end{equation}
 we have the following fundamental inequality:
