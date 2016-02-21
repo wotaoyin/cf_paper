@@ -252,8 +252,8 @@ Let $Z^*$ be the set of optimal solutions of~\eqref{pdproblem} and $(z^k)_{k\geq
 \item $f,g,h^*$ are closed proper convex functions. In addition, $f$ is differentiable and $\nabla f$ is Lipschitz continuous with $\beta$;
 %\item the delay for every coordinate is bounded by a positive number $\tau$, i.e. for every $1\leq i\leq m$, $\hat{z}^{k}_{i}=z_i^{k-d_{i}^k}$ for some $0\leq d_{i}^k\leq\tau$;
 \item $\eta_k
-\in [\eta_{\min}, \eta_{\max}]$ for certain $0<\eta_{\max}<\frac{mq_{\min}}{2\tau\kappa
-\sqrt{q_{\min}}+\kappa^2}$ and any $0<\eta_{\min}\leq\eta_{\max}$.
+\in [\eta_{\min}, \eta_{\max}]$ for certain $0<\eta_{\max}<\frac{mq_{\min}}{2\tau
+\sqrt{\kappa q_{\min}}+\kappa}$ and any $0<\eta_{\min}\leq\eta_{\max}$.
 \end{enumerate}
 Then $(z^k)_{k\geq 0}$ converges to a $Z^*$-valued random variable with probability 1.
 \end{thm}
@@ -344,7 +344,7 @@ Define a $(\tau+1)\times(\tau+1)$ matrix $U'$ by
 U':=\begin{bmatrix}1 & 0 & \cdots &0\\
 0 & 0 &\cdots & 0\\ \vdots &\vdots & \ddots & \vdots\\
 0 & 0 &\cdots & 0 \end{bmatrix}
-+\sqrt{q_{\min}}/\kappa\begin{bmatrix} \tau & -\tau &  & \\
++\sqrt{\frac{q_{\min}}{\kappa}}\begin{bmatrix} \tau & -\tau &  & \\
 -\tau & 2\tau-1 & 1-\tau & \\
  & 1-\tau & 2\tau-3 & 2-\tau  & \\
  & & \ddots & \ddots & \ddots &\\
@@ -355,10 +355,10 @@ U':=\begin{bmatrix}1 & 0 & \cdots &0\\
 and let $U=U'\otimes \cI_\FF$. Here $\otimes$ represents the Kronecker product. For a given $(y^0,\cdots,y^\tau)\in\FF^{\tau+1}$, $(z^0,\cdots,z^\tau)=U(y^0,\cdots,y^\tau)$ is given by:
 \begin{align*}
 &z^0=\textstyle
-y^0+\frac{\sqrt{q_{\min}}}{\kappa\tau} (y^0-y^1),\\
+y^0+\tau\sqrt{\frac{q_{\min}}{\kappa}} (y^0-y^1),\\
 &z^i =
-\textstyle\frac{\sqrt{q_{\min}}}{\kappa}((i-\tau-1)y^{i-1}+(2\tau-2i+1)y^i+(i-\tau)y^{i+1}),\text{ if } 1\le i\le \tau-1,\\
-&z^{\tau}=\textstyle\frac{\sqrt{q_{\min}}}{\kappa} (y^{\tau}-y^{\tau-1}).
+\textstyle\sqrt{\frac{q_{\min}}{\kappa}}((i-\tau-1)y^{i-1}+(2\tau-2i+1)y^i+(i-\tau)y^{i+1}),\text{ if } 1\le i\le \tau-1,\\
+&z^{\tau}=\textstyle\sqrt{\frac{q_{\min}}{\kappa}} (y^{\tau}-y^{\tau-1}).
 \end{align*} 
 Then $U$ is a self-adjoint and positive definite linear operator since $U'$ is
 symmetric and positive definite, and we define $\langle\cdot\, |\,
