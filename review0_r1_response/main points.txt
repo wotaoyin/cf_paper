@@ -1,0 +1,8 @@
+*. strong performance of CU relies on solving simple subproblems (....) and CU quick convergence
+*. we have rich results on CU convergence, but very little on problem structures amenable to CU
+*. not all problem structures are amenable to CU; even if CU has fast convergence, it won't work when the subproblem is too difficult
+*. existing CU only concentrates on a few albeit important classes of applications
+*. for other problems, including very important ones, simple subproblems are not easy to identify! We don't have a measure (of how simple it needs to be) or tools to obtain them. The existing convergence-focused theory, as well as its kind to arrive in the future, does not provide these answers
+*. the measure (of how simple it needs to be) must make sense and be simple to compute
+*. the tools must be powerful to cover the current CU applications, as well as undiscovered ones
+*. 
