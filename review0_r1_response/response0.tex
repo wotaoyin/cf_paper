@@ -31,7 +31,7 @@ Let us summarize the major changes in this new revision:
 \begin{itemize}
 \item We corrected all of the typos based on the first reviewer's comments. 
 \item In response to the second reviewer's criticisms, we emphasized on the new algorithms and new applications  in our article and, in addition,  added a new primal-dual coordinate-update algorithm in Section 4.4. We provided the convergence proof for the added algorithm   in Appendix D.
-\item We updated a  numerical experiment in Section 6.2 to demonstrate the superiority of coordinate friendly methods over the start-of-the-art method. 
+\item We updated a  numerical experiment in Section 6.2 to demonstrate the superiority of coordinate friendly methods over start-of-the-art methods. 
 \item We edited the introduction to reflect the changes made, as well as the other contributions of our article.
 \end{itemize}
 
@@ -40,7 +40,7 @@ Let us summarize the major changes in this new revision:
 
 ``In general, the paper is well written and well organized. But this reviewer still finds some typos and awkward statements. In the following, I will list some of the typos that I found. The authors are suggested to do more thorough and careful checking to make sure that there is no more typos."
 
-\rev{\textbf{Response:} Thanks for your careful review. We have read through the paper multiple times and improved some then awkward statements. We have also corrected the typos, one by one, in the new manuscript. Thanks again. 
+\rev{\textbf{Response:} Thanks for your careful review. We have read through the paper multiple times and improved then awkward statements. We have also corrected the typos, one by one, in the new manuscript. Thanks again. 
 }
 
 \section{Response to reviewer 2}
@@ -56,20 +56,22 @@ machine learning, imaging, finance, and distributed computing, among others."
 
 \rev{\textbf{Response:} Thanks for the summary.
 
-Before we respond to other comments from the reviewer, we would like to share with the reviewer our motivation for our work. 
+Before we respond to other comments from the reviewer, we would like to share with the reviewer the motivation for our work. 
 
-Coordinate update methods have had very exciting progress recently. Nonetheless, most recent papers focus on a few classes of important applications such as regularized empirical risk minimization. Possessing a great power,  it would be a pity if coordinate update methods are not applied to  more problems and show strong performance. Clearly,  strong performance of  coordinate update methods relies on solving simple subproblems. However,  it was not always easy  to get simple subproblems and  implement their solvers properly. Even for domain experts, when they face problems combining constraints,   objective functions, both separable and non-separable terms, and/or both convex and nonconvex parts, those questions are nontrivial to answer. 
+Coordinate update methods have had very exciting progress recently. Nonetheless, most recent papers focus on a few classes of important applications such as regularized empirical risk minimization. 
+%Possessing a great power,  
+It would be a pity if coordinate update methods are not applied to  more problems and its strong performance is not shown. Clearly, the strong performance of  coordinate update methods relies on solving simple subproblems. However,  it was not always easy  to get simple subproblems and  implement their solvers properly. Even for domain experts, when they face problems combining constraints,   objective functions, both separable and non-separable terms, and/or both convex and nonconvex parts, those questions are nontrivial to answer. 
 
-Clearly, not all problem structures and algorithms are amenable to coordinate update. Therefore, we need a qualifier, a simple condition that needs to be satisfied for efficient coordinate update. That is the coordinate-friendly property we propose in our article. 
+Clearly, not all problem structures and algorithms are amenable to coordinate update. Therefore, we need a qualifier, a simple condition that needs to be satisfied for an efficient coordinate update. That is the coordinate-friendly property we propose in our article. 
 
-The techniques to obtain simple subproblems, develop their solvers, and qualify them for coordinate update are crucial to the successful applications of coordinate update methods, which are the focus of our article.
+The techniques to obtain simple subproblems, develop their solvers, and qualify them for coordinate updates are crucial to the successful applications of coordinate update methods, which are the focus of our article.
 }
 
 
 \textbf{Comment 1:} The focus of this paper is on summarizing the components and composition of
 efficient coordinate-update methods, and largely ignore convergence guarantees.
 
-\rev{\textbf{Response:}  We agree that the convergence guarantees were ignored in our article on purpose. In the new revision, we added the convergence guarantee for one of the novel algorithms in the paper. It is an algorithm performing async-parallel primal-dual coordinate update, capable of solving problems such as second-order cone programs by multiple computers simultaneously performing coordinate updates. To avoid a sharp increase in technicality level, we have added the proof to the Appendix. Due to the focus and the page limit, we have to ignore the convergence guarantees of other new algorithms.
+\rev{\textbf{Response:}  We agree that the convergence guarantees were ignored in our article on purpose. In the new revision, we added the convergence guarantee for one of the novel algorithms in the paper. It is an algorithm performing an async-parallel primal-dual coordinate update, capable of solving problems such as second-order cone programs by multiple computers simultaneously performing coordinate updates. To avoid a sharp increase in the technicality level, we have added the proof to the Appendix. Due to the focus and the page limit, we have to ignore the convergence guarantees of other new algorithms.
 
 %In fact, the goal of this paper is to identify the favorable structures of an operator which make coordinate-update computationally worthy.  As for convergence guarantees, in this revision, we proved the convergence of our primal-dual coordinate-update schemes under the async-parallel algorithmic framework (which includes the stochastic coordinate selection rule as a special case). The convergence of other coordinate-update schemes is omitted due to page limit, but they all converge under the async-parallel algorithmic framework according to the previous work \cite{Peng_2015_AROCK}.
 }
@@ -90,9 +92,9 @@ structure of coordinate update methods, and the technical depth of this paper
 does not reach the high-quality of a first-class journal on mathematical
 sciences. 
 
-\rev{\textbf{Response:} Our exposition includes both well--known  and \emph{new} structures. Several composite structures are new, and their integration with operator splitting such as the proposed primal-dual coordinate-update algorithm are also new. We have systematically reasoned that certain quantities must be cached and maintained in memory, or coordinate update would not be efficient. These expositions lead to new coordinate-update algorithms for second-order cone programming, nonnegative matrix factorization, CT image processing, and portfolio optimization, which were not previously treated with similar coordinate updates. We also get new coordinate-update algorithms for overlapping group LASSO. 
+\rev{\textbf{Response:} Our exposition includes both well--known  and \emph{new} structures. Several composite structures are new, and their integration with operator splitting such as the proposed primal-dual coordinate-update algorithm is also new. We have systematically reasoned that certain quantities must be cached and maintained in memory, or coordinate updates would not be efficient. These expositions lead to new coordinate-update algorithms for second-order cone programming, nonnegative matrix factorization, CT image processing, and portfolio optimization, which were not previously treated with similar coordinate updates. We also get new coordinate-update algorithms for overlapping group LASSO. 
 
-Considering the audience and goal of this article, we intentionally keep its technical depth at a low--medium level so that non domain experts can understand this article. Operator splitting and coordinate descent convergence can go very sophisticated, fending off potential users. Hence, we decide to leave them out in order to promote applications. 
+Considering the audience and goal of this article, we intentionally keep its technical depth at a low--medium level so that nondomain experts can understand this article. Operator splitting and coordinate descent convergence can go very sophisticated, fending off potential users. Hence, we decide to leave them out in order to promote applications. 
 
 While it will take time to see where the journal ``Annals of Mathematical Sciences and Applications" ends up settling down with its emphases, we would like to test the water by aiming at successful \emph{applications} of coordinate update methods. 
 
@@ -117,9 +119,9 @@ On the other hand, we do agree that the original submission ignored theoretical 
 
 In this revision, we updated our second numerical example to a new instance of CT image. The coordinate-update algorithm continues to show its superiority in efficiency.
 
-We also added an analysis for the convergence of one of our primal-dual coordinate-update algorithms (the most sophisticated one, under the async-parallel setting).
+We also added the convergence analysis for one of our primal-dual coordinate-update algorithms (the most sophisticated one, under the async-parallel setting).
 
-Hopefully these numerical and theoretical results will convince the reviewer and the readers that coordinate update algorithms are worth serious consideration.}
+Hopefully, these numerical and theoretical results will convince the reviewer and the readers that coordinate update algorithms are worth serious consideration.}
 %\bibliographystyle{plain}
 %\bibliography{response0}
 \end{document}
