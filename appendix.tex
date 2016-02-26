@@ -83,7 +83,7 @@ x^{k+1}=\prox_{\eta F}(x^k-\eta(t^k+2\gamma A^\top Ax^k))
 \end{array}\label{c-efull2}
 \right.
 \end{equation}
-Both $\eqref{c-efull}$ and $\eqref{c-efull2}$ (with $t^0=A^Ts^0$) converge in practice and so does coordinate update versions of $\eqref{c-efull}$. But our experiments show that coordinate update versions of $\eqref{c-efull2}$ do not converge to the solution of problem $\eqref{c-e}$. A key factor is that with full update versions of $\eqref{c-efull}$ and $\eqref{c-efull2}$, as well as coordinate update versions of $\eqref{c-efull}$, $t^k$ always stay in the image of $A^T$. But with coordinate update versions of $\eqref{c-efull2}$, $t^k$ do not always stay in the image of $A^T$, which causes trouble.
+Both $\eqref{c-efull}$ and $\eqref{c-efull2}$ (with $t^0=A^\top s^0$) converge in practice and so does coordinate update versions of $\eqref{c-efull}$. But our experiments show that coordinate update versions of $\eqref{c-efull2}$ do not converge to the solution of problem $\eqref{c-e}$. A key factor is that with full update versions of $\eqref{c-efull}$ and $\eqref{c-efull2}$, as well as coordinate update versions of $\eqref{c-efull}$, $t^k$ always stay in the image of $A^\top $. But with coordinate update versions of $\eqref{c-efull2}$, $t^k$ do not always stay in the image of $A^\top $, which causes trouble.
 \end{example}
 }
 \section{Derivation of ADMM from the DRS Update}\label{sec:drs-admm}

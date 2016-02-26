@@ -3,12 +3,12 @@
  Many convex image processing problems have the general form
 $$\Min_{x} f(x) + g(Ax),$$
 where $A$ is a matrix such as a dictionary, sampling operator, or finite difference operator. We can reduce the problem to the system: $0\in\cA(z) + \cB(z)$, where $z=[x;s]$,
-$$\cA(z):=\begin{bmatrix}\partial f(x)\\\partial g^*(s)\end{bmatrix},\quad\mbox{and}\quad \cB(z):=\begin{bmatrix}0 & ~A^T \\ -A & 0\end{bmatrix}\begin{bmatrix}x\\s\end{bmatrix}.$$
+$$\cA(z):=\begin{bmatrix}\partial f(x)\\\partial g^*(s)\end{bmatrix},\quad\mbox{and}\quad \cB(z):=\begin{bmatrix}0 & ~A^\top  \\ -A & 0\end{bmatrix}\begin{bmatrix}x\\s\end{bmatrix}.$$
 (See Appendix~\ref{sec:vc-op} for the reduction.) The work \mbox{%DIFAUXCMD
 \cite{o2014primal} }%DIFAUXCMD
 gives their resolvents    
 \begin{align*}\cJ_{\gamma \cA} &= \begin{bmatrix}\prox_{\gamma f}\\\prox_{\gamma g^*}\end{bmatrix},\\ 
-\cJ_{\gamma \cB} &= (I+\gamma \cB)^{-1}= \begin{bmatrix} 0 &~ 0 \\ 0 &~ I\end{bmatrix}+\begin{bmatrix}I\\ \gamma A\end{bmatrix}(I+\gamma^2 A^TA)^{-1}\begin{bmatrix}I\\ -\gamma A\end{bmatrix}^T,
+\cJ_{\gamma \cB} &= (I+\gamma \cB)^{-1}= \begin{bmatrix} 0 &~ 0 \\ 0 &~ I\end{bmatrix}+\begin{bmatrix}I\\ \gamma A\end{bmatrix}(I+\gamma^2 A^\top A)^{-1}\begin{bmatrix}I\\ -\gamma A\end{bmatrix}^\top ,
 \end{align*}
 where $\cJ_{\gamma \cA}$ is often cheap or separable and we can \emph{explicitly form}  $\cJ_{\gamma \cB}$  as a matrix or implement it based on a fast transform. The resulting DRS operator is CF when $\cJ_{\gamma \cB}$ is CF. We leave the DRS coordinate update to the reader.
 
@@ -56,7 +56,7 @@ h^* (s, t) &= \iota_{\|\cdot\|_{\infty} \leq \lambda} (s) + \frac{1}{2} \|t + b\
 Applying \eqref{vucondat2} gives the following full update:
 \begin{subequations}\label{eqn:pd_tvl2}
 \begin{align}
-x^{k + 1} &= x^k - \eta (\nabla^\top s^k + A^T t^k), \\
+x^{k + 1} &= x^k - \eta (\nabla^\top s^k + A^\top  t^k), \\
 s^{k + 1} &= \prj_{\|\cdot\|_{\infty} \leq \lambda} \left(s^k + \gamma \nabla (x^k - 2\eta (\nabla^\top s^k + A^\top t^k))\right), \\ 
 t^{k+1} &= \frac{1}{1 + \gamma} \left(t^k + \gamma A (x^k - 2 \eta (\nabla^\top s^k + A^\top t^k)) - \gamma b \right).
 \end{align}

@@ -10,7 +10,7 @@ then we have $u=\prj_{Q}(v) = \big(\xi_1 ^vv_1,\,\xi_2^v\cdot (v_2,\ldots,v_n)\b
 \begin{proposition}\label{prop:socproj}
 \begin{enumerate}
 \item Let $v\in\RR^{n}$ and $v^+ := v+ \nu e_i$ for any $\nu\in\RR$. Then, given $\rho_1^v,\rho_2^v,\xi_1^v,\xi_2^v$ {defined above}, it takes $O(1)$ operations to obtain $\rho_1^{v^+},\rho_2^{v^+},\xi_1^{v^+},\xi_2^{v^+}$. 
-\item Let $v\in\RR^{n}$ and $A=[a_1~A_2]\in\RR^{m\times n}$, where $a_1\in\RR^m,A_2\in\RR^{m\times (n-1)}$. Given $\rho_1^v,\rho_2^v,\xi_1^v,\xi_2^v$, we have $$A(2\cdot\prj_{Q}(v)-v)=((2\xi_1 ^v-1)v_1)\cdot a_1 + (2\xi_2^v-1)\cdot A_2 (v_2,\ldots,v_n)^T.$$
+\item Let $v\in\RR^{n}$ and $A=[a_1~A_2]\in\RR^{m\times n}$, where $a_1\in\RR^m,A_2\in\RR^{m\times (n-1)}$. Given $\rho_1^v,\rho_2^v,\xi_1^v,\xi_2^v$, we have $$A(2\cdot\prj_{Q}(v)-v)=((2\xi_1 ^v-1)v_1)\cdot a_1 + (2\xi_2^v-1)\cdot A_2 (v_2,\ldots,v_n)^\top .$$
 \end{enumerate}
 \end{proposition}
 By the proposition, if $\cT_1$ is an affine operator, then in the composition $\cT_1\circ \prj_{Q}$, {the computation of $\prj_{Q}$ is cheap as long as we maintain $\rho_1^v,\rho_2^v,\xi_1^v,\xi_2^v$.
