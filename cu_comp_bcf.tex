@@ -17,7 +17,7 @@ x^{k+1}&=\argmin_x f(x)+\frac{\eta}{2}\|Ax+By^k+Cz^k+\frac{s^k}{\eta}-b\|^2,\\
 \begin{pmatrix}
 y^{k+1}\\
 z^{k+1}
-\end{pmatrix}&=\argmin_{(y,z)^T}g(y)+h(z)+\frac{\eta}{2}\|Ax^{k+1}+By+Cz+\frac{s^k}{\eta}-b\|^2,\\
+\end{pmatrix}&=\argmin_{(y,z)^\top }g(y)+h(z)+\frac{\eta}{2}\|Ax^{k+1}+By+Cz+\frac{s^k}{\eta}-b\|^2,\\
 s^{k+1}&=s^k+\eta(Ax^{k+1}+By^{k+1}+Cz^{k+1}-b).
 \end{array}\right.
 \end{equation}
@@ -164,7 +164,7 @@ while $\nops{x}{\cT_1\circ\cT_2 x}=O(m^2)$. Hence, $\cT_1\circ\cT_2$ is Type-I C
 
 \item Assume that $\cT_2$ is separable ($\cC_1$). It is easy to see that if $\cT_1$ is CF ($\cF$)\cut{ ($\cF, \cF_1, \cF_2$)}, then $\cT_1\circ \cT_2$ remains CF\cut{ ($\cF, \cF_1, \cF_2$, respectively)}. In addition if $\cT_1$ is Type-II CF ($\cF_2$), so is $\cT_1\circ\cT_2$; see Examples \ref{exp:log-grad}.\cut{ and \ref{alg:prox-grad}.} %The results are summarized in Cases 5 and 6 of Table \ref{table:comp-op}.
 
-Note that if $\cT_2$ is nearly-separable, in general we do not have CF properties for $\cT_1\circ\cT_2$. This is because $\cT_2 x$ and $\cT_2 x^+$ can be totally different (so updating $\cT_2 x$ is expensive) even if $x$ and $x^+$ differ only at one coordinate; see the example in footnote~\ref{note1}. %We have three sub-cases: Sub-case (i): If $\cT_2$ is easy-to-update, then  $\cT$ is CF\cut{easy-to-update provided that we maintain $\cT_2 x$}. Sub-case (ii): If $\cT_2$ is CF, then so is $\cT$. \cut{We say that $\cT_2$ is \emph{easy-to-compute} if $\nops{x}{\cT_2 x}\le \nops{\cT_2x}{(\cT_1(\cT_2 x))_i}$ for all $i$. Clearly, if $\cT_2$ is easy-to-compute, then $\cT=\cT_1\circ \cT_2$ is CF. Sub-case (iii): If $\cT_2x = Ax+b$, then $\cT=\cT_1\circ \cT_2$ is CF since, for each $i$, there exists $\cT_{1,i}$ such that  $(\cT x)_i=\cT_{1,i}(\cT_2 x)_i=\cT_{1,i}(a_i^Tx+b_i)$.}
+Note that if $\cT_2$ is nearly-separable, in general we do not have CF properties for $\cT_1\circ\cT_2$. This is because $\cT_2 x$ and $\cT_2 x^+$ can be totally different (so updating $\cT_2 x$ is expensive) even if $x$ and $x^+$ differ only at one coordinate; see the example in footnote~\ref{note1}. %We have three sub-cases: Sub-case (i): If $\cT_2$ is easy-to-update, then  $\cT$ is CF\cut{easy-to-update provided that we maintain $\cT_2 x$}. Sub-case (ii): If $\cT_2$ is CF, then so is $\cT$. \cut{We say that $\cT_2$ is \emph{easy-to-compute} if $\nops{x}{\cT_2 x}\le \nops{\cT_2x}{(\cT_1(\cT_2 x))_i}$ for all $i$. Clearly, if $\cT_2$ is easy-to-compute, then $\cT=\cT_1\circ \cT_2$ is CF. Sub-case (iii): If $\cT_2x = Ax+b$, then $\cT=\cT_1\circ \cT_2$ is CF since, for each $i$, there exists $\cT_{1,i}$ such that  $(\cT x)_i=\cT_{1,i}(\cT_2 x)_i=\cT_{1,i}(a_i^\top x+b_i)$.}
 
 
 \item Assume that $\cT_1$ is Type-I CF ($\cF_1$). Then if $\cT_2$ is Type-II CF ($\cF_2$), $\cT_1\circ\cT_2$ must be CF ($\cF$); see the next example.
@@ -172,7 +172,7 @@ Note that if $\cT_2$ is nearly-separable, in general we do not have CF propertie
 Let $A,B\in\RR^{m\times m}$ be dense. Then $\cT_1 x=Ax$ is Type-I CF and $\cT_2 x=Bx$ Type-II CF (by maintaining $Bx$; see {Example \ref{ex:lsq2}}). For any $x$ and $i$, let $x^+$ satisfy \eqref{singleupdate}. Maintaining $\cT_2 x$, we can compute $\cT_2 x^+$ for $O(m)$ operations and then $(\cT_1\circ\cT_2 x^+)_j$ for $O(m)$ operations for any $j$. On the other hand, computing $\cT_1\circ\cT_2 x^+$ without maintaining $\cT_2 x$ costs $O(m^2)$. 
 \end{example}
 
-%\item Consider the case where $\cT_1$ is non-separable.  There are two sub-cases. (a): If $\cT_1$ is CF, then if $\cT_2$ is separable and we maintain $\cT_2 x$, $\cT_1\circ \cT_2$ remains CF. Indeed, suppose that $x$ changes to $\tilde x = x+\eta e_i$. Then, only one coordinate of $\cT_2 x$ becomes different, allowing a quick update to $\cT \tilde x=\cT_1(\cT_2 \tilde x)$. (b): If $\cT_1$ is Type-I CF, then \emph{only if} $\cT_2$ is easy-to-compute, does $\cT=\cT_1\circ \cT_2$ remain CF; see Cases 6 and 7 in Table \ref{table:comp-op}. \cut{If $\cT_1 y = Ay+b$ (which is CF) where $\cA\in\RR^{m\times m}$, then \emph{only if} $\cT_2$ is  easy-to-update or is easy-to-compute (specifically, $\nops{x}{T_2x}\le O(m)$), is $\cT=\cT_1\circ \cT_2$ remain CF. Indeed, since $(\cT x)_i = a_i^T(\cT_2 x)+b_i$, we must be able to update $\cT_2 x$ or compute it quickly.}
+%\item Consider the case where $\cT_1$ is non-separable.  There are two sub-cases. (a): If $\cT_1$ is CF, then if $\cT_2$ is separable and we maintain $\cT_2 x$, $\cT_1\circ \cT_2$ remains CF. Indeed, suppose that $x$ changes to $\tilde x = x+\eta e_i$. Then, only one coordinate of $\cT_2 x$ becomes different, allowing a quick update to $\cT \tilde x=\cT_1(\cT_2 \tilde x)$. (b): If $\cT_1$ is Type-I CF, then \emph{only if} $\cT_2$ is easy-to-compute, does $\cT=\cT_1\circ \cT_2$ remain CF; see Cases 6 and 7 in Table \ref{table:comp-op}. \cut{If $\cT_1 y = Ay+b$ (which is CF) where $\cA\in\RR^{m\times m}$, then \emph{only if} $\cT_2$ is  easy-to-update or is easy-to-compute (specifically, $\nops{x}{T_2x}\le O(m)$), is $\cT=\cT_1\circ \cT_2$ remain CF. Indeed, since $(\cT x)_i = a_i^\top (\cT_2 x)+b_i$, we must be able to update $\cT_2 x$ or compute it quickly.}
 
 \item Assume that one of $\cT_1$ and $\cT_2$ is cheap\cut{\footnote{By ``cheap'', we mean their computational complexity differ at least one order. For example, if computing $\cT_1 x$ costs $O(m)$ and $\cT_2 x$ costs $O(m^2)$, then $\cT_1$ is cheap.} compared to the other one}. If $\cT_2$ is cheap, then as long as $\cT_1$ is Type-I CF ($\cF_1$), $\cT_1\circ \cT_2$ is Type-I CF. If $\cT_1$ is cheap, then as long as $\cT_2$ is Type-II CF ($\cF_2$), $\cT_1\circ \cT_2$ is CF ($\cF$); see Example~\ref{alg:prox-grad}.
 \end{itemize}
@@ -186,7 +186,7 @@ In this subsection, we compare the efficiency of three coordinate update schemes
 \end{equation}
 The goal of this experiment is to show the efficiency of the coordinate update methods for composition operators. We solve \eqref{eqn:l2_log} with the following gradient descent method
 \begin{equation}\label{eqn:gd_for_log_loss}
-x^{k+1} = x^k - \eta_k \left(\lambda  x^k + \sum_{i = 1}^p \frac{-b_i}{1 + \exp{(b_i \cdot a_i^T x^k)}} a_i\right),
+x^{k+1} = x^k - \eta_k \left(\lambda  x^k + \sum_{i = 1}^p \frac{-b_i}{1 + \exp{(b_i \cdot a_i^\top  x^k)}} a_i\right),
 \end{equation}
 where $\eta_k$ is the step size. The update \eqref{eqn:gd_for_log_loss} can be treated as a combination of the four operators ($\cI, A, A^\top, \cT$), i.e., 
 \begin{equation}\label{eqn:log-reg-update}

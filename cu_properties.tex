@@ -298,7 +298,7 @@ In  machine learning, if each observation only involves with a few features, the
 
 \cut{ % have been moved
 \begin{example}[matrix-vector multiplication]\label{mtxexam}
-With a (dense) matrix $A\in\RR^{m\times m}$, the operator $\cT:x\mapsto A x$ is non-separable yet CF. Indeed, let $a_i$ be the $i$th row of $A$. Then, we can compare $\nops{x}{\cT(x)}=\nops{x}{Ax}=m^2$, and  $\nops{x}{(\cT x)_i}=\nops{x}{a_i^T x}=m$ is much smaller.
+With a (dense) matrix $A\in\RR^{m\times m}$, the operator $\cT:x\mapsto A x$ is non-separable yet CF. Indeed, let $a_i$ be the $i$th row of $A$. Then, we can compare $\nops{x}{\cT(x)}=\nops{x}{Ax}=m^2$, and  $\nops{x}{(\cT x)_i}=\nops{x}{a_i^\top  x}=m$ is much smaller.
 %Observe that the complexity of $\cS_i \circ (\cT x)$ is $O(m n)$, however, the complexity for evaluating $\cT x$ is $O(n^2)$. We can choose $m \ll n$, then the affine map $\cT$ is BC-friendly.
 %The extra cost we pay for parallelization is that $x$ needs to be read $n/m$ times instead of once compared to the serial implementation.
 \end{example}
