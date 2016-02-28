@@ -1,5 +1,5 @@
 \subsubsection{3D Mesh Denoising}
-Follow an example in~\cite{repetti2015random}, we consider a 3D mesh described by their nodes $\bar{x}_i=(\bar{x}_i^X,\bar{x}_i^Y,\bar{x}_i^Z), i=1,2,...,n$, and the adjacency matrix $A\in\mathbb{R}^{n\times n}$. We let $\cV_i$  be the set of neighbours of node $i$. Noisy mesh nodes $z_i, i=1,2,...,n$  with the same adjacency matrix $A$ are observed. We try to recover the original mesh nodes by solving the following optimization problem \cite{repetti2015random}:
+Following an example in~\cite{repetti2015random}, we consider a 3D mesh described by their nodes $\bar{x}_i=(\bar{x}_i^X,\bar{x}_i^Y,\bar{x}_i^Z), i\in[n] := \{1,2,...,n\}$, and the adjacency matrix $A\in\mathbb{R}^{n\times n}$, where $A_{ij} = 1$ if nodes $i$ and $j$ are adjacent, otherwise $A_{ij} = 0$. We let $\cV_i$  be the set of neighbours of node $i$. Noisy mesh nodes $z_i, i=1,2,...,n$, are observed. We try to recover the original mesh nodes by solving the following optimization problem \cite{repetti2015random}:
 \begin{equation}
 \Min_{x} ~\sum_{i=1}^n f_i(x_i)+\sum_{i=1}^n g_i(x_i)+\sum_{i,j:j\in \cV_{i}} h_{i,j}(x_{i}-x_{j}),
 \end{equation}
@@ -9,7 +9,7 @@ We introduce a dual variable $s$ with coordinates $s_{i,j}$, for all ordered pai
 \begin{equation}
 \left\{
 \begin{array}{l}
-\text{when }x_i\text{ is chosen, compute}\\
+\text{select $i$ from $[n]$, then compute }\\
 \qquad \tilde{s}_{i,j}^{k+1}=\prox_{\gamma h_{i,j}^*} (s_{i,j}^k+\gamma x_i^k-\gamma x_j^k),\forall j\in\cV_i,\\
 \qquad \tilde{s}_{j,i}^{k+1}=\prox_{\gamma h_{j,i}^*} (s_{j,i}^k+\gamma x_j^k-\gamma x_i^k),\forall j\in\cV_i,\\
 \qquad \textnormal{and update}\\
