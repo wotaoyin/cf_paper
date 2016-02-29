@@ -26,7 +26,7 @@ Consider the least squares problem
 \end{equation}
 where $A \in \RR^{p \times m}$ and $b \in \RR^p$. In this example, assume that $m=\Theta(p)$, namely, $m$ and $p$ are of the same order.  We compare the full update of gradient descent to its coordinate update.\footnote{Although gradient descent is seldom used to solve least squares, it often appears as a part in first-order algorithms for problems involving a least squares term.} 
 The full update is referred to as the iteration
-$x^{k+1}= \cT x^k $ where
+$x^{k+1}= \cT x^k $ where $\cT$ is defined as
 \begin{equation}
 \cT x:=x-\eta\nabla f(x)=x-\eta A^\top Ax + \eta A^\top b.
 \end{equation}
