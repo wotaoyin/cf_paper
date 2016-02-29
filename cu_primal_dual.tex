@@ -279,7 +279,7 @@ To the best of our knowledge, this update is never given in the literature. Note
 %
 %If we instead do not maintain $Ax$, updating one coordinate of $s$ will cost $O(m)$ operations and the cost of updating one coordinate (involving computing $(A^\top Ax)_i$) of $x$ will be $O(m+p)+\mathfrak{M}[\{x^k,\nabla f(x^k),(i)\}\to \nabla f(\hat{x}^{k+1})]$ operations. The cost for computing the entire $\cT z$ coordinate by coordinate is $O(mp+m^2)+m\mathfrak{M}[\{x^k,\nabla f(x^k),(i)\}\to \nabla f(\hat{x}^{k+1})]$ operations. So caching $Ax$ is still favorable unless $m\ll p$, but in extended monotropic programming we usually have $p<m$ because the linear constraint $Ax=b$ is usually under-determined.
 \begin{remark}
-In general, when the $s$ update is affine, we can plug the $s$ update into the $x$ update and decouple $s^{k+1}$ and $x^{k+1}$. It is the case when $h$ is affine and quadratic in problem \eqref{pdproblem}.
+In general, when the $s$ update is affine, we can decouple $s^{k+1}$ and $x^{k+1}$ by plugging the $s$ update into the $x$ update. It is the case when $h$ is affine or quadratic in problem \eqref{pdproblem}.
 \end{remark}
 A sufficient condition for $\cT_\textnormal{emp}$  to be CF is $\prox_g\in\cC_1$ i.e., separable. Indeed, we have $\cT_\textnormal{emp}=\cT_1\circ\cT_2$, where $$\cT_1=\begin{bmatrix}
 \cI & 0\\0&\prox_{\eta g}
