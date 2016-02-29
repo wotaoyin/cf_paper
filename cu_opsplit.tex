@@ -10,7 +10,7 @@ This is a high-level abstraction of many problems or their optimality conditions
 When $\cA, \cB$ are maximally monotone (think it as the subdifferential $\partial f$ of a proper convex function $f$) and $\cC$ is $\beta$-cocoercive (think it as the gradient $\nabla f$ of a $1/\beta$-Lipschitz differentiable function $f$),  a solution can be found by the iteration \eqref{fpi} with $\cT=\TS$, introduced recently in \cite{davis2015three}, where  \cut{three operator splitting (3S) for solving \eqref{eqn:3s_problem} is defined by}
 \beq\label{3s}
 \TS := \cI- \cJ_{\gamma \cB}+ \cJ_{\gamma \cA}\circ(2 \cJ_{\gamma \cB}- \cI - \gamma \cC\circ \cJ_{\gamma \cB}).
-\eeq \cut{It can be shown that if $\cC$ is $\beta$-cocoercive, then}Indeed, by setting  $\gamma\in(0,2\beta)$, $\cT_{3S}$ is $(\frac{2\beta}{4\beta-\gamma})$-averaged (think it as a property weaker than the Picard contraction that no longer garantees $\cT$ having a fixed point, yet ensures convergence provided the existence of a fixed point.). Following the standard convergence result (cf. textbook \cite{B-C2011cvx-mon}), provided that $\cT$ has a  fixed point, the sequence from~\eqref{fpi} converges to a fixed-point $x^*$ of $\TS$. Instead of $x^*$, $\cJ_{\gamma\cB}(x^*)$ is a solution to~\eqref{eqn:3s_problem}.  \cut{, and one can choose $\gamma\in(0,2\beta)$ for convergence.}
+\eeq \cut{It can be shown that if $\cC$ is $\beta$-cocoercive, then}Indeed, by setting  $\gamma\in(0,2\beta)$, $\cT_{3S}$ is $(\frac{2\beta}{4\beta-\gamma})$-averaged (think it as a property weaker than the Picard contraction that no longer garantees $\cT$ having a fixed point, yet ensures convergence where a fixed point does exist.). Following the standard convergence result (cf. textbook \cite{B-C2011cvx-mon}), provided that $\cT$ has a  fixed point, the sequence from~\eqref{fpi} converges to a fixed-point $x^*$ of $\TS$. Instead of $x^*$, $\cJ_{\gamma\cB}(x^*)$ is a solution to~\eqref{eqn:3s_problem}.  \cut{, and one can choose $\gamma\in(0,2\beta)$ for convergence.}
 Applying the results in \S\ref{sc:comb},  $\TS$ {is CF if } $\cJ_{\gamma \cA}$ is separable ($\cC_1$). $\cJ_{\gamma \cB}$ is \cut{easy-to-compute or }Type-II CF ($\cF_2$), and $\cC$ is Type-I CF ($\cF_1$). %Given $x$, $(\cT_{3S} x)_i = ......$
 
 %\subsubsection{Special cases}
@@ -100,7 +100,7 @@ The ADMM method iterates:
 From the results in \S\ref{sc:comb}, a sufficient condition for the above iteration to be CF is that $\cJ_{\gamma\cA}$ is (nearly-)separable and $\cJ_{\gamma\cB}$ being CF. 
 \end{example}
 
-The above abstract operators and their CF properties will be applied in Section \ref{sec:applications}.
+The above abstract operators and their CF properties will be applied in Section \ref{sec:applications} to several applications. 
 
 
 %\begin{subsection}{Forward-backward splitting (FBS) and backward-forward splitting (BFS)}
