@@ -2,15 +2,14 @@
 \section{Coordinate Friendly Operators}\label{sec:cuf}
 
 \subsection{Notation}
-For convenience, we do not distinguish \emph{a coordinate} from \emph{a block of coordinates} throughout this paper. A coordinate is treated as the unit of variables that are updated together each time. We assume that there are $m$ coordinates and their spaces are $\HH_1,\ldots,\HH_m$. For simplicity, we assume that they are finite-dimensional real Hilbert spaces, though most results hold for general Hilbert spaces. For brevity, we also let $$x = (x_1, \ldots, x_m) \in\HH := \HH_1 \times \cdots \times \HH_m\quad\mbox{and}\quad x_i\in\HH_i,~ i=1,\ldots,m.$$
-A function maps from $\HH$ to $\RR$, and an operator maps from $\HH$ to $\GG$, where the definition of $\GG$ depends on the context. The operator $\cT$ and those operators in the splitting methods in \S\ref{sec:splitting} map from $\HH$ to $\HH$.
+For convenience, we do not distinguish \emph{a coordinate} from \emph{a block of coordinates} throughout this paper. We assume our variable $x$ consists of $m$ coordinates: $$x = (x_1, \ldots, x_m) \in\HH := \HH_1 \times \cdots \times \HH_m\quad\mbox{and}\quad x_i\in\HH_i,~ i=1,\ldots,m.$$ For simplicity, we assume that $\HH_1,\ldots,\HH_m$ are finite-dimensional real Hilbert spaces, though most results hold for general Hilbert spaces.
+A function maps from $\HH$ to $\RR$, the set of real numbers, and an operator maps from $\HH$ to $\GG$, where the definition of $\GG$ depends on the context. \cut{The operator $\cT$ and those operators in the splitting methods in \S\ref{sec:splitting} map from $\HH$ to $\HH$.}
 
-Several definitions below  use $x,x^+\in\HH$ that \emph{differ by one coordinate}: for some $i\in\{1,\ldots,m\}$ and $\delta_i\in\HH$ that is supported on $\HH_i$,
+Our discussion often involves two points $x,x^+\in\HH$ that \emph{differ by one coordinate}: there exists an index $i\in\{1,\ldots,m\}$ and a point $\delta_i\in\HH$ that is supported on $\HH_i$, such that
 \beq\label{singleupdate}
 x^+ = x+\delta_i.
 \eeq
 Note that $x^+_j=x_j$ for all $j\not=i$. 
-
 \begin{definition}[number of operations]
 We let $\nops{a}{b}$ denote \emph{the number of basic operations} that it takes to compute the quantity $b$ from the  input $a$.
 \end{definition}
@@ -19,23 +18,23 @@ For example, $\nops{x}{(\cT x)_i}$ denotes the number of operations to compute t
 For a given matrix $A$, let $A_{i,:}$ and $A_{:,j}$ be its $i$th row and $j$th column, respectively. Let $A^\top$ be the transpose of $A$ and $A^\top_{i,:}$ be $(A^\top)_{i,:}$, i.e., the $i$th row of the transpose of $A$. 
 
 \subsection{Single Coordinate Friendly Operators}
-This subsection studies a few kinds of CF operators and then formally define the CF operator. We motivate the first kind through an example.
+This subsection studies a few classes of CF operators and then formally define the CF operator. We motivate the first class through an example.
 \begin{example}[least squares]\label{ex:lsq1}
-We consider the least squares problem
+Consider the least squares problem
 \begin{equation}
 \Min_{x} f(x):=\frac{1}{2} \|A x - b\|^2,\label{lsq}
 \end{equation}
-where $A \in \RR^{p \times m}$ and $b \in \RR^p$. In this example, assume that $m=\Theta(p)$, namely, $m$ and $p$ are of the same order.  We compare the full update of gradient descent and its coordinate update for problem~$\eqref{lsq}$.\footnote{Although gradient descent is seldom used to solve least squares, it often appears as a part in first-order algorithms for problems involving a least squares term.} 
-The full update is
+where $A \in \RR^{p \times m}$ and $b \in \RR^p$. In this example, assume that $m=\Theta(p)$, namely, $m$ and $p$ are of the same order.  We compare the full update of gradient descent to its coordinate update.\footnote{Although gradient descent is seldom used to solve least squares, it often appears as a part in first-order algorithms for problems involving a least squares term.} 
+The full update is referred to as the iteration
 $x^{k+1}= \cT x^k $ where
 \begin{equation}
 \cT x:=x-\eta\nabla f(x)=x-\eta A^\top Ax + \eta A^\top b.
 \end{equation}
-Assuming that $ A^\top A$ and $ A^\top b$ are made available by pre-computing, we have $\nops{x}{\cT x}=O(m^2)$. The coordinate update at the $k$th iteration performs
+Assuming that $ A^\top A$ and $ A^\top b$ are already computed, we have $\nops{x}{\cT x}=O(m^2)$. The coordinate update at the $k$th iteration performs
 $$x_{i_k}^{k+1}=\cT_{i_k} x^k =x^k_{i_k}-\eta\nabla_{i_k} f(x^k),$$
 and $x_j^{k+1}=x_j^{k},\forall j\neq i_k$, where $i_k$ is some selected coordinate. 
 
-Since for all $i$, $\left(A^\top (Ax-b)\right)_{i}=(A^\top A)_{i,:}\cdot x-(A^\top b)_{i}$,
+Since for all $i$, $\nabla_i f(x^k)=\left(A^\top (Ax-b)\right)_{i}=(A^\top A)_{i,:}\cdot x-(A^\top b)_{i}$,
 we have $\nops{x}{\cT_i x }=O(m)=O(\frac{1}{m}\nops{x}{\cT x})$. Therefore, the coordinate gradient descent is computationally worthy. 
 \end{example}
 The operator $\cT$ in the above example is a special \emph{Type-I CF} operator.
@@ -46,9 +45,9 @@ We say $\cT$ is \emph{Type-I CF} (denoted as $\cF_1$) if for any $x\in\HH$ and $
 $$\nops{x}{(\cT x)_i}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg).$$
 \end{definition}
 \begin{example}[least squares II]\label{ex:lsq2}
-We can implement the coordinate update in Example \ref{ex:lsq1} in a different manner by maintaining the result $\cT x^k$ throughout, which works when $m=\Theta(n)$ or $p\gg m$. The full update is unchanged. 
-At each iteration, we  immediately obtain $x_{i_k}^{k+1}=(\cT x^k )_{i_k}$ but  need to refresh $\cT x^k$ to $\cT x^{k+1}$.
-Since $x^{k+1}$ and $x^k$ only differ by just one coordinate, the refreshing only requires multiplying the $i_k$th column of $A^\top A$ by $x^{k+1}_{i_k}-x^k_{i_k}$, which is much cheaper than multiplying $A^\top A$ by $x^{k+1}$. The refreshing takes $O(m)$ operations, which is $O(\frac{1}{m}\nops{x}{\cT (x)})$.
+We can implement the coordinate update in Example \ref{ex:lsq1} in a different manner by maintaining the result $\cT x^k$ in the memory throughout, which works when $m=\Theta(n)$ or $p\gg m$. The full update is unchanged. 
+At each iteration, from $\cT x^k$ we immediately obtain $x_{i_k}^{k+1}=(\cT x^k )_{i_k}$ but  need to refresh $\cT x^k$ to $\cT x^{k+1}$.
+Since $x^{k+1}$ and $x^k$ only differ by just one coordinate, the refreshing only requires multiplying the $i_k$th column of $A^\top A$ by $x^{k+1}_{i_k}-x^k_{i_k}$, which is much cheaper than multiplying $A^\top A$ by $x^{k+1}$. The work of refreshing takes $O(m)$ operations, which is $O(\frac{1}{m}\nops{x}{\cT (x)})$.
 Therefore,
 $$\nops{\{ x^k,\cT x^k, x^{k+1}\}}{ \cT x^{k+1}}= O\bigg(\frac{1}{m}\DIFdelbegin  \nops{x^{k+1}}{\cT  x^{k+1}} \bigg).$$
 \end{example}
@@ -78,7 +77,7 @@ Combining Type-I and Type-II CF operators with the last example, we arrive at th
 %given any $x\in\HH$ and an arbitrary $i\in\{1,\ldots,m\}$, the coordinate update from $x$ to $x^+$ where $x^+_i = (\cT x)_i$ and $x_{j}^+=x_{j}$ for $j\not=i$, satisfies
 \begin{equation}\label{op-cuf} \nops{\{x,\cM(x)\}}{\{x^+,\cM(x^+)\}}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg),
 \end{equation}
-where $\cM(x)$ is some quantity, possibly non-existing, that is maintained in the memory  to facilitate each coordinate update and refreshed to $\cM(x^+)$. 
+where $\cM(x)$ is some quantity maintained in the memory to facilitate each coordinate update and refreshed to $\cM(x^+)$. $\cM(x)$ can be empty, i.e., besides $x$, there is no other varying quantity maintained.
 \end{definition}
 
 \cut{\begin{definition}[CF operator]
@@ -255,7 +254,7 @@ Consider a \emph{separable} function
 $$f(x) = \sum_{i=1}^m f_i(x_i).$$
 Then, both $\nabla f$ and $\prox_{\gamma f}$ are separable, in particular,
 $$(\nabla f(x))_i = \nabla f_i (x_i) \quad \mbox{and}\quad (\prox_{\gamma f}(x))_i= \prox_{\gamma f_i} (x_i).$$\cut{$$\nabla f(x) = \begin{bmatrix} \nabla f_1 (x_1) \\ \vdots \\ \nabla f_m(x_m) \end{bmatrix} \quad \mbox{and}\quad \prox_{\gamma f}(x) = \begin{bmatrix}  \prox_{\gamma f_1} (x_1) \\ \vdots \\  \prox_{\gamma f_m}(x_m) \end{bmatrix}.$$}
-Here, $\prox_{\gamma f} (x)$ ( $\gamma >0$) is the \emph{proximal operator} that we  define in \eqref{def-prox}. %returns the minimizer $y^*$ of the function $f(x) + \frac{1}{2\gamma } \|x - y\|^2$. The minimizer exists and is unique when $f$ is a closed proper convex function.
+Here, $\prox_{\gamma f} (x)$ ( $\gamma >0$) is the \emph{proximal operator} that we  define in Appendix~\ref{sec:op-concept}. %returns the minimizer $y^*$ of the function $f(x) + \frac{1}{2\gamma } \|x - y\|^2$. The minimizer exists and is unique when $f$ is a closed proper convex function.
 % $$\prox_{\gamma f} (x): = \argmin_{y \in \HH} f(x) + \frac{1}{2\gamma } \|x - y\|^2,$$
 % for which we assume unique minimizer (true if $f$ is closed proper convex).
 \end{example}
@@ -293,7 +292,7 @@ The gradient map $\nabla f$ is nearly-separable.
 
 An application of this example arises in wireless communication over  a graph of $m$ nodes. Let each $x_i$ be the spectrum assignment to node $i$, each $e$ be a neighborhood of nodes,  and each   $f_e$ be a utility function. The input of $f_e$ is $x_e$ since the utility depends on the spectra assignments in the neighborhood.
 
-In  machine learning, if each observation only involves with a few features, then each function of the optimization objective will depend on a  small number of components of $x$.  \cut{The gradient of $f(x)$ will also only depend on a few coordinates of $x$. \commwy{could you be specific in the machine learning example?}}
+In machine learning, if each observation only involves a few features, then each function of the optimization objective will depend on a  small number of components of $x$. This is the case when graphical models are used~\cite{rue2005gaussian,bengio2006label}. \cut{The gradient of $f(x)$ will also only depend on a few coordinates of $x$. \commwy{could you be specific in the machine learning example?}}
 \end{example}
 
 \cut{ % have been moved
