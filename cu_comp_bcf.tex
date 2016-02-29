@@ -1,5 +1,7 @@
 % !TEX root = ./amsa_main.tex
 \section{Composite Coordinate Friendly Operators}\label{sec:comp-cuf}
+Composite operators arise in the algorithms for problems with composite functions, as well as the algorithms that are derived from operator splitting methods. To update $x^k$ to $x^{k+1}$, two or more operators are applied, and therefore their structures together determine whether is update is CF. This is where CF structures become less trivial and more interesting. This section studies composite CF operators. Along with the recovery of existing algorithm, new algorithms will be introduced.
+
 \cut{Operator splitting algorithms decompose awkward combinations of operators into simpler subproblems. They give rise to a lot of efficient algorithms. \rev{Aside from the widely used ADMM and the primal-dual algorithms \cite{chambolle2011first}\cite{condat2013primal}\cite{vu2013splitting}, the forward-backward splitting, the forward-backward-forward splitting, the Douglas-Rachford splitting, the forward-Douglas-Rachford splitting also find numerous applications \cite{daubechies2003iterative}\cite{combettes2005signal}\cite{o2014primal}\cite{briceno2015FDRS} in machine learning, signal processing and imaging. Morover, the development of operator splitting schemes can produce more powerful algorithms \cite{davis2015three}. Combining operator splitting and coordinate updating will give us algorithms enjoying benefits from both sides. However, naively applying coordinate update to existing algorithms may results in divergence or wrong answers.
 \begin{example}[three block ADMM]
 The problem:
@@ -34,10 +36,11 @@ s^{k+1}=s^k+\eta(Ax^{k+1}+By^{k+1}+Cz^{k+1}-b).
 It is the direct extension of ADMM to three block, which is proved to be divergent in \citep{chen2014direct}
 \end{example}}
 This motivates us to study the mechanism to develop coordinate update algorithms based on operator splitting. In order to do this, we study when the combinations of operators is CF in  In \S\ref{sc:comb}. Then, in \S\ref{sec:splitting} review several operator splitting schemes and provide examples. \rev{We point out here that the coordinate update methods we propose, based on operator splitting schemes, all have convergence guarantee, at least for async-parallel (thus also stochastic) update \cite{Peng_2015_AROCK}}
-}
+
 
 There are many popular operator-splitting based algorithms, e.g., proximal gradient method, ADM, and primal-dual method, which reduce the original problem to simpler subproblems, each corresponding to a part of the objective or constraints. Coordinate updates can be combined with operator splitting to further simplify their subproblems and even offer better parallelism. Most operator splitting algorithms are sequential compositions of two or more operators. This section studies when their compositions are CF operators.
 
+}
 
 \subsection{Combinations of Operators}\label{sc:comb}
 We start by an example with numerous applications. It is a generalization of Example~\ref{ex:qhloss}.
@@ -53,7 +56,7 @@ $\nabla f= \cT_1\circ\cT_2\circ\cT_3$ is CF.
 
 If $p=m$, $\cT_1,\cT_2,\cT_3$ all map from $\RR^m$ to $\RR^m$. Then, it is easy to check that $\cT_1$ is Type-I CF, $\cT_2$ is separable, and $\cT_3$ is Type-II CF. The last one is crucial since not maintaining $\cT_3 x$ would disqualify $\cT$ from CF. Indeed, to obtain $(\cT x)_i$, we must multiple $A_i^\top$ to all the entries of $\cT_2\circ\cT_3 x$, which in turn needs all the entries of $\cT_3 x$, computing which from scratch costs $O(pm)$.
 
-There are some  rules to preserve Type-I and Type-II CF. For example, $\cT_1\circ \cT_2$ is still Type-I CF, and $\cT_2\circ\cT_3$ is still CF but there are counter examples where  $\cT_2\circ\cT_3$  can be neither Type-I nor Type-II CF. Such properties are important for developing efficient coordinate update algorithms for complicated problems; we will fomarlize them in the following.
+There are general rules to preserve Type-I and Type-II CF. For example, $\cT_1\circ \cT_2$ is still Type-I CF, and $\cT_2\circ\cT_3$ is still CF but there are counter examples where  $\cT_2\circ\cT_3$  can be neither Type-I nor Type-II CF. Such properties are important for developing efficient coordinate update algorithms for complicated problems; we will fomarlize them in the following.
 \end{example}
 
 The operators $\cT_2$ and $\cT_3$ in the above example are prototypes of \emph{cheap} and \emph{easy-to-maintain} operators from $\HH$ to $\GG$ that arise in operator compositions.
@@ -152,7 +155,7 @@ Case & $\cT_1\in$ & $\cT_2\in$ & $~(\cT_1\circ\cT_2)\in ~$& Example\\\hline\hlin
 %When we consider whether an operator is coordinate update friendly or not, we only have to consider the more complicate operator if the computation
 %\end{remark}
 
-Next, we discuss how $\cT_1\circ \cT_2$ inherits the CF properties from $\cT_1$ and $\cT_2$, and the results are summarized in Table \ref{table:comp-op}. For simplicity, we only use matrix-vector multiplication as examples in this subsection; more examples will be given later.%where at least one operator in the composition is non-separable. 
+Next, we discuss how $\cT_1\circ \cT_2$ inherits the CF properties from $\cT_1$ and $\cT_2$, and the results are summarized in Table \ref{table:comp-op}. For simplicity, we only use matrix-vector multiplication as examples in this subsection; more interesting examples will be given later.%where at least one operator in the composition is non-separable. 
 \begin{itemize}
 
 \item If $\cT_1$ is separable or nearly-separable ($\cC_1\cup\cC_2$), then as long as $\cT_2$ is CF ($\cF$), $\cT_1\circ\cT_2$ remains CF. In addition, if $\cT_2$ is Type-I CF ($\cF_1$), so is $\cT_1\circ\cT_2$; see Example~\ref{exp:sp-dens}. 
