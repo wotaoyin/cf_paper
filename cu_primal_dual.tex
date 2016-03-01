@@ -9,7 +9,7 @@ and $A$ is a ``$p$-by-$m$" linear operator from $\mathbb{H}=\HH_1\times\cdots\ti
 %$\Box$ is the infimal convolution operator defined as $(h\Box l)(y)=\inf_{z\in\GG} h(z)+l(y-z)$. 
 \cut{[do we mention saddle-point and VI at the end of this section?]} Problem~\eqref{pdproblem} abstracts many applications in image processing and machine learning.
 \begin{example}[image deblurring/denoising]
-Let $u^0$ be an image, where $u_i^0\in[0,255]$, and $B$ be the blurring linear operator. Let $\|\nabla u\|_1$ be the anisotropic\footnote{Our derivation can be easily generalized to the isotropic case} total variation of $u$. Suppose that $b$ is a noisy observation of $Bu^0$. Then, we can try to recover $u^0$ by solving 
+Let $u^0$ be an image, where $u_i^0\in[0,255]$, and $B$ be the blurring linear operator. Let $\|\nabla u\|_1$ be the anisotropic\footnote{Our derivation can be easily generalized to the isotropic case.} total variation of $u$ (see \eqref{eqn:tv_def} for definition). Suppose that $b$ is a noisy observation of $Bu^0$. Then, we can try to recover $u^0$ by solving 
 \begin{equation}
 \Min_u\, \frac{1}{2}\|Bu-b\|^2+\iota_{[0,255]}(u)+\lambda\|\nabla u\|_1,
 \end{equation}
@@ -308,10 +308,10 @@ x-\eta(\nabla f(x)+A^\top s+2\gamma A^\top Ax-2\gamma A^\top b)
 \subsection{Overlapping-block Coordinate Updates}\label{sec:overlap}
 {In the coordinate update scheme proposed in \S\ref{sec:pdcu}, updating $x_i$ involves computing $s^{k+1}$ but the $s^{k+1}$ we compute is not used to update $s$ or even cached (see the proof of Proposition \ref{prop1}, item 1). This is because $x_i$'s and $s_j$'s are coupled through the matrix $A$.
 
-We define, for each $i$,  $\JJ(i)\subset \{1,2,\ldots, p\}$ as the set of indices $ j$ such that $A^\top_{i,j}\neq 0$, and, for each $j$,  $\II(j)\subset\{1,2,\ldots,m\}$ as the set of indices of $i$ such that $A_{j,i}\neq 0$. We also let $m_j:=|\II(j)|$, and assume $m_j\neq 0,\forall j=1,2,\ldots, p$ without loss of generality.
+We define, for each $i$,  $\JJ(i)\subset [p]$ as the set of indices $ j$ such that $A^\top_{i,j}\neq 0$, and, for each $j$,  $\II(j)\subset [m]$ as the set of indices of $i$ such that $A_{j,i}\neq 0$. We also let $m_j:=|\II(j)|$, and assume $m_j\neq 0,\forall j \in [p]$ without loss of generality.
 %otherwise we can simply delete the $j$th column of $A$ without affecting the solution of problem $\eqref{pdproblem}$.
 
-We arrange the coordinates of $z=[x;s]$ into $m$ (overlapping) blocks. The $i$th block consists of the coordinate $x_i$ and  $s_j$ for all $j\in\JJ(i)$. We propose a block coordinate update scheme based on $\eqref{vucondat}$. Because the blocks overlap, the $s_j$ update is relaxed with parameters $\rho_{i,j}\ge 0$ (see~\eqref{pdoverlap} below) that satisfy  $$\sum_{i\in \II(j)}\rho_{i,j}=1,~~\forall j=1,2,\ldots, p,$$ so that the aggregated effect is to update $s_j$ without scaling. (Following the
+We arrange the coordinates of $z=[x;s]$ into $m$ (overlapping) blocks. The $i$th block consists of the coordinate $x_i$ and  $s_j$ for all $j\in\JJ(i)$. We propose a block coordinate update scheme based on $\eqref{vucondat}$. Because the blocks overlap, the $s_j$ update is relaxed with parameters $\rho_{i,j}\ge 0$ (see~\eqref{pdoverlap} below) that satisfy  $\sum_{i\in \II(j)}\rho_{i,j}=1,~~\forall j \in [p],$ so that the aggregated effect is to update $s_j$ without scaling. (Following the
 %Krasnosel'ski$\breve{\text{i}}$-Mann 
 KM iteration~\cite{krasnosel1955two}, we can also assign a relaxation parameter $\eta_k$ for the $x_i$ update; then, the $s_j$ update should be relaxed with $\rho_{i,j}\eta_k$.)
 
@@ -321,10 +321,10 @@ We propose the following new update scheme:
 \left\{
 \begin{array}{l}
 \text{select }i\text{ from } 1,2,\ldots,m, \text{ then compute}\\
-\qquad\tilde{s}_j^{k+1}=\prox_{\gamma h_j^*} (s_j^k+\gamma (Ax^k)_j),~\mbox{for all}~ j\in\JJ(i),\\
-\qquad\tilde{x}_i^{k+1}=\prox_{\eta g_i}(x_i^k-\eta(\nabla_i f(x^k)+\sum_{j\in\JJ(i)}A_{i,j}^\top(2\tilde{s}_j^{k+1}-s_j^k))),\\
-\qquad\text{update }x_i^{k+1}=x_i^k+(\tilde{x}_i^{k+1}-x_i^k), \\
-\qquad\text{update }s_j^{k+1}=s_j^k+\rho_{i,j}(\tilde{s}_j^{k+1}-s_j^k),~\mbox{for all}~ j\in\JJ(i).
+\quad\tilde{s}_j^{k+1}=\prox_{\gamma h_j^*} (s_j^k+\gamma (Ax^k)_j),~\mbox{for all}~ j\in\JJ(i),\\
+\quad\tilde{x}_i^{k+1}=\prox_{\eta g_i}(x_i^k-\eta(\nabla_i f(x^k)+\sum_{j\in\JJ(i)}A_{i,j}^\top(2\tilde{s}_j^{k+1}-s_j^k))),\\
+\quad\text{update }x_i^{k+1}=x_i^k+(\tilde{x}_i^{k+1}-x_i^k), \\
+\quad\text{update }s_j^{k+1}=s_j^k+\rho_{i,j}(\tilde{s}_j^{k+1}-s_j^k),~\mbox{for all}~ j\in\JJ(i).
 \end{array}
 \right.\label{pdoverlap}
 \end{equation}
@@ -396,7 +396,7 @@ The two algorithms are based on Sections~\S\ref{sec:pdcu} and~\S\ref{sec:overlap
 \Input{$z^0\in\FF$,  $K>0$, a discrete distribution $(q_1,\ldots,q_{m+p})$
 with $\sum_{i=1}^{m+p}q_i=1$ and $q_i>0,\forall i$, } set global iteration
 counter $k=0$\; \While{$k < K$, every agent asynchronously and continuously}{
-  select $i_k\in\{1,\ldots,m+p\}$ with $\mathrm{Prob}(i_k=i)=q_i$\;%from $\{1,
+  select $i_k\in [m+p]$ with $\mathrm{Prob}(i_k=i)=q_i$\;%from $\{1,
   % ..., m\}$ under a discrete positive distribution\; $\hat{x}^k\gets$ reads the variable $x$\;
   % computes $\Delta x=-\frac{\eta_k}{mp_{i_k}} S_{i_k}\hat{x}^k$; ~(see \eqref{eqn:asyn_update}--\eqref{eqn:inconsist} for definitions)\;
   % adds $(\Delta x)_{i_k}$ to the component $x_{i_k}$ of the variable $x$\;
@@ -429,7 +429,7 @@ The async-parallel algorithm using the overlapping-block coordinate update~\eqre
 \Input{$z^0\in\FF$,  $K>0$, a discrete distribution $(q_1,\ldots,q_{m})$
 with $\sum_{i=1}^{m}q_i=1$ and $q_i>0,\forall i$, } set global iteration
 counter $k=0$\; \While{$k < K$, every agent asynchronously and continuously}{
-  select $i_k\in\{1,\ldots,m\}$ with $\mathrm{Prob}(i_k=i)=q_i$\;%from $\{1,
+  select $i_k\in [m]$ with $\mathrm{Prob}(i_k=i)=q_i$\;%from $\{1,
   % ..., m\}$ under a discrete positive distribution\; $\hat{x}^k\gets$ reads the variable $x$\;
   % computes $\Delta x=-\frac{\eta_k}{mp_{i_k}} S_{i_k}\hat{x}^k$; ~(see \eqref{eqn:asyn_update}--\eqref{eqn:inconsist} for definitions)\;
   % adds $(\Delta x)_{i_k}$ to the component $x_{i_k}$ of the variable $x$\;

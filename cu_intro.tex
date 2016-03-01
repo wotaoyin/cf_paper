@@ -53,11 +53,11 @@ We study the structures of $\cT$ that make the  following coordinate update algo
 %x^{k+1}_i = (\cT x^k)_i\quad\mbox{or}\quad 
 x^{k+1}_i = x_i^k - \eta_k (x^k-\cT x^k)_i,
 \eeq
-where  $\eta_k$ is a  step size and $i\in\{1,\ldots,m\}$ is arbitrary. Specifically, the cost of performing  \eqref{cuitr}  is roughly $\frac{1}{m}$, or lower, of that of performing \eqref{fpi}. We call such $\cT$ a \textbf{coordinate friendly (CF)} operator, which we will formally define.
+where  $\eta_k$ is a  step size and $i\in [m] := \{1,\ldots,m\}$ is arbitrary. Specifically, the cost of performing  \eqref{cuitr}  is roughly $\frac{1}{m}$, or lower, of that of performing \eqref{fpi}. We call such $\cT$ a \textbf{coordinate friendly (CF)} operator, which we will formally define.
 
 This paper will explore a variety of CF operators. Single CF operators include linear maps, projections to certain simple sets, proximal maps and gradients of (nearly) separable functions, as well as gradients of sparsely supported functions. There are many more composite CF operators, which are built from single CF and non-CF operators under a set of rules.  The fact that some of these operators are CF is not obvious.  
 
-These CF operators let us derive powerful coordinate update algorithms for a variety of applications including, but not limited to, linear and second-order cone programming, variational image processing, support vector machine, empirical risk minimization, portfolio optimization, and nonnegative matrix factorization. For each application, we present an algorithm in the form of~\eqref{fpi} so that its coordinate update~\eqref{cuitr} is efficient. %A final coordinate update algorithm can be obtained by plugging~\eqref{cuitr} into an algorithmic framework reviewed in \S\ref{sec:literature}. 
+These CF operators let us derive powerful coordinate update algorithms for a variety of applications including, but not limited to, linear and second-order cone programming, variational image processing, support vector machine, empirical risk minimization, portfolio optimization, distributed computing, and nonnegative matrix factorization. For each application, we present an algorithm in the form of~\eqref{fpi} so that its coordinate update~\eqref{cuitr} is efficient. %A final coordinate update algorithm can be obtained by plugging~\eqref{cuitr} into an algorithmic framework reviewed in \S\ref{sec:literature}. 
 {In this way we obtain new coordinate update algorithms for these applications, some of which  are treated with coordinate update for the first time. %For the problems with coordinate update solution, we recover the existing methods and also provide new approaches.
 }
 \cut{\rev{We would like to point out our coordinate update scheme is different from the domain decomposition approach. Domain decomposition splits the variable domain into small subdomains and solves the original problem in each subdomains, with variables coherent on the intersections or the boundary. Our coordinate update scheme, on the other hand, is based on operator splitting. Variables are divided into coordinates corresponding to the algorithm instead of any physical grid domains and updating each coordinate involves solving a subproblem different from the original one. 
@@ -95,7 +95,7 @@ The general framework of coordinate update is
 \begin{enumerate}
 \item set $k\gets 0$ and initialize $x^0\in\HH=\HH_1\times \cdots \times \HH_m$
 \item while \emph{not converged} do
-\item \quad select an index $i_k\in \{1,\ldots,m\}$;
+\item \quad select an index $i_k\in [m]$;
 \item \quad update $x^{k+1}_{i}$ for $i={i_k}$ while keeping $x_j^{k+1}=x_j^k$, $\forall\,j\not ={i_k}$;
 \item \quad $k\gets k+1$;
 \end{enumerate} 
@@ -149,13 +149,13 @@ In the full update, the step size $\eta_k$ is set to the theoretical upper bound
 
 \subsubsection{Parallel Update} As one of their main advantages, coordinate update algorithms are easy to parallelize. In this subsection, we discuss  both synchronous (sync) and asynchronous (async) parallel updates.
 
-\textbf{Sync-parallel (Jacobi) update} specifies a sequence of index subsets $\II_1,\II_2,\ldots \subseteq \{1,\ldots,n\}$, and at each iteration $k$,  the coordinates in $\II_k$ are updated in parallel by multiple agents:
+\textbf{Sync-parallel (Jacobi) update} specifies a sequence of index subsets $\II_1,\II_2,\ldots \subseteq [n]$, and at each iteration $k$,  the coordinates in $\II_k$ are updated in parallel by multiple agents:
 $$ \begin{cases}
 x^{k+1}_{i} = x_{i}^k - \eta_k(x^k-\cT x^k)_{i},& i\in \II_k,\\
 x^{k+1}_{i} = x_i^k,&i\not\in \II_k.
 \end{cases}
 $$
-Synchronization across all agents ensures that  all $x_i$ in $\II_k$ are updated and also written to the memory before the next iteration starts. Note that, if $\II_k=\{1,\ldots,n\}$, then all the coordinates are updated and, thus, each iteration reduces to the full update: $x^{k+1} =  x^k - \eta_k(x^k-\cT x^k).$ \cut{\color{red}This, of course, does not mean solving $x=\cT x$ in one step; therefore, do not confuse performing an  update in \eqref{coordes} for all the coordinates in parallel from the joint minimization over all the variables.}
+Synchronization across all agents ensures that  all $x_i$ in $\II_k$ are updated and also written to the memory before the next iteration starts. Note that, if $\II_k= [n]$, then all the coordinates are updated and, thus, each iteration reduces to the full update: $x^{k+1} =  x^k - \eta_k(x^k-\cT x^k).$ \cut{\color{red}This, of course, does not mean solving $x=\cT x$ in one step; therefore, do not confuse performing an  update in \eqref{coordes} for all the coordinates in parallel from the joint minimization over all the variables.}
 
 \textbf{Async-parallel update.} In this setting, a set of agents  still perform parallel updates, but synchronization is eliminated or weakened. Hence, each agent continuously applies \eqref{fm:async} below, which reads    $x$  from the shared memory and writes $x_i$ back (or through communicating without shared memory):  
 \beq\label{fm:async} \begin{cases}
@@ -206,7 +206,7 @@ For fixed-point problems,~\cite{Peng_2015_AROCK} introduced  async-parallel stoc
 \subsection{Contributions of this paper} 
 The paper systematically discusses the CF properties found in both single and composite operators underlying many interesting applications. We introduce approaches to recognize CF operators and develop coordinate-update algorithms based on them. 
 We provide a variety of applications to illustrate our approaches. 
-In particular, we obtain new coordinate-update algorithms for image deblurring, portfolio optimization, second-order cone programming, as well as tensor decomposition. Our analysis also provides guidance to the implementation of coordinate-update algorithms by specifying how to compute certain operators and maintain certain quantities in memory. We also provide numerical results to illustrate the efficiency of the proposed coordinate update algorithms.
+In particular, we obtain new coordinate-update algorithms for image deblurring, portfolio optimization, second-order cone programming, as well as matrix decomposition. Our analysis also provides guidance to the implementation of coordinate-update algorithms by specifying how to compute certain operators and maintain certain quantities in memory. We also provide numerical results to illustrate the efficiency of the proposed coordinate update algorithms.
  
 This paper does \emph{not} focus on the convergence perspective of coordinate update algorithms, though a convergence proof is provided in the appendix for a new primal-dual coordinate update algorithm. In general, in fixed-point algorithms, the iterate convergence is ensured by the monotonic decrease of the distance between the iterates and the solution set, while in minimization problems, the objective value convergence is ensured by the monotonic decrease of a certain energy function. The reader is referred to the existing literature for details. 
 

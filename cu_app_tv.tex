@@ -18,7 +18,7 @@ We consider the following Total Variation (TV) image processing model
 \Min_{x}~\lambda \|x\|_{\text{TV}} + \frac{1}{2} \|A\,x - b\|^2,
 \end{equation}
 where $x\in \RR^n$ is the vector representation of the unknown image, $A$ is an $m \times n$ matrix describing the transformation from the image to the measurements $b$. Common $A$ includes sampling matrices in MRI, CT, denoising, deblurring, etc.  Let $(\nabla_i^h,\nabla_i^v)$ be the discrete gradient at pixel $i$. Then the TV semi-norm $\|\cdot\|_{\text{TV}}$ in the isotropic and anisotropic fashions are, respectively,
-\begin{subequations}
+\begin{subequations}\label{eqn:tv_def}
 \begin{align}
 \|x\|_{\text{TV}} &= {\sum_{i} \sqrt{(\nabla_i^h x)^2 + (\nabla_i^v x)^2},}\\
   \| x\|_{\text{TV}} &= \| \nabla x\|_1 = \sum_{i} \left(|\nabla_i^h x| + |\nabla_i^v x|\right).

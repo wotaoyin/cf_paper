@@ -1,5 +1,5 @@
 \subsubsection{3D Mesh Denoising}
-Following an example in~\cite{repetti2015random}, we consider a 3D mesh described by their nodes $\bar{x}_i=(\bar{x}_i^X,\bar{x}_i^Y,\bar{x}_i^Z), i\in[n] := \{1,2,...,n\}$, and the adjacency matrix $A\in\mathbb{R}^{n\times n}$, where $A_{ij} = 1$ if nodes $i$ and $j$ are adjacent, otherwise $A_{ij} = 0$. We let $\cV_i$  be the set of neighbours of node $i$. Noisy mesh nodes $z_i, i=1,2,...,n$, are observed. We try to recover the original mesh nodes by solving the following optimization problem \cite{repetti2015random}:
+Following an example in~\cite{repetti2015random}, we consider a 3D mesh described by their nodes $\bar{x}_i=(\bar{x}_i^X,\bar{x}_i^Y,\bar{x}_i^Z), i\in[n]$, and the adjacency matrix $A\in\mathbb{R}^{n\times n}$, where $A_{ij} = 1$ if nodes $i$ and $j$ are adjacent, otherwise $A_{ij} = 0$. We let $\cV_i$  be the set of neighbours of node $i$. Noisy mesh nodes $z_i, i \in [n]$, are observed. We try to recover the original mesh nodes by solving the following optimization problem \cite{repetti2015random}:
 \begin{equation}
 \Min_{x} ~\sum_{i=1}^n f_i(x_i)+\sum_{i=1}^n g_i(x_i)+\sum_{i,j:j\in \cV_{i}} h_{i,j}(x_{i}-x_{j}),
 \end{equation}
