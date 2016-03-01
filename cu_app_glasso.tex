@@ -13,14 +13,16 @@ Let $U_i$ be formed by the columns of the identity matrix $I$ in $\II_i$, and le
 
 \subsubsection*{Non-overlapping case~\cite{YL2006GrpLasso}} In this case, we have $\II_i\cap \II_j =\emptyset, \,\forall i\neq j$, and can apply the FBS scheme \eqref{eq:FBS} to \eqref{eq:glasso2}. Specifically, let $\cT_1=\partial (h\circ U)$ and $\cT_2=\nabla f$. The FBS full update is 
 $$x^{k+1}=\cJ_{\gamma \cT_1}\circ(\cI-\gamma\cT_2)(x^k).$$
-For $i\in\{1,\ldots,m\}$, the corresponding coordinate update is
-\begin{subequations}\label{update-nonlap-gl}
-\begin{align}
-x_i^{k+1}=&\argmin_{x_i}\frac{1}{2}\|x_i-x_i^k+\gamma \nabla_i f(x^k)\|_2^2+ \gamma h_i(x_i)\\
-=&\max\left(\|x_i^k-\gamma \nabla_i f(x^k)\|_2-\gamma,0\right)\frac{x_i^k-\gamma \nabla_i f(x^k)}{\|x_i^k-\gamma \nabla_i f(x^k)\|_2},
-\end{align} 
-\end{subequations}
-where the step size can be taken to $\gamma=\frac{1}{\|A\|_2^2}$. When $\nabla f$ is either cheap or easy-to-maintain,  the coordinate update in \eqref{update-nonlap-gl} is inexpensive.
+The corresponding coordinate update is the following
+\begin{equation}\label{update-nonlap-gl}
+{\left\{
+\begin{array}{l}
+\text{if }i \in [m]\text{ is chosen, then compute}\\
+\qquad x_i^{k+1}=\argmin_{x_i}\frac{1}{2}\|x_i-x_i^k+\gamma_i \nabla_i f(x^k)\|_2^2+ \gamma_i h_i(x_i),\\
+\end{array}
+\right.
+}\end{equation}
+where the step size can be taken to $\gamma_i=\frac{1}{\|A_{:,i}\|^2}$. When $\nabla f$ is either cheap or easy-to-maintain,  the coordinate update in \eqref{update-nonlap-gl} is inexpensive.
 
 \subsubsection*{Overlapping case~\cite{jacob2009group}} This case allows $\II_i\cap \II_j \neq\emptyset$ for some $i\neq j$, causing the evaluation of $\cJ_{\gamma\cT_1}$ be generally difficult. However, we can apply the primal-dual update \eqref{vucondat} to this problem as
 \begin{subequations}\label{eq:pd-glasso}
@@ -38,11 +40,15 @@ $$h^*(s)=\left\{
 \end{array}
 \right.$$
 is cheap.
-Hence, for $i\in\{1,\ldots,m\},$ the coordinate update based on \eqref{eq:pd-glasso} is
-\begin{subequations}\label{update-lap-gl}
-\begin{align}
-s_i^{k+1}=&\,\prj_{B_{\lambda_i}}(s_i^k+\gamma x_i^k), \\
-x_i^{k+1}=&\,x_i^k-\eta(\nabla_i f(x^k)+(2\prj_{B_{\lambda_i}}(s_i^k+\gamma x_i^k)-s_i^k),
-\end{align}
-\end{subequations}
+Hence, the corresponding coordinate update of \eqref{eq:pd-glasso} is
+\begin{equation}\label{update-lap-gl}
+{\left\{
+\begin{array}{l}
+\text{if $s_i$  is chosen for some $i \in [m]$, then compute}\\
+\qquad s_i^{k+1}=\,\prj_{B_{\lambda_i}}(s_i^k+\gamma x_i^k) \\
+\text{if $x_i$  is chosen for some $i \in [m]$, then compute}\\
+\qquad x_i^{k+1}=\,x_i^k-\eta(\nabla_i f(x^k)+(2\prj_{B_{\lambda_i}}(s_i^k+\gamma x_i^k)-s_i^k),\\
+\end{array}
+\right.
+}\end{equation}
 where $B_\lambda$ is the Euclidean ball of radius $\lambda$. When $\nabla f$ is easy-to-maintain, the coordinate update in \eqref{update-lap-gl} is inexpensive. To the best of our knowledge, the coordinate update method~\eqref{update-lap-gl} is new. 
