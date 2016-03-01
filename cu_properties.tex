@@ -3,19 +3,19 @@
 
 \subsection{Notation}
 For convenience, we do not distinguish \emph{a coordinate} from \emph{a block of coordinates} throughout this paper. We assume our variable $x$ consists of $m$ coordinates: $$x = (x_1, \ldots, x_m) \in\HH := \HH_1 \times \cdots \times \HH_m\quad\mbox{and}\quad x_i\in\HH_i,~ i=1,\ldots,m.$$ For simplicity, we assume that $\HH_1,\ldots,\HH_m$ are finite-dimensional real Hilbert spaces, though most results hold for general Hilbert spaces.
-A function maps from $\HH$ to $\RR$, the set of real numbers, and an operator maps from $\HH$ to $\GG$, where the definition of $\GG$ depends on the context. We define $[m]$ as the index set $\{1, \ldots, m\}$.\cut{The operator $\cT$ and those operators in the splitting methods in \S\ref{sec:splitting} map from $\HH$ to $\HH$.}
+A function maps from $\HH$ to $\RR$, the set of real numbers, and an operator maps from $\HH$ to $\GG$, where the definition of $\GG$ depends on the context. Again, we define $[m]$ as the index set $\{1, \ldots, m\}$.\cut{The operator $\cT$ and those operators in the splitting methods in \S\ref{sec:splitting} map from $\HH$ to $\HH$.}
 
 Our discussion often involves two points $x,x^+\in\HH$ that \emph{differ by one coordinate}: there exists an index $i\in [m]$ and a point $\delta_i\in\HH$ that is supported on $\HH_i$, such that
 \beq\label{singleupdate}
 x^+ = x+\delta_i.
 \eeq
-Note that $x^+_j=x_j$ for all $j\not=i$. 
+Note that $x^+_j=x_j$ for all $j\not=i$.
 \begin{definition}[number of operations]
 We let $\nops{a}{b}$ denote \emph{the number of basic operations} that it takes to compute the quantity $b$ from the  input $a$.
 \end{definition}
-For example, $\nops{x}{(\cT x)_i}$ denotes the number of operations to compute the $i$th component of $\cT x$ given $x$. We explore the possibility to compute  $(\cT x)_i$ with much fewer operations than what is needed to first compute $\cT x$ and  then take its $i$th component. %Obviously, this number  depends on the structure of $\cT$.   
+For example, $\nops{x}{(\cT x)_i}$ denotes the number of operations to compute the $i$th component of $\cT x$ given $x$. We explore the possibility to compute  $(\cT x)_i$ with much fewer operations than what is needed to first compute $\cT x$ and  then take its $i$th component. %Obviously, this number  depends on the structure of $\cT$.
 
-For a given matrix $A$, let $A_{i,:}$ and $A_{:,j}$ be its $i$th row and $j$th column, respectively. Let $A^\top$ be the transpose of $A$ and $A^\top_{i,:}$ be $(A^\top)_{i,:}$, i.e., the $i$th row of the transpose of $A$. 
+For a given matrix $A$, let $A_{i,:}$ and $A_{:,j}$ be its $i$th row and $j$th column, respectively. Let $A^\top$ be the transpose of $A$ and $A^\top_{i,:}$ be $(A^\top)_{i,:}$, i.e., the $i$th row of the transpose of $A$.
 
 \subsection{Single Coordinate Friendly Operators}
 This subsection studies a few classes of CF operators and then formally define the CF operator. We motivate the first class through an example.
@@ -24,7 +24,7 @@ Consider the least squares problem
 \begin{equation}
 \Min_{x} f(x):=\frac{1}{2} \|A x - b\|^2,\label{lsq}
 \end{equation}
-where $A \in \RR^{p \times m}$ and $b \in \RR^p$. In this example, assume that $m=\Theta(p)$, namely, $m$ and $p$ are of the same order.  We compare the full update of gradient descent to its coordinate update.\footnote{Although gradient descent is seldom used to solve least squares, it often appears as a part in first-order algorithms for problems involving a least squares term.} 
+where $A \in \RR^{p \times m}$ and $b \in \RR^p$. In this example, assume that $m=\Theta(p)$, namely, $m$ and $p$ are of the same order.  We compare the full update of gradient descent to its coordinate update.\footnote{Although gradient descent is seldom used to solve least squares, it often appears as a part in first-order algorithms for problems involving a least squares term.}
 The full update is referred to as the iteration
 $x^{k+1}= \cT x^k $ where $\cT$ is defined as
 \begin{equation}
@@ -32,20 +32,20 @@ $x^{k+1}= \cT x^k $ where $\cT$ is defined as
 \end{equation}
 Assuming that $ A^\top A$ and $ A^\top b$ are already computed, we have $\nops{x}{\cT x}=O(m^2)$. The coordinate update at the $k$th iteration performs
 $$x_{i_k}^{k+1}=\cT_{i_k} x^k =x^k_{i_k}-\eta\nabla_{i_k} f(x^k),$$
-and $x_j^{k+1}=x_j^{k},\forall j\neq i_k$, where $i_k$ is some selected coordinate. 
+and $x_j^{k+1}=x_j^{k},\forall j\neq i_k$, where $i_k$ is some selected coordinate.
 
 Since for all $i$, $\nabla_i f(x^k)=\left(A^\top (Ax-b)\right)_{i}=(A^\top A)_{i,:}\cdot x-(A^\top b)_{i}$,
-we have $\nops{x}{\cT_i x }=O(m)=O(\frac{1}{m}\nops{x}{\cT x})$. Therefore, the coordinate gradient descent is computationally worthy. 
+we have $\nops{x}{\cT_i x }=O(m)=O(\frac{1}{m}\nops{x}{\cT x})$. Therefore, the coordinate gradient descent is computationally worthy.
 \end{example}
 The operator $\cT$ in the above example is a special \emph{Type-I CF} operator.
 \begin{definition}[Type-I CF]
-For an operator $\cT: \HH\to\HH$, let $\nops{x}{(\cT x)_i}$ be the number of operations for computing the $i$th coordinate of $\cT x$ given $x$ and $\nops{x}{\cT x}$ the number of operations for computing $\cT x$ given $x$. 
+For an operator $\cT: \HH\to\HH$, let $\nops{x}{(\cT x)_i}$ be the number of operations for computing the $i$th coordinate of $\cT x$ given $x$ and $\nops{x}{\cT x}$ the number of operations for computing $\cT x$ given $x$.
 
 We say $\cT$ is \emph{Type-I CF} (denoted as $\cF_1$) if for any $x\in\HH$ and $\forall\, i\in [m]$, it holds
 $$\nops{x}{(\cT x)_i}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg).$$
 \end{definition}
 \begin{example}[least squares II]\label{ex:lsq2}
-We can implement the coordinate update in Example \ref{ex:lsq1} in a different manner by maintaining the result $\cT x^k$ in the memory throughout, which works when $m=\Theta(n)$ or $p\gg m$. The full update is unchanged. 
+We can implement the coordinate update in Example \ref{ex:lsq1} in a different manner by maintaining the result $\cT x^k$ in the memory throughout, which works when $m=\Theta(n)$ or $p\gg m$. The full update is unchanged.
 At each iteration, from $\cT x^k$ we immediately obtain $x_{i_k}^{k+1}=(\cT x^k )_{i_k}$ but  need to refresh $\cT x^k$ to $\cT x^{k+1}$.
 Since $x^{k+1}$ and $x^k$ only differ by just one coordinate, the refreshing only requires multiplying the $i_k$th column of $A^\top A$ by $x^{k+1}_{i_k}-x^k_{i_k}$, which is much cheaper than multiplying $A^\top A$ by $x^{k+1}$. The work of refreshing takes $O(m)$ operations, which is $O(\frac{1}{m}\nops{x}{\cT (x)})$.
 Therefore,
@@ -62,10 +62,10 @@ Sometimes, maintaining certain quantities other than $\cT x$ can also make the c
 \begin{example}[least squares III]\label{ex:lsq3}
 For the case $p\ll m$, we should avoid pre-computing $A^\top A$ because multiplying $A$ and then $A^\top$ is cheaper. Therefore, we change the implementations of both the full and coordinate updates in Example \ref{ex:lsq1}. In particular, the full update
 $$x^{k+1}=\cT x^k =x^k-\eta\nabla f(x^k)=x^k-\eta A^\top (Ax^k-b),$$
-pre-multiplies $x^k$ by $A$ and then $A^\top$. Hence, 
+pre-multiplies $x^k$ by $A$ and then $A^\top$. Hence,
 $\nops{x^k}{\cT(x^k)}=O(mp)$.
 
-We change the coordinate update to maintain the intermediate quantity $Ax^k$. The coordinate update computes 
+We change the coordinate update to maintain the intermediate quantity $Ax^k$. The coordinate update computes
 $$(\cT x^k)_{i_k}=x^k_{i_k}-\eta (A^\top Ax^k-A^\top b)_{i_k},$$
 by pre-multiplying $Ax^k$ by $A^{\top}_{i_k,:}$ and refreshing $Ax^k$ to $Ax^{k+1}$ by adding $(x^{k+1}_{i_k}-x^k_{i_k}) A_{:,i_k}$ to $A x^k$. Both steps take $O(p)$ operations, so
 \begin{displaymath}{\nops{\{x^k,Ax^k\}}{\{x^{k+1},Ax^{k+1}\}}=O(p)=O\left(\frac{1}{m}\nops{x^k}{\cT x^k}\right)}.\end{displaymath}
@@ -73,7 +73,7 @@ by pre-multiplying $Ax^k$ by $A^{\top}_{i_k,:}$ and refreshing $Ax^k$ to $Ax^{k+
 Combining Type-I and Type-II CF operators with the last example, we arrive at the following CF definition.
 
 \begin{definition}[CF operator]
- We say that an operator $\cT:\HH\to\HH$ is \emph{CF} if, for any $x,i,\delta_i,x^+$ satisfying \eqref{singleupdate}, the following holds 
+ We say that an operator $\cT:\HH\to\HH$ is \emph{CF} if, for any $x,i,\delta_i,x^+$ satisfying \eqref{singleupdate}, the following holds
 %given any $x\in\HH$ and an arbitrary $i\in\{1,\ldots,m\}$, the coordinate update from $x$ to $x^+$ where $x^+_i = (\cT x)_i$ and $x_{j}^+=x_{j}$ for $j\not=i$, satisfies
 \begin{equation}\label{op-cuf} \nops{\{x,\cM(x)\}}{\{x^+,\cM(x^+)\}}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg),
 \end{equation}
@@ -91,7 +91,7 @@ The \emph{set} of CF operators is denoted by  $\cF$. \commzp{$e_j$ is not define
 
 The left-hand side of \eqref{op-cuf} measures the cost of performing one coordinate update (including the cost of updating $\cM(x)$ to $\cM(x^+)$)  while the right-hand side measures the average per-coordinate cost of updating all the coordinates together. When~\eqref{op-cuf} holds, $\cT$ is amenable to coordinate updates.
 
-\cut{\begin{example}Consider for $a,x\in\RR^m$, $$f(x):=\frac{1}{2}\big(\max(0,1-\beta a^\top x)\big)^2,$$ which is the squared hinge loss function. Consider the operator 
+\cut{\begin{example}Consider for $a,x\in\RR^m$, $$f(x):=\frac{1}{2}\big(\max(0,1-\beta a^\top x)\big)^2,$$ which is the squared hinge loss function. Consider the operator
 \beq\label{qhlossT}
 \cT x:=\nabla f(x)=-\beta \max(0,1-\beta a^\top x) a.
 \eeq
@@ -100,7 +100,7 @@ Let us maintain $\cM(x)=a^\top x$. For arbitrary $x$ and $i$,  let $$x^+_i:=(\cT
 &\nops{\{x,a^\top x\}}{\{x^+,a^\top x^+\}}\\
 =&\nops{\{x,a^\top x\}}{x^+}+\nops{\{a^\top x,x^+_i-x_i\}}{a^\top x^+}\\
 =&O(1)+O(1)=O(1).
-\end{align*} 
+\end{align*}
 On the other hand, $\nops{x}{\cT x}=O(m)$. Therefore,~the inequality \eqref{op-cuf} holds, and $\cT$ defined in~\eqref{qhlossT} is CF.
 \end{example}
 }
@@ -114,14 +114,14 @@ $$\nops{x}{(\cT x)_i}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg).$$
 
 %\item Type-II CF ($\cF_2$): an operator $\cT:\HH\to\GG$ is in $\cF_2$ if, for any $x\in\HH$,  $c\in\RR$, it holds that, $\forall i=1,\ldots,\dim\GG$ and $\forall j=1,\ldots,\dim\HH$:  $$\nops{\{x,\cT x,c\}}{(\cT (x+c e_j))_i}\le O\left(\frac{1}{\dim\GG}\nops{\{x,\cT x,c\}}{\cT (x+ce_j)}\right).$$
 
-\item $\cT$ is \emph{Type-II CF} (denoted as $\cF_2$) if, for any $x,i,\delta_i,x^+$ satisfying \eqref{singleupdate}, the following holds: 
+\item $\cT$ is \emph{Type-II CF} (denoted as $\cF_2$) if, for any $x,i,\delta_i,x^+$ satisfying \eqref{singleupdate}, the following holds:
 \begin{equation}\label{op-cuf2} \nops{\{ x,\cT x, x^+\}}{\cT x^+}= O\bigg(\frac{1}{m}\nops{x^+}{\cT x^+}\bigg)
 \end{equation}
 
 \end{itemize}
 \end{definition}}
 %\begin{remark}
-By definition, a Type-I CF operator $\cT$ is CF without maintaining any quantity, i.e., $\cM(x)=\emptyset$. 
+By definition, a Type-I CF operator $\cT$ is CF without maintaining any quantity, i.e., $\cM(x)=\emptyset$.
 
 A Type-II CF operator $\cT$ satisfies \eqref{op-cuf} with $\cM(x)= \cT x$, so it is also CF. Indeed, given any $x$ and $i$, we can compute $x^+$ by immediately letting $x^+_i=(\cT x)_i$ (at $O(1)$ cost) and keeping $x^+_{j}=x_{j},\,\forall j\neq i$; then, by \eqref{op-cuf2}, we update $\cT x$ to $\cT x^+$ at a low cost. Formally, letting $\cM(x)= \cT x$, %Assume $x$ is updated from $x^-$ and they differ only at the $j$th coordinate, i.e., $x_j=(\cT x^-)_j$ and $x_{j'}=x^-_{j'},\,\forall j'\neq j$. Then we have
 \begin{align*}
@@ -132,7 +132,7 @@ A Type-II CF operator $\cT$ satisfies \eqref{op-cuf} with $\cM(x)= \cT x$, so it
 \end{align*} %Type-I CF operators include all separable operators (see Definition \ref{def:sep-op} and Examples \ref{exp:diagmat} through \ref{exp:proj-box} below), and Type-II CF operators include the affine mapping $\cT x=Ax+b$ as a special case.
 
 \cut{\begin{example}[Matrix-vector multiplication]\label{ex:mtx}
-Let $A \in \RR^{m \times m}$ be dense, and $A_{i,:},A_{:,i}$ be the $i$th row and the $i$th column of $A$, respectively. Let $b\in\RR^{m}$. Consider $$\cT x:= A x + b,$$ 
+Let $A \in \RR^{m \times m}$ be dense, and $A_{i,:},A_{:,i}$ be the $i$th row and the $i$th column of $A$, respectively. Let $b\in\RR^{m}$. Consider $$\cT x:= A x + b,$$
 and   $x,i,\delta_i,x^+$ satisfying \eqref{singleupdate} for $\HH=\RR^m$. Clearly, $\nops{x}{\cT x}=O(m^2)$.
 
 \begin{enumerate}
@@ -143,7 +143,7 @@ Whether maintaining $\cT x$ or nor will  make significant difference when $\cT$ 
 \end{example}
 }
 \cut{ let $a_i$ be the $i$th row of $A$. We have $\nops{x}{\cT(x)}=\nops{x}{Ax+b}=m^2+m$, and  $\nops{x}{(\cT }$}
-\DIFdelbegin %DIFDELCMD < 
+\DIFdelbegin %DIFDELCMD <
 
 %DIFDELCMD < %%%
 In general, the set of CF operators is much larger than the union of Type-I and Type-II CF operators.
@@ -152,7 +152,7 @@ In general, the set of CF operators is much larger than the union of Type-I and 
 
 %CF operators, as the name suggests, let one compute coordinate updates at little overhead.
 Another important subclass of CF operators are operators $\cT:\HH\to\HH$ where   $(\cT x)_i$ only depends on one, or a few, entries out of $x_1,\ldots,x_m$.\cut{, obviously $(\cT x)_i$ is relatively easy to compute. Therefore, they belong to $\cF$.} Based on how many input coordinates they depend on, we partition them into three subclasses.
- \DIFdelbegin %DIFDELCMD < 
+ \DIFdelbegin %DIFDELCMD <
 
 %DIFDELCMD < %%%
 \DIFdelend \begin{definition}[Separable operator]\label{def:sep-op} Consider $\mathfrak{T}:=\{\cT ~|~\cT:\HH\to\HH\}$. We have the partition $\mathfrak{T}=\cC_1\cup\cC_2\cup\cC_3$, where
@@ -166,8 +166,8 @@ Another important subclass of CF operators are operators $\cT:\HH\to\HH$ where  
 
 \cut{For operators in $\cC_1$, the evaluation of $(\cT x)_i$ only involves coordinates $x_i$ and small operator $\cT_i$.  Thus, all the coordinates and the $\cT_i$s are independent with each other, and this is ideal case for coordinate update. For operators in $\cC_2$, the evaluation of $(\cT x)_i$ needs knowledge of some components of $x$.}
 
-Throughout the paper, we assume the coordinate update of a (nearly-) separable operator costs roughly the same for all coordinates. Under this assumption, separable operators are both Type-I CF and Type-II CF, and nearly-separable operators are Type-I CF.\footnote{\label{note1}Not all nearly-separable operators are Type-II CF. Indeed, consider a sparse matrix $A\in \RR^{m\times m}$ whose  non-zero entries are only located  in the last column. Let $\cT x=Ax$ and $x^+=x+\delta_m$. As $x^+$ and $x$ differ by the last entry, $\cT x^+=\cT x+(x^+_m-x_m)A_{:,m}$ takes $m$ operations. Therefore, we have $\nops{\{x,\cT x,x^+\}}{\cT  x^+}=O(m)$. Since $\cT x^+=x^+_mA_{:,m}$ takes $m$ operations, we also have $\nops{x^+}{\cT x^+}=O(m)$. Therefore,~\eqref{op-cuf2} is violated, and there is no benefit  from maintaining $\cT x$.}  %DIF > There are non-separable  CF operators, e.g., Example \ref{ex:lsq1}, \ref{ex:lsq2}, \ref{ex:lsq3}. 
-%For example, with a (dense) matrix $A\in\RR^{m\times m}$ and vector $b\in\RR^{m}$, the operator $\cT:x\mapsto A x+b$ is non-separable yet CF. Indeed, let $a_i$ be the $i$th row of $A$. We have $\nops{x}{\cT(x)}=\nops{x}{Ax+b}=m^2+m$, and  $\nops{x}{(\cT x)_i}=\nops{x}{a_i^\top x+b_i}=m+1$, which is much smaller. 
+Throughout the paper, we assume the coordinate update of a (nearly-) separable operator costs roughly the same for all coordinates. Under this assumption, separable operators are both Type-I CF and Type-II CF, and nearly-separable operators are Type-I CF.\footnote{\label{note1}Not all nearly-separable operators are Type-II CF. Indeed, consider a sparse matrix $A\in \RR^{m\times m}$ whose  non-zero entries are only located  in the last column. Let $\cT x=Ax$ and $x^+=x+\delta_m$. As $x^+$ and $x$ differ by the last entry, $\cT x^+=\cT x+(x^+_m-x_m)A_{:,m}$ takes $m$ operations. Therefore, we have $\nops{\{x,\cT x,x^+\}}{\cT  x^+}=O(m)$. Since $\cT x^+=x^+_mA_{:,m}$ takes $m$ operations, we also have $\nops{x^+}{\cT x^+}=O(m)$. Therefore,~\eqref{op-cuf2} is violated, and there is no benefit  from maintaining $\cT x$.}  %DIF > There are non-separable  CF operators, e.g., Example \ref{ex:lsq1}, \ref{ex:lsq2}, \ref{ex:lsq3}.
+%For example, with a (dense) matrix $A\in\RR^{m\times m}$ and vector $b\in\RR^{m}$, the operator $\cT:x\mapsto A x+b$ is non-separable yet CF. Indeed, let $a_i$ be the $i$th row of $A$. We have $\nops{x}{\cT(x)}=\nops{x}{Ax+b}=m^2+m$, and  $\nops{x}{(\cT x)_i}=\nops{x}{a_i^\top x+b_i}=m+1$, which is much smaller.
 
 \cut{There are CF operators that are not Type-I . For example, let $f(x)=\sum_{i=1}^m \log [1+\exp(-b_i a_i^\top x)]$. The gradient operator $\nabla f$ is not Type-I CF, but it is CF by caching $a_i^\top x,\, \forall i$.}
 
@@ -185,16 +185,16 @@ The \emph{set} of {easy-to-update} operators is denoted by $\cE$.
 In coordinate-update algorithms, easy-to-update operators \emph{can be treated as} a subclass of CF operators. Seemingly, an easy-to-update operator is not CF since it is not necessarily cheaper to compute $(\cT x)_i$ than the entire $\cT  x$. However, computing the entire $\cT  x$ and changing the entire $x$ add a significantly higher cost to \emph{the next iteration} than computing just $(\cT x)_i$, changing just $x_i$, and taking advantage of the easy-to-update property.
 }
 
-%Summarizing this subsection, coordinate update algorithms shall apply CF operators, which include separable, nearly-separable,  linear, as well as easy-to-update operators. 
+%Summarizing this subsection, coordinate update algorithms shall apply CF operators, which include separable, nearly-separable,  linear, as well as easy-to-update operators.
 \cut{
 Finally, we define \emph{cheap} and \emph{easy-to-maintain} operators from $\HH$ to $\GG$ that arise in operator compositions.
 \begin{definition}[Cheap operator] In an operator composition $\cT=\cT_1 \circ\cdots \circ \cT_p$, an operator $\cT_i:\HH\to\GG$ is cheap if $\nops{x}{\cT_i x}$ is less than or equal to the number of remaining coordinate-update operations, in order of magnitude.
 \end{definition}
 \begin{definition}[Easy-to-maintain operator]
-%If $\cT$ maps from $\HH$ to a different space $\GG$ and it satisfies \eqref{op-cuf2}, we call it 
+%If $\cT$ maps from $\HH$ to a different space $\GG$ and it satisfies \eqref{op-cuf2}, we call it
 In an operator composition $\cT=\cT_1 \circ\cdots \circ \cT_p$, an operator $\cT_i:\HH\to\GG$ is \emph{easy-to-maintain} if, for any $x,i,\delta_i,x^+$ satisfying \eqref{singleupdate}, $\nops{\{ x,\cT x, x^+\}}{\cT x^+}$ is less than or equal to the number of remaining coordinate-update operations, in order of magnitude, \emph{or} belongs to $O(\frac{1}{\dim \GG}\nops{x^+}{\cT x^+})$.
 
-The set of  easy-to-maintain operators is denoted by $\cE$. %We call an operator $\cT: \HH\to\GG$ \emph{easy-to-update} if it  and denote the set of these operators as $\cE$.  
+The set of  easy-to-maintain operators is denoted by $\cE$. %We call an operator $\cT: \HH\to\GG$ \emph{easy-to-update} if it  and denote the set of these operators as $\cE$.
 \end{definition}
 %Easy-to-update operators are used in maintaining quantities.
 }
@@ -285,8 +285,8 @@ Examples of sparse matrices arise from various finite difference schemes for dif
 
 \begin{example}[sum of sparsely supported functions]
 Let $E$ be a class of index sets and every $e\in E$ be a small subset of $[m]$, $|e|\ll m$. In addition $\#\{e:i\in e\}\ll \#\{e\}$ for all $i\in [m]$.
-Let $x_e:=(x_i)_{i\in e}$, and  
-$$f(x) = \sum_{e \in E} f_e (x_e).$$ 
+Let $x_e:=(x_i)_{i\in e}$, and
+$$f(x) = \sum_{e \in E} f_e (x_e).$$
 The gradient map $\nabla f$ is nearly-separable.
 
 
@@ -385,7 +385,7 @@ If the complexity of evaluating $\cT_2 x$ is smaller or equals to the complexity
 \end{remark}
 }
 \begin{example}[square hinge loss function]\label{ex:qhloss}
-Consider for $a,x\in\RR^m$, $$f(x):=\frac{1}{2}\big(\max(0,1-\beta a^\top x)\big)^2,$$ which is the squared hinge loss function. Consider the operator 
+Consider for $a,x\in\RR^m$, $$f(x):=\frac{1}{2}\big(\max(0,1-\beta a^\top x)\big)^2,$$ which is the squared hinge loss function. Consider the operator
 \beq\label{qhlossT}
 \cT x:=\nabla f(x)=-\beta \max(0,1-\beta a^\top x) a.
 \eeq
@@ -394,17 +394,17 @@ Let us maintain $\cM(x)=a^\top x$. For arbitrary $x$ and $i$,  let $$x^+_i:=(\cT
 &\nops{\{x,a^\top x\}}{\{x^+,a^\top x^+\}}\\
 =&\nops{\{x,a^\top x\}}{x^+}+\nops{\{a^\top x,x^+_i-x_i\}}{a^\top x^+}\\
 =&O(1)+O(1)=O(1).
-\end{align*} 
+\end{align*}
 On the other hand, $\nops{x}{\cT x}=O(m)$. Therefore,~\eqref{op-cuf} holds, and $\cT$ defined in~\eqref{qhlossT} is CF.
 \end{example}
 
 
 \cut{\rev{\subsection{Compare Full Update with Coordinate Update}\label{lsqexperiment}
-In this subsection, we compare the efficiency of four different coordinate update schemes (cyclic, cyclic permutation, random, and greedy with Gauss-Southwell rule) with the full gradient descent method for solving the least square problem 
+In this subsection, we compare the efficiency of four different coordinate update schemes (cyclic, cyclic permutation, random, and greedy with Gauss-Southwell rule) with the full gradient descent method for solving the least square problem
 $$\Min_{x} \frac{1}{2} \|A x - b\|^2,$$
 where $A \in \RR^{p \times m}$ and $b \in \RR^p$. We solve the above problem with the following update scheme
 $$x^{k+1} = x^k - \eta_k A^{\top}(A x^k - b),$$
-where $\eta_k$ is the step size. This test uses three datasets, which are summarized in Table \ref{tab:ls-data}.  
+where $\eta_k$ is the step size. This test uses three datasets, which are summarized in Table \ref{tab:ls-data}.
 \begin{table}[!hbtp]
 \centering
  \begin{tabular}{lrrrr}
@@ -419,7 +419,7 @@ where $\eta_k$ is the step size. This test uses three datasets, which are summar
  \caption{Three datasets for the least square problem\label{tab:ls-data}}
 \end{table}
 
-For both full gradient descent method, the step size $\eta$ is set to $\frac{2}{\|A\|_2^2}$. For the four coordinate update methods, if coordinate $i$ is selected, then $\eta_k$ is set to $\frac{1}{(A^{\top}A)_{ii}}$. Since all of the methods have same per epoch complexity, so we measure and compare the per epoch progress in terms of objective error. Figure \ref{fig:ls_a} shows that for Dataset I, both cyclic update, cyclic permutation, and greedy update converge to the optimal solution with one epoch. Random coordinate update converges to the optimal solution after $8$ epochs. However, due to the small step size ($\eta_k = 10^{-6}$), the gradient descent algorithm converges very slowly. For the other two datasets, we observe that greedy coordinate update converges faster than the other methods, and random coordinate update and cyclic shuffle coordinate update give consistent better performance than the full gradient descent algorithm. 
+For both full gradient descent method, the step size $\eta$ is set to $\frac{2}{\|A\|_2^2}$. For the four coordinate update methods, if coordinate $i$ is selected, then $\eta_k$ is set to $\frac{1}{(A^{\top}A)_{ii}}$. Since all of the methods have same per epoch complexity, so we measure and compare the per epoch progress in terms of objective error. Figure \ref{fig:ls_a} shows that for Dataset I, both cyclic update, cyclic permutation, and greedy update converge to the optimal solution with one epoch. Random coordinate update converges to the optimal solution after $8$ epochs. However, due to the small step size ($\eta_k = 10^{-6}$), the gradient descent algorithm converges very slowly. For the other two datasets, we observe that greedy coordinate update converges faster than the other methods, and random coordinate update and cyclic shuffle coordinate update give consistent better performance than the full gradient descent algorithm.
 \begin{figure}[!htbp] \centering
     \begin{subfigure}[b]{0.3\linewidth}
         \includegraphics[width=40mm]{./figs/diag_matrix_cropped.pdf}
@@ -452,7 +452,7 @@ For both full gradient descent method, the step size $\eta$ is set to $\frac{2}{
 =& O(p) + O(p) +O(p)=O(p).\nonumber
 \end{align*}
 On the other hand, $\nops{x}{\nabla f(x)}=O(pm)$. Therefore
-$\nabla f= \cT_1\circ\cT_2\circ\cT_3$ is CF. 
+$\nabla f= \cT_1\circ\cT_2\circ\cT_3$ is CF.
 
 Once $p=m$, $\cT_1,\cT_2,\cT_3$ all map from $\RR^m$ to $\RR^m$. Then, it is easy to check that $\cT_1$ is Type-I CF, $\cT_2$ is separable, and $\cT_3$ is Type-II CF. The last one is crucial since not maintaining $\cT_3 x$ would disqualify $\cT$ from CF. Indeed, to obtain $(\cT x)_i$, we must multiple $A_i^\top$ to all the entries of $\cT_2\circ\cT_3 x$, which in turn needs all the entries of $\cT_3 x$, computing which from scratch costs $O(pm)\gg O(p)$.
 
