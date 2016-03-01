@@ -41,7 +41,7 @@ Examples of proximal functions include $\ell_1,\ell_2,\ell_\infty$-norms, severa
  A special proximal map is the projection map. Let $X$ be a nonempty closed convex set, and $\iota_S$ be its indicator function. Minimizing $\iota_S(x)$  enforces $x\in S$,  so $\prox_{\gamma \iota_S}$ reduces to the projection map $\prj_{S}$ for any $\gamma>0$. Therefore, $\prj_{S}$ is also firmly nonexpansive.
  \end{example}
 
-\cut{A firmly nonexpansive operator is always nonexpansive and maximally monotone \cite[Example 20.27]{B-C2011cvx-mon}. }
+\cut{A firmly nonexpansive operator is always nonexpansive and maximally monotone \cite[Example 20.27]{bauschke2011convex}. }
 
 \begin{definition}[$\beta$-cocoercive operator]
 An operator $\cT:\HH\to\HH$ is \emph{$\beta$-cocoercive} if 
@@ -49,7 +49,7 @@ $\langle x-y, \cT x-\cT y\rangle \ge \beta \|\cT x-\cT y\|^2,\ \forall x,y\in\HH
 \end{definition}
 
 \begin{example}
-A special example of  cocoercive operator is the gradient of a smooth function. Let $f$ be a differentiable function. Then $\nabla f$ is $\beta$-Lipschitz continuous \emph{if and only if} $\nabla f$ is $\frac{1}{\beta}$-cocoercive \cite[Corollary 18.16]{B-C2011cvx-mon}. \cut{If $\cT$ is $\beta$-cocoercive, $\beta \cT$ must be firmly nonexpansive \cite[Remark 4.24]{B-C2011cvx-mon}, and $\cT$ is maximally monotone.}
+A special example of  cocoercive operator is the gradient of a smooth function. Let $f$ be a differentiable function. Then $\nabla f$ is $\beta$-Lipschitz continuous \emph{if and only if} $\nabla f$ is $\frac{1}{\beta}$-cocoercive \cite[Corollary 18.16]{bauschke2011convex}. \cut{If $\cT$ is $\beta$-cocoercive, $\beta \cT$ must be firmly nonexpansive \cite[Remark 4.24]{bauschke2011convex}, and $\cT$ is maximally monotone.}
 \end{example}
 \cut{
 At last we give a counterexample to show naively extending existing algorithms to coordinate update schemes may result in divergence or wrong solutions.
