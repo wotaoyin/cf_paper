@@ -1,3 +1,7 @@
+amsa_main.pdf
+
+*.ddf
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof

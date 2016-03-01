@@ -4,7 +4,7 @@ Given the training data $\{(a_i,\beta_i)\}_{i=1}^m$ with $\beta_i\in\{+1, -1\},\
 \begin{equation}\label{eq:ksvm}
 \begin{array}{rl}
 \Min\limits_{x,\xi,y} &\frac{1}{2}\|x\|_2^2+C\sum_{i=1}^m \xi_i,\\
- \st\ & \beta_i(x^\top\phi(a_i)-y)\ge 1-\xi_i,\, \xi_i\ge 0,\, i=1,\ldots,m,
+ \st\ & \beta_i(x^\top\phi(a_i)-y)\ge 1-\xi_i,\, \xi_i\ge 0,\, \forall i \in [m],
 \end{array}
 \end{equation}
 where $\phi$ is a vector-to-vector map, mapping each data $a_i$ to a point in a (possibly) higher-dimensional space. If $\phi(a)=a$, then \eqref{eq:ksvm} reduces to the linear support vector machine. The model~\eqref{eq:ksvm}  can be interpreted as finding a hyperplane $\{w:x^\top w-y=0\}$ to separate two sets of points $\{\phi(a_i):\beta_i=1\}$ and $\{\phi(a_i):\beta_i=-1\}$. 
