@@ -1,6 +1,6 @@
 % !TEX root = ./amsa_main.tex
 \subsubsection{Network}\label{sec:network}
-Consider that  $m$ worker agents and one master agent form a star-shaped network. The  $m+1$ agents collaboratively solve the consensus problem:  $$\Min_{x_c} \sum_{i=1}^m f_i(x_c),$$ where $x_c\in R^d$ is the common variable and each  proximable function $f_i$ is held privately by agent $i$. The problem can be reformulated as 
+Consider that $m$ worker agents and one master agent form a star-shaped network, where the master agent at the center connects to each of the worker agents. The $m+1$ agents collaboratively solve the consensus problem:  $$\Min_{x_c} \sum_{i=1}^m f_i(x_c),$$ where $x_c\in \RR^d$ is the common variable and each proximable function $f_i$ is held privately by agent $i$. The problem can be reformulated as 
 \begin{align}
 \Min_{x_1,\cdots,x_m,y\in \RR^d} F(x) := \sum_{i=1}^mf_i(x_i),\quad \St~ x_i=y,   
 \end{align}
@@ -19,23 +19,22 @@ I & -e & 0
 x\\
 y\\
 s
-\end{bmatrix}}_{\mbox{operator}~\cC}.
+\end{bmatrix}}_{\mbox{operator}~\cC},
 \end{equation}
+where $s$ is the dual variable.
 
 Applying the FBFS scheme \eqref{eqn:fbf} to~\eqref{pro:decentral} yields the following full update:
 \begin{subequations}
 \begin{align}
 x_i^{k+1} &= \prox_{\gamma f_i}(x_i^k-\gamma s_i^k)+\gamma^2 x_i^{k}-\gamma^2 y^k-2\gamma s_i^k, \label{fbfs_a} \\
-y^{k+1} &= (1+m\gamma^2)y^k +3\gamma \sum_j s_j^k -\gamma^2 \sum_jx_j^k,\\
-s_i^{k+1} &= s_i^k-2\gamma x_i^k-\gamma \prox_{\gamma f_i}(x_i^k-\gamma s_i^k)+3\gamma y^k+ \gamma^2 \sum_js_j^k, \label{fbfs_c}
+y^{k+1} &= (1+m\gamma^2)y^k +3\gamma \sum_{j=1}^m s_j^k -\gamma^2 \sum_{j=1}^m x_j^k,\\
+s_i^{k+1} &= s_i^k-2\gamma x_i^k-\gamma \prox_{\gamma f_i}(x_i^k-\gamma s_i^k)+3\gamma y^k+ \gamma^2 \sum_{j=1}^m s_j^k, \label{fbfs_c}
 \end{align}
 \end{subequations}
 {where }\eqref{fbfs_a} {and }\eqref{fbfs_c} {are applied to all $i=1,\ldots,m$.
-Hence, for each $i$, } we group  $x_i$ and $s_i$ together and assign them on agent $i$.  {We let the master agent } maintain $\sum_j s_j$ and $\sum_j x_j$. Therefore, {in the FBFS coordinate update, updating any $(x_i,s_i)$ needs only $y$ and $\sum_j s_j$ from the master agent, and updating $y$ is done on the master agent.
+Hence, for each $i$, } we group  $x_i$ and $s_i$ together and assign them on agent $i$.  {We let the master agent } maintain $\sum_j s_j$ and $\sum_j x_j$. Therefore, {in the FBFS coordinate update, updating any $(x_i,s_i)$ needs only $y$ and $\sum_j s_j$ from the master agent, and updating $y$ is done on the master agent. In synchronous parallel setting, at each iteration, each worker agent $i$ computes $s_i^{k+1}, x_i^{k+1}$, then the master agent collects the updates from all of workers and then updates $y$ and $\sum_j s_j$. The above update can be relaxed to be asynchronous. In this case, the master and worker work concurrently, master agent updates $y$ and $\sum_j s_j$ as soon as it receives the updated $s_i$ and $x_i$ from any of the worker agents. It also periodically broadcast $y$ back to the worker agents.
 
 %can consider $(x_i,s_i)$ as one coordinate and store each pair of such variables on one agent. Updating $(x_i,s_i)$ will need the latest value of $y$ from the master node only, and updating $y$ will need the latest values all  $(x_i,y_i)$ from all the agents. However, the information needed is just the summation of $x_i$ and $s_i$, which is easy to update. 
-
-
 
 \cut{
 \subsection{Total Variation Image Processing}\label{sec:tvip}
@@ -73,7 +72,3 @@ s
 %\begin{align}
 %0 \in \underbrace{\begin{bmatrix}\partial f_1(x_1) \\ \cdots\\\partial f_m(x_m)\end{bmatrix}}_{\mbox{operator}~\cA} + \underbrace{{1\over \gamma}(I-W)x}_{\mbox{operator}~\cB},
 %\end{align}
-
-
-
-

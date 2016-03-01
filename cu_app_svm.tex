@@ -7,22 +7,22 @@ Given the training data $\{(a_i,\beta_i)\}_{i=1}^m$ with $\beta_i\in\{+1, -1\},\
  \st\ & \beta_i(x^\top\phi(a_i)-y)\ge 1-\xi_i,\, \xi_i\ge 0,\, i=1,\ldots,m,
 \end{array}
 \end{equation}
-where $\phi$ is a vector-to-vector map, mapping each data $a_i$ to a point in a (possibly) higher-dimensional space. If $\phi(a)=a$, then \eqref{eq:ksvm} reduces to the linear support vector machine. The model~\eqref{eq:ksvm}  can be interpreted as finding a hyperplane $\{w:x^\top w-y=0\}$ to roughly separate two sets of points $\{\phi(a_i):\beta_i=1\}$ and $\{\phi(a_i):\beta_i=-1\}$. 
+where $\phi$ is a vector-to-vector map, mapping each data $a_i$ to a point in a (possibly) higher-dimensional space. If $\phi(a)=a$, then \eqref{eq:ksvm} reduces to the linear support vector machine. The model~\eqref{eq:ksvm}  can be interpreted as finding a hyperplane $\{w:x^\top w-y=0\}$ to separate two sets of points $\{\phi(a_i):\beta_i=1\}$ and $\{\phi(a_i):\beta_i=-1\}$. 
 
 The dual problem of \eqref{eq:ksvm} is
 \begin{equation}\label{eq:dksvm}
 \Min_s \frac{1}{2}s^\top Q s- e^\top s,\ \St\ 0\le s_i\le C,\,\forall i,\, \sum_i \beta_i s_i=0,
 \end{equation}
-where $Q_{ij}=\beta_i\beta_j k(a_i,a_j)$, $k(\cdot,\cdot)$ is a so-called kernel function, and $e = (1, ..., 1)^\top$. If $\phi(a)=a$, then $k(a_i,a_j)=a_i^\top a_j$.
+where $Q_{ij}=\beta_i\beta_j k(a_i,a_j)$, $k(\cdot,\cdot)$ is a so-called \emph{kernel function}, and $e = (1, ..., 1)^\top$. If $\phi(a)=a$, then $k(a_i,a_j)=a_i^\top a_j$.
 
 \subsubsection*{Unbiased case}
-If $y=0$ is enforced in \eqref{eq:ksvm}, then the solution hyperplane $\{w:x^\top w=0\}$ passes through the origin and is called \emph{unbiased}. Consequently, the dual problem \eqref{eq:dksvm} will no longer have the linear constraint $\sum_i \beta_i s_i=0$, leaving it with the coordinate-wise separable box constraints $0\le s_i\le C$.  To solve \eqref{eq:dksvm}, we can apply the FBS scheme \eqref{eq:FBS}. Letting $d(s):= \frac{1}{2}s^\top Q s- e^\top s$}, the coordinate update based on FBS is
+If $y=0$ is enforced in \eqref{eq:ksvm}, then the solution hyperplane $\{w:x^\top w=0\}$ passes through the origin and is called \emph{unbiased}. Consequently, the dual problem \eqref{eq:dksvm} will no longer have the linear constraint $\sum_i \beta_i s_i=0$, leaving it with the coordinate-wise separable box constraints $0\le s_i\le C$.  To solve \eqref{eq:dksvm}, we can apply the FBS operator $\cT$ defined by \eqref{eq:FBS}. Letting $d(s):= \frac{1}{2}s^\top Q s- e^\top s$}, $\cA = \prox_{[0, C]}$ and $\cC = \nabla d$, the coordinate update based on FBS is
 $$s_i^{k+1}=\prj_{[0,C]}(s_i^k-\gamma_i\nabla_i d(s^k)),$$
 where we can take $\gamma_i=\frac{1}{Q_{ii}}$. 
 
 \subsubsection*{Biased (general) case} In this case, the mode \eqref{eq:ksvm} has $y\in\RR$, so the hyperplane $\{w:x^\top w-y=0\}$ may not pass the origin and is called \emph{biased}. Then,  the dual problem \eqref{eq:dksvm} retains the linear constraint $\sum_i \beta_i s_i=0$. In this case, we apply the primal-dual splitting scheme \eqref{vucondat} or the three-operator splitting scheme \eqref{3s}.
 
-The coordinate update based on the primal-dual splitting is:
+The coordinate update based on the full primal-dual splitting scheme \eqref{vucondat} is:
 \begin{subequations}\label{eq:pd-svm}
 \begin{align}
 t^{k+1}=&\,t^k+\gamma\sum_{i=1}^m \beta_i s_i^k,\label{eq:pd-svm-t}\\
@@ -30,15 +30,29 @@ s_i^{k+1}=&\,\prj_{[0,C]}\left(s_i^k-\eta\big(\nabla_i d(s^k)+\beta_i(2t^{k+1}-t
 \end{align}
 \end{subequations}
 {where $t,s$ are the primal and dual variables, respectively. Note that we can let $w:=\sum_{i=1}^m \beta_i s_i$ and maintain it. With variable $w$ and substituting \eqref{eq:pd-svm-t} into \eqref{eq:pd-svm-s}, we can equivalently write \eqref{eq:pd-svm} into
-\begin{subequations}\label{eq:pd-svm2}
-\begin{align}
-t^{k+1}=&\,t^k+\gamma w^k,\label{eq:pd-svm2-t}\\
-s_i^{k+1}=&\,\prj_{[0,C]}\left(s_i^k-\eta\big(q_i^\top s^k-1+\beta_i(2\gamma w^k+t^k)\big)\right),\,i=1,\ldots,m.\label{eq:pd-svm2-s}
-\end{align}
-\end{subequations}
-In parallel computing, whenever a processor updates some $s_i$, the $w$ variable must be also renewed as $w^{k+1}=w^k+\beta_i(s_i^{k+1}-s_i^k)$.
 
-We can also apply the three-operator splitting  \eqref{3s} as follows. Let {$D_1:=[0,C]^m$ and $D_2:=\{s: \sum_{i=1}^m \beta_i s_i=0\}$. The full update is
+\begin{equation}
+{\left\{
+\begin{array}{l}
+\text{if }t\text{ is chosen (the index 0), then compute}\\
+\qquad t^{k+1}=\,t^k+\gamma w^k,\\
+\text{if }s_j\text{ is chosen (an index $j \in [m]$), then compute}\\
+\qquad s_j^{k+1}=\,\prj_{[0,C]}\left(s_j^k-\eta\big(q_j^\top s^k-1+\beta_j(2\gamma w^k+t^k)\big)\right)\\
+\qquad w^{k+1}= w^k + \beta_j (s_j^{k+1} - s_j^k).
+\end{array}
+\right.
+}\end{equation}
+
+
+%\begin{subequations}\label{eq:pd-svm2}
+%\begin{align}
+%t^{k+1}=&\,t^k+\gamma w^k,\label{eq:pd-svm2-t}\\
+%s_i^{k+1}=&\,\prj_{[0,C]}\left(s_i^k-\eta\big(q_i^\top s^k-1+\beta_i(2\gamma w^k+t^k)\big)\right),\,i=1,\ldots,m.\label{eq:pd-svm2-s}
+%\end{align}
+%\end{subequations}
+%In parallel computing, whenever a processor updates some $s_i$, the $w$ variable must be also renewed as $w^{k+1}=w^k+\beta_i(s_i^{k+1}-s_i^k)$.
+
+We can also apply the three-operator splitting  \eqref{3s} as follows. Let {$D_1:=[0,C]^m$ and $D_2:=\{s: \sum_{i=1}^m \beta_i s_i=0\}$. Let $\cA = \prj_{D_2}$, $\cB = \prj_{D_1}$ and $\cC(x) = Qx - e$,  The full update corresponding to $\cT = (I - \eta_k) \cI + \eta_k \TS$ is
 \begin{subequations}\label{eq:3op-svm}
 \begin{align}
 s^{k+1}=&\prj_{D_2}(u^k),\label{eq:3op-svm-s}\\
@@ -46,12 +60,16 @@ u^{k+1}=&u^k+\eta_k\left(\prj_{D_1}\big(2s^{k+1}-u^k-\gamma (Qs^{k+1}-e)\big)-s^
 \end{align}
 \end{subequations}
 where $s$ is just an intermediate variable.
-Let $\tilde{\beta}:=\frac{\beta}{\|\beta\|_2}$ and $w:=\tilde{\beta}^\top u$. Then $\prj_{D_2}(u)=(I-\tilde{\beta}\tilde{\beta}^\top)u$. Hence, $s^{k+1}=u^k-w^k\tilde{\beta}$. Plugging it into~\eqref{eq:3op-svm-u} yields the coordinate update:
-\begin{subequations}\label{eq:3op-svm2}
-\begin{align*}
-s^{k+1}_i=&u^k_i-w^k\tilde{\beta}_i,\\
-u^{k+1}_i=&u^k_i+\eta_k\left(\prj_{[0,C]}\left(2s_i^{k+1}-u^k_i-\gamma \big(q_i^\top u^k- w^k (q_i^\top \tilde{\beta})-1\big)\right)-s_i^{k+1}\right).
-%u^{k+1}_i=&u^k_i+\eta_k\left(\prj_{[0,C]}\left(u^k_i-2w^k\tilde{\beta}_i-\gamma \big(q_i^\top u^k- w^k (q_i^\top \tilde{\beta})-1\big)\right)-u^k_i+w^k\tilde{\beta}_i\right).
-\end{align*}
-\end{subequations}
-We can maintain $w$ and renew it as $w^{k+1}=w^k+\tilde{\beta}_i(u_i^{k+1}-u_i^k)$ whenever $u_i$ is updated. The intermediate variable $s_i$ is not kept throughout iterations.
+Let $\tilde{\beta}:=\frac{\beta}{\|\beta\|_2}$ and $w:=\tilde{\beta}^\top u$. Then $\prj_{D_2}(u)=(I-\tilde{\beta}\tilde{\beta}^\top)u$. Hence, $s^{k+1}=u^k-w^k\tilde{\beta}$. Plugging it into~\eqref{eq:3op-svm-u} yields the following coordinate update scheme:
+\begin{equation*}
+{\left\{
+\begin{array}{l}
+\text{if }i \in [m]\text{ is chosen, then compute}\\
+\quad s^{k+1}_i=u^k_i-w^k\tilde{\beta}_i,\\
+\quad u^{k+1}_i=u^k_i+\eta_k\left(\prj_{[0,C]}\left(2s_i^{k+1}-u^k_i-\gamma \big(q_i^\top u^k- w^k (q_i^\top \tilde{\beta})-1\big)\right)-s_i^{k+1}\right) \\
+\quad w^{k+1}=w^k+\tilde{\beta}_i(u_i^{k+1}-u_i^k),
+\end{array}
+\right.
+}\end{equation*}
+where $w^k$ is the maintained variable and $s^k$ is the intermediate variable.
+

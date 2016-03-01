@@ -1,5 +1,5 @@
 % !TEX root = ./amsa_main.tex
-\subsubsection{Second-Order Cone Programming}\label{sec:socp}
+\subsubsection{Second-Order Cone Programming (SOCP)}\label{sec:socp}
 SOCP extends LP by incorporating second-order cones. A second-order cone in $\RR^n$ is $$Q=\big\{(x_1,x_2,\ldots,x_n)\in\RR^n:\|(x_2,\ldots,x_n)\|_2\le x_1\big\}.$$  
 Given a point $v\in\RR^n$, let  $\rho_1^v:=\|(v_2,\ldots,v_n)\|_2$ and $\rho_2^v:=\frac{1}{2}(v_1+\rho_1^v)$}. Then, the projection {of  $v$ to $Q$ {returns $0$ if $v_1<-\rho_1$, returns $v$ if $v_1 \ge \rho_1$, and returns $(\rho_2^v,\frac{\rho_2^v}{\rho_1^v}\cdot(v_2,\ldots,v_n))$ otherwise. Therefore, if we define the scalar couple:
 $$(\xi_1^v,\xi_2^v) = \begin{cases}(0,0),&\quad v_1<-\rho_2^v,\\
@@ -25,12 +25,23 @@ Given $x,c\in\RR^n$, $b\in\RR^m$, and $A\in\RR^{m\times n}$, the standard-form S
 where each $Q_i$ is a second-order cone, and $\bar{n}\not=n$ in general.
 The problem~\eqref{eq:socp} is equivalent to 
 $$\Min_x \big(c^\top  x+\iota_{A\cdot =b}(x)\big)+\iota_X(x),$$
-to which we can apply the DRS iteration $z^{k+1} = \TDRS (z^k)$ (see \eqref{eq:DRS}), in which $\cJ_1 = \prj_X$ and $\cT_2$ is a linear operator given by 
-$$\cJ_2(x) = \argmin_y ~ c^\top y+  \frac{1}{2\gamma}\|y-x\|^2\quad \St~ Ay=b.$$
+to which we can apply the DRS iteration $z^{k+1} = \TDRS (z^k)$ (see \eqref{eq:DRS}), in which $\cJ_{\gamma \cA} = \prj_X$ and $\cT_{\gamma \cB}$ is a linear operator given by 
+$$\cJ_{\gamma \cB} (x) = \argmin_y ~ c^\top y+  \frac{1}{2\gamma}\|y-x\|^2\quad \St~ Ay=b.$$
 Assume that the matrix $A$ has full row-rank (otherwise, $Ax=b$ has either redundant rows or no solution). 
-Then, in~\eqref{eq:DRS}, we have $\cR_{2}(x)= Bx+d$, where $B:=I-2A^\top (AA^\top )^{-1}A$ and $d:=2A^\top (AA^\top )^{-1}(b+\gamma Ac)-2\gamma c$.
+Then, in~\eqref{eq:DRS}, we have $\cR_{\gamma \cB}(x)= Bx+d$, where $B:=I-2A^\top (AA^\top )^{-1}A$ and $d:=2A^\top (AA^\top )^{-1}(b+\gamma Ac)-2\gamma c$.
 
-It is easy to apply coordinate updates to $z^{k+1} = \TDRS (z^k)$ following Proposition \ref{prop:socproj}. Specifically, by maintaining the scalars $\rho_1^v,\rho_2^v,\xi_1^v,\xi_2^v$ for each $v=x_i\in Q_i$ during  coordinate updates, the computation of the projection can be completely avoided. We pre-compute $(AA^\top )^{-1}$ and cache the matrix $B$ and vector $d$. Then, $\TDRS$ is CF. 
+It is easy to apply coordinate updates to $z^{k+1} = \TDRS (z^k)$ following Proposition \ref{prop:socproj}. Specifically, by maintaining the scalars $\rho_1^v,\rho_2^v,\xi_1^v,\xi_2^v$ for each $v=x_i\in Q_i$ during  coordinate updates, the computation of the projection can be completely avoided. We pre-compute $(AA^\top )^{-1}$ and cache the matrix $B$ and vector $d$. Then, $\TDRS$ is CF, and we have the following coordinate update method
+\begin{equation}\label{cf-cone}
+{\left\{
+\begin{array}{l}
+\text{select $i \in [\bar{n}]$, then compute}\\
+\qquad y^{k+1}_i = B_i x^k + d_i \\
+\qquad x_i^{k+1}=\,\prj_{Q_i}(y_i^{k+1}) + \frac{1}{2} ( x_i^k - y_i^{k+1}), \\
+\end{array}
+\right.
+}\end{equation}
+where $B_i \in \RR^{n_i \times n}$ is the $i$th row block submatrix of $B$, and $y_i^k$ is the intermediate variable. 
+
 
 It is trivial to extend this method for  SOCPs with a quadratic objective:
 \begin{align*}

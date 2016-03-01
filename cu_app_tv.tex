@@ -1,6 +1,6 @@
 % !TEX root = ./amsa_main.tex
 \subsubsection{DRS for Image Processing in the Primal-dual Form \cite{o2014primal}}
- Many convex image processing problems have the general form
+Many convex image processing problems have the general form
 $$\Min_{x} f(x) + g(Ax),$$
 where $A$ is a matrix such as a dictionary, sampling operator, or finite difference operator. We can reduce the problem to the system: $0\in\cA(z) + \cB(z)$, where $z=[x;s]$,
 $$\cA(z):=\begin{bmatrix}\partial f(x)\\\partial g^*(s)\end{bmatrix},\quad\mbox{and}\quad \cB(z):=\begin{bmatrix}0 & ~A^\top  \\ -A & 0\end{bmatrix}\begin{bmatrix}x\\s\end{bmatrix}.$$
@@ -10,14 +10,14 @@ gives their resolvents
 \begin{align*}\cJ_{\gamma \cA} &= \begin{bmatrix}\prox_{\gamma f}\\\prox_{\gamma g^*}\end{bmatrix},\\ 
 \cJ_{\gamma \cB} &= (I+\gamma \cB)^{-1}= \begin{bmatrix} 0 &~ 0 \\ 0 &~ I\end{bmatrix}+\begin{bmatrix}I\\ \gamma A\end{bmatrix}(I+\gamma^2 A^\top A)^{-1}\begin{bmatrix}I\\ -\gamma A\end{bmatrix}^\top ,
 \end{align*}
-where $\cJ_{\gamma \cA}$ is often cheap or separable and we can \emph{explicitly form}  $\cJ_{\gamma \cB}$  as a matrix or implement it based on a fast transform. The resulting DRS operator is CF when $\cJ_{\gamma \cB}$ is CF. We leave the DRS coordinate update to the reader.
+where $\cJ_{\gamma \cA}$ is often cheap or separable and we can \emph{explicitly form}  $\cJ_{\gamma \cB}$  as a matrix or implement it based on a fast transform. With the defined $\cJ_{\gamma \cA}$ and $\cJ_{\gamma \cB}$, we can apply the RPRS method as $z^{k+1} = \cT_{\text{RPRS}} z^k$. The resulting RPRS operator is CF when $\cJ_{\gamma \cB}$ is CF. Hence, we can derive a new RPRS coordinate update algorithm. We leave the derivation to the readers. Derivations of coordinate update algorithms for more specific image processing problems are shown in the following subsections.
 
 \subsubsection{Total Variation Image Processing}
 We consider the following Total Variation (TV) image processing model
 \begin{equation}\label{eqn:tvl2}
 \Min_{x}~\lambda \|x\|_{\text{TV}} + \frac{1}{2} \|A\,x - b\|^2,
 \end{equation}
-where $x\in \RR^n$ is the vector representation of the unknown image, $A$ is an $m \times n$ matrix describing the transformation from the image to the measurements, and $b \in \RR^m$ is the given measurements with noise. Let $(\nabla_i^h,\nabla_i^v)$ be the discrete gradient at pixel $i$. Then the TV semi-norm $\|\cdot\|_{\text{TV}}$ in the isotropic and anisotropic fashions are, respectively,
+where $x\in \RR^n$ is the vector representation of the unknown image, $A$ is an $m \times n$ matrix describing the transformation from the image to the measurements $b$. Common $A$ includes sampling matrices in MRI, CT, denoising, deblurring, etc.  Let $(\nabla_i^h,\nabla_i^v)$ be the discrete gradient at pixel $i$. Then the TV semi-norm $\|\cdot\|_{\text{TV}}$ in the isotropic and anisotropic fashions are, respectively,
 \begin{subequations}
 \begin{align}
 \|x\|_{\text{TV}} &= {\sum_{i} \sqrt{(\nabla_i^h x)^2 + (\nabla_i^v x)^2},}\\
@@ -41,19 +41,19 @@ where $x\in \RR^n$ is the vector representation of the unknown image, $A$ is an 
 %
 %
 %Let $x \in \RR^n$ be the vector representation of the unknown image and $b \in \RR^m$ be the given measurements. Here $A$ is a $m \times n$ matrix describing the direct transformation from the image to the measurements. 
-{Consider applications in which $A$ is a sparse matrix. For example, in CT image reconstruction, $A$ models the discrete Radon transform. Each row describes a line integral, and as each line  only intersects with  a few pixels, there are many zeros in each row. For image deblurring, $A$ models a convolution kernel, and each row is sparse if the size of the kernel is small. 
+%{Consider applications in which $A$ is a sparse matrix. For example, in CT image reconstruction, $A$ models the discrete Radon transform. Each row describes a line integral, and as each line  only intersects with  a few pixels, there are many zeros in each row. For image deblurring, $A$ models a convolution kernel, and each row is sparse if the size of the kernel is small. 
 %$A$ depends on the imaging modality used; for example, in Computed Tomography (CT), $A$ is the discrete Radon transform, with each row describing an integral along one straight line, and all the elements in $A$ are nonnegative. 
 
-For simplicity, we use the anisotropic TV for analysis and in the numerical experiment in \S~\ref{sec:tv}. It is {slightly more complicated for the isotropic TV. Introducing the following notation:
+For simplicity, we use the anisotropic TV for analysis and in the numerical experiment in \S~\ref{sec:tv}. It is {slightly more complicated for the isotropic TV. Introducing the following notation
 $$B \DIFaddbegin \DIFadd{:}\DIFaddend = \begin{pmatrix} \nabla \\ A \end{pmatrix}, \quad h (p, q) \DIFaddbegin \DIFadd{:}\DIFaddend = \lambda \|p\|_1 + \frac{1}{2} \|q - b\|^2, $$
  {we can reformulate }\eqref{eqn:tvl2} \DIFaddend as
 $$\Min_x ~ h(B\,x) = h(\nabla x, A \, x),$$
 which {reduces to the form of~\eqref{pdproblem} with $f=g=0$. Based on its definition, the convex conjugate of $h(p, q)$ and its proximal operator are, respectively, 
 \begin{align}
-h^* (s, t) &= \iota_{\|\cdot\|_{\infty} \leq \lambda} (s) + \frac{1}{2} \|t + b\|^2 - \frac{1}{2} \|b\|^2, \\
-\prox_{\gamma h^*} (s, t) &= \prj_{\|\cdot\|_{\infty} \leq \lambda} (s) + \frac{1}{1 + \gamma} (t - \gamma b). 
+h^* (s, t) &= \iota_{\|\cdot\|_{\infty} \leq \lambda} (s) + \frac{1}{2} \|t + b\|^2 - \frac{1}{2} \|b\|^2, \label{eqn:dual-h}\\
+\prox_{\gamma h^*} (s, t) &= \prj_{\|\cdot\|_{\infty} \leq \lambda} (s) + \frac{1}{1 + \gamma} (t - \gamma b). \label{eqn:prox-dual-h}
 \end{align}
-Applying \eqref{vucondat2} gives the following full update:
+Let $s, t$ be the dual variables corresponding to $\nabla x$ and $Ax$ respectively, then using \eqref{eqn:prox-dual-h} and applying \eqref{vucondat2} give the following full update:
 \begin{subequations}\label{eqn:pd_tvl2}
 \begin{align}
 x^{k + 1} &= x^k - \eta (\nabla^\top s^k + A^\top  t^k), \\
@@ -61,4 +61,21 @@ s^{k + 1} &= \prj_{\|\cdot\|_{\infty} \leq \lambda} \left(s^k + \gamma \nabla (x
 t^{k+1} &= \frac{1}{1 + \gamma} \left(t^k + \gamma A (x^k - 2 \eta (\nabla^\top s^k + A^\top t^k)) - \gamma b \right).
 \end{align}
 \end{subequations}
-To perform the coordinate updates {as described in \S\ref{sec:p-d}}, we can maintain $\nabla^\top s^k$ and $A^\top t^k$. Whenever a coordinate of $(s,t)$ is updated, the corresponding $\nabla^\top s^k$ (or $A^\top t^k)$ should also be updated. 
+To perform the coordinate updates {as described in \S\ref{sec:p-d}}, we can maintain $\nabla^\top s^k$ and $A^\top t^k$. Whenever a coordinate of $(s,t)$ is updated, the corresponding $\nabla^\top s^k$ (or $A^\top t^k)$ should also be updated. Specifically, we have the following coordinate update algorithm
+\begin{equation}\label{update-lap-gl}
+{\left\{
+\begin{array}{l}
+\text{if $x_i$  is chosen for some $i \in [n]$, then compute}\\
+\qquad x_i^{k + 1} = x_i^k - \eta (\nabla^\top s^k + A^\top  t^k)_i; \\
+\text{if $s_i$  is chosen for some $i \in [2n]$, then compute}\\
+\qquad s_i^{k + 1} = \prj_{\|\cdot\|_{\infty} \leq \lambda} \left(s_i^k + \gamma \nabla_i (x^k - 2\eta (\nabla^\top s^k + A^\top t^k))\right) \\
+\qquad \text{and update $\nabla^\top s^k$ to $\nabla^\top s^{k+1}$}; \\
+\text{if $t_i$  is chosen for some $i \in [m]$, then compute}\\
+\qquad t_i^{k+1} = \frac{1}{1 + \gamma} \left(t_i^k + \gamma A_{i,:} (x^k - 2 \eta (\nabla^\top s^k + A^\top t^k)) - \gamma b_i \right)\\
+\qquad \text{and update $A^{\top} t^k$ to $A^{\top} t^{k+1}$}. \\
+\end{array}
+\right.
+}\end{equation}
+
+
+
