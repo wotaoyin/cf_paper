@@ -24,7 +24,7 @@ scalability & scalable & not scalable\\\hline
 \caption{Benefits of coordinate update}\label{table:benefits}
 \end{table}}
 
-Clearly, the great performance of coordinate
+Clearly, the strong performance of coordinate
 update methods relies on solving \emph{simple} subproblems. The cost of each subproblem must be proportional to how many coordinates it updates. %We say that a coordinate update subproblem is \emph{computationally worthy}  if its cost is proportionally low. 
 When there are totally $m$ coordinates, the cost of updating one coordinate should not exceed $\frac{1}{m}$ of the cost of the full update (made to all the coordinates at once). Otherwise, coordinate update is not \emph{computationally worthy}. For example, let  $f:\RR^n\to \RR$ be  a $C^2$ function, and consider the Newton update  $x^{k+1} \gets x^k - \big(\nabla^2 f(x^k)\big)^{-1}\nabla f(x^k)$. Since updating each $x_i$ (keeping others  fixed) still requires forming the Hessian matrix $\nabla^2 f(x)$ (at least $O(n^2)$ operations) and factorizing it ($O(n^3)$ operations), there is little to save in computation compared to updating all the components of $x$ at once; hence, the Netwon's method is generally not amenable to coordinate update. 
 
@@ -46,7 +46,7 @@ In many cases, the operator $\cT$ itself represents an iteration:
 \beq\label{fpi}
 x^{k+1} = \cT x^k
 \eeq
-such that the limit of the sequence $\{x^k\}$  exists and is a fixed point of $\cT$, which {\color{red}doubles} as a solution to the application. We call the scheme~\eqref{fpi} a \emph{full update}, as opposed to updating one $x_i$ at a time. The  scheme~\eqref{fpi} has an number of interesting special cases including  methods of gradient descent, gradient projection, proximal gradient,  operator splitting, and many others.
+such that the limit of the sequence $\{x^k\}$  exists and is a fixed point of $\cT$, which is also a solution to the application. We call the scheme~\eqref{fpi} a \emph{full update}, as opposed to updating one $x_i$ at a time. The  scheme~\eqref{fpi} has an number of interesting special cases including  methods of gradient descent, gradient projection, proximal gradient,  operator splitting, and many others.
 
 We study the structures of $\cT$ that make the  following coordinate update algorithm \emph{computationally worthy}
 \beq\label{cuitr}
@@ -55,7 +55,7 @@ x^{k+1}_i = x_i^k - \eta_k (x^k-\cT x^k)_i,
 \eeq
 where  $\eta_k$ is a  step size and $i\in\{1,\ldots,m\}$ is arbitrary. Specifically, the cost of performing  \eqref{cuitr}  is roughly $\frac{1}{m}$, or lower, of that of performing \eqref{fpi}. We call such $\cT$ a \textbf{coordinate friendly (CF)} operator, which we will formally define.
 
-This paper will explore examples of CF operators. Single CF operators include linear maps, projections to certain simple sets, proximal maps and gradients of (nearly) separable functions, as well as gradients of sparsely supported functions. There are many more composite CF operators, which are built from single CF and non-CF operators under a set of rules.  The fact that some of these operators are CF is not obvious.  
+This paper will explore a variety of CF operators. Single CF operators include linear maps, projections to certain simple sets, proximal maps and gradients of (nearly) separable functions, as well as gradients of sparsely supported functions. There are many more composite CF operators, which are built from single CF and non-CF operators under a set of rules.  The fact that some of these operators are CF is not obvious.  
 
 These CF operators let us derive powerful coordinate update algorithms for a variety of applications including, but not limited to, linear and second-order cone programming, variational image processing, support vector machine, empirical risk minimization, portfolio optimization, and nonnegative matrix factorization. For each application, we present an algorithm in the form of~\eqref{fpi} so that its coordinate update~\eqref{cuitr} is efficient. %A final coordinate update algorithm can be obtained by plugging~\eqref{cuitr} into an algorithmic framework reviewed in \S\ref{sec:literature}. 
 {In this way we obtain new coordinate update algorithms for these applications, some of which  are treated with coordinate update for the first time. %For the problems with coordinate update solution, we recover the existing methods and also provide new approaches.
