@@ -1,13 +1,13 @@
 % !TEX root = ./amsa_main.tex
 \subsubsection{Portfolio Optimization}
-Assume that we have one unit of capital and $m$ assets to invest on. The $i$th asset has an expected return rate $\xi_i\ge 0$\cut{ for $i=1,\ldots,m$}. Our goal is to find a portfolio with the minimal risk such that the expected return is no less than $c$. This problem can be formulated as
+Assume that we have one unit of capital and $m$ assets to invest on. The $i$th asset has an expected return rate $\xi_i\ge 0$\cut{ for $i\in[m]$}. Our goal is to find a portfolio with the minimal risk such that the expected return is no less than $c$. This problem can be formulated as
 
 \begin{equation*}
 \begin{array}{l}
 \displaystyle
 \Min_x ~ \frac{1}{2} x^\top Q x, \\
 \displaystyle
-\text{subject to}~ x\ge0, \sum_{i=1}^m x_i\le 1,\, \sum_{i=1}^m\xi_i x_i\ge c 
+\text{subject to}~ x\ge0, \sum_{i=1}^m x_i\le 1,\, \sum_{i=1}^m\xi_i x_i\ge c
 \end{array}
 \end{equation*}
 where the objective function is a measure of risk, and the last constraint imposes that the expected return is at least $c$. Let $a_1=e/\sqrt{m}$, $b_1=1/\sqrt{m}$, $a_2=\xi/\|\xi\|_2$, and $b_2=c/\|\xi\|_2$, where $e = (1, \dots, 1)^\top, \xi = (\xi_1, \dots, \xi_m)^\top$. The above problem is rewritten as
@@ -28,8 +28,8 @@ x, & \text{ if }x\in P_1,\\
 \prj_{D_{21}\cap D_{22}}(x), & \text{ if }x\in P_3,\\
 \prj_{D_{21}}(x), & \text{ if }x\in P_4.
 \end{array}
-\right.$$ 
-Let $w_i=a_i^\top x-b_i, i=1,2$, and maintain $w_1,w_2$. Let $\tilde{a}_2=\frac{a_2-a_1(a_1^\top a_2)}{1-(a_1^\top a_2)^2}$, $\tilde{a}_1=\frac{a_1-a_2(a_1^\top a_2)}{1-(a_1^\top a_2)^2}$. Then 
+\right.$$
+Let $w_i=a_i^\top x-b_i, i=1,2$, and maintain $w_1,w_2$. Let $\tilde{a}_2=\frac{a_2-a_1(a_1^\top a_2)}{1-(a_1^\top a_2)^2}$, $\tilde{a}_1=\frac{a_1-a_2(a_1^\top a_2)}{1-(a_1^\top a_2)^2}$. Then
 \begin{align*}
 &\prj_{D_{21}}(x)=x-w_1a_1,\\
 &\prj_{D_{22}}(x)=x-w_2a_2,\\
@@ -37,7 +37,7 @@ Let $w_i=a_i^\top x-b_i, i=1,2$, and maintain $w_1,w_2$. Let $\tilde{a}_2=\frac{
 \end{align*}
 %
 %
-%Let $w_i=a_i^\top x, i=1,2$, and maintain $w_1,w_2$. Let $\tilde{a}_2=\frac{a_2-a_1(a_1^\top a_2)}{\|a_2-a_1(a_1^\top a_2)\|_2}$ and $\tilde{b}_2=\frac{b_2-b_1(a_1^\top a_2)}{\|a_2-a_1(a_1^\top a_2)\|_2}$. Then $\tilde{A}=[a_1,\tilde{a}_2]$ is orthonormal, and $D_{21}\cap D_{22}=\{x: \tilde{A}^\top x=\tilde{b}=[b_1;\tilde{b}_2]\}$. Let $\tilde{x}=\tilde{A}\tilde{b}\in D_{21}\cap D_{22}$. Then 
+%Let $w_i=a_i^\top x, i=1,2$, and maintain $w_1,w_2$. Let $\tilde{a}_2=\frac{a_2-a_1(a_1^\top a_2)}{\|a_2-a_1(a_1^\top a_2)\|_2}$ and $\tilde{b}_2=\frac{b_2-b_1(a_1^\top a_2)}{\|a_2-a_1(a_1^\top a_2)\|_2}$. Then $\tilde{A}=[a_1,\tilde{a}_2]$ is orthonormal, and $D_{21}\cap D_{22}=\{x: \tilde{A}^\top x=\tilde{b}=[b_1;\tilde{b}_2]\}$. Let $\tilde{x}=\tilde{A}\tilde{b}\in D_{21}\cap D_{22}$. Then
 %\begin{align*}
 %&\prj_{D_{21}}(x)=(I-a_1a_1^\top)(x-\tilde{x})+\tilde{x}=x-w_1a_1+b_1a_1,\\
 %&\prj_{D_{22}}(x)=(I-a_2a_2^\top)(x-\tilde{x})+\tilde{x}=x-w_2a_2+b_2a_2,\\

@@ -10,8 +10,8 @@ This is a high-level abstraction of many problems or their optimality conditions
 When $\cA, \cB$ are maximally monotone (think it as the subdifferential $\partial f$ of a proper convex function $f$) and $\cC$ is $\beta$-cocoercive (think it as the gradient $\nabla f$ of a $1/\beta$-Lipschitz differentiable function $f$),  a solution can be found by the iteration \eqref{fpi} with $\cT=\TS$, introduced recently in \cite{davis2015three}, where  \cut{three operator splitting (3S) for solving \eqref{eqn:3s_problem} is defined by}
 \beq\label{3s}
 \TS := \cI- \cJ_{\gamma \cB}+ \cJ_{\gamma \cA}\circ(2 \cJ_{\gamma \cB}- \cI - \gamma \cC\circ \cJ_{\gamma \cB}).
-\eeq \cut{It can be shown that if $\cC$ is $\beta$-cocoercive, then}Indeed, by setting  $\gamma\in(0,2\beta)$, $\cT_{3S}$ is $(\frac{2\beta}{4\beta-\gamma})$-averaged (think it as a property weaker than the Picard contraction that no longer garantees $\cT$ having a fixed point, yet ensures convergence where a fixed point does exist.). Following the standard convergence result (cf. textbook \cite{bauschke2011convex}), provided that $\cT$ has a  fixed point, the sequence from~\eqref{fpi} converges to a fixed-point $x^*$ of $\TS$. Instead of $x^*$, $\cJ_{\gamma\cB}(x^*)$ is a solution to~\eqref{eqn:3s_problem}.  \cut{, and one can choose $\gamma\in(0,2\beta)$ for convergence.}
-Applying the results in \S\ref{sc:comb},  $\TS$ {is CF if } $\cJ_{\gamma \cA}$ is separable ($\cC_1$). $\cJ_{\gamma \cB}$ is \cut{easy-to-compute or }Type-II CF ($\cF_2$), and $\cC$ is Type-I CF ($\cF_1$). %Given $x$, $(\cT_{3S} x)_i = ......$
+\eeq \cut{It can be shown that if $\cC$ is $\beta$-cocoercive, then}Indeed, by setting  $\gamma\in(0,2\beta)$, $\cT_{3S}$ is $(\frac{2\beta}{4\beta-\gamma})$-averaged (think it as a property weaker than the Picard contraction that no longer guarantees $\cT$ having a fixed point, yet ensures convergence where a fixed point does exist.) Following the standard convergence result (cf. textbook \cite{bauschke2011convex}), provided that $\cT$ has a  fixed point, the sequence from~\eqref{fpi} converges to a fixed-point $x^*$ of $\cT$. Instead of $x^*$, $\cJ_{\gamma\cB}(x^*)$ is a solution to~\eqref{eqn:3s_problem}.  \cut{, and one can choose $\gamma\in(0,2\beta)$ for convergence.}
+Applying the results in \S\ref{sc:comb},  $\TS$ {is CF if } $\cJ_{\gamma \cA}$ is separable ($\cC_1$), $\cJ_{\gamma \cB}$ is \cut{easy-to-compute or }Type-II CF ($\cF_2$), and $\cC$ is Type-I CF ($\cF_1$). %Given $x$, $(\cT_{3S} x)_i = ......$
 
 %\subsubsection{Special cases}
 We give a few special cases of $\TS$ below, which have much longer history. They all converge to a fixed point $x^*$ whenever a solution exists and $\gamma$ is properly chosen. Whenever $\cB\neq 0$, {$\cJ_{\gamma \cB}(x^*)$ replaces $x^*$  as a solution to \eqref{eqn:3s_problem}.
@@ -27,7 +27,7 @@ We give a few special cases of $\TS$ below, which have much longer history. They
   \end{equation}
 for solving the problem $0\in\cB x+\cC x$. When $\cA=\cB$, $\TFBS$ and $\TBFS$ apply the same pair of operators in the opposite orders, and they solve the same problem. Iterations based on $\TBFS$ are rarely used in the literature because they  need an extra application of $\cJ_{\gamma B}$ before returning the solution, so $\TBFS$ is seemingly an unnecessary variant of $\TFBS$. However, they become  different in coordinate update algorithms; in particular, $\TBFS$ is CF (but $\TFBS$ is generally not) when $\cJ_{\gamma \cB}$ is \cut{easy-to-compute or }Type-II CF ($\cF_2$) and $\cC$ is Type-I CF ($\cF_1$). Therefore, $\TBFS$ is worth discussing alone.
 
-\textbf{Douglas-Rachford Splitting (DRS):} Letting $\cC=0$, $\TS$ reduces to 
+\textbf{Douglas-Rachford Splitting (DRS):} Letting $\cC=0$, $\TS$ reduces to
   \begin{equation}\label{eq:DRS}\TDRS:=\cI-\cJ_{\gamma \cB}+\cJ_{\gamma\cA}\circ(2\cJ_{\gamma \cB}-\cI)=\frac{1}{2}(\cI+\cR_{\gamma\cA}\circ \cR_{\gamma\cB})
   \end{equation}
 introduced in \cite{douglas1956DRS} for solving the problem $0\in\cA x+\cB x$. A more general splitting is the  Relaxed Peaceman-Rachford Splitting (RPRS) with $\lambda\in[0,1]$:
@@ -36,9 +36,9 @@ introduced in \cite{douglas1956DRS} for solving the problem $0\in\cA x+\cB x$. A
 \end{equation}
 which recovers $\TDRS$ by setting $\lambda=\frac{1}{2}$ and Peaceman-Rachford Splitting (PRS) \cite{peaceman1955PRS} by $\lambda=1$.
 
-\textbf{Forward-Douglas-Rachford Splitting (FDRS):} Let $V$ be  a linear subspace, and $\cN_V$ and $\cP_V$ be the normal cone and projection operator, respectively. The FDRS~\cite{briceno2015FDRS} 
+\textbf{Forward-Douglas-Rachford Splitting (FDRS):} Let $V$ be  a linear subspace, and $\cN_V$ and $\cP_V$ be the normal cone and projection operator, respectively. The FDRS~\cite{briceno2015FDRS}
  $$\TFDRS=\cI-\cP_V+\cJ_{\gamma\cA}\circ(2\cP_V-\cI-\gamma \cP_V\circ\tilde{\cC}\circ\cP_V),$$
-aims at finding a $x$ such that $0\in\cA\,x+\tilde{\cC}\,x+\cN_V\,x$. If an optimal $x$ exists, we have $x\in V$ and $\cN_Vx$ is the orthogonal complement of $V$. Therefore, the problem is equivalent to finding $x$ such that $0\in\cA\,x+\cP_V\circ\tilde{\cC}\circ\cP_V\,x+\cN_V\,x$. Thus, $\TS$ recovers $\TFDRS$ by letting $\cB=\cN_V$ and $\cC=\cP_V\circ\tilde{\cC}\circ\cP_V$.
+aims at finding a point $x$ such that $0\in\cA\,x+\tilde{\cC}\,x+\cN_V\,x$. If an optimal $x$ exists, we have $x\in V$ and $\cN_Vx$ is the orthogonal complement of $V$. Therefore, the problem is equivalent to finding $x$ such that $0\in\cA\,x+\cP_V\circ\tilde{\cC}\circ\cP_V\,x+\cN_V\,x$. Thus, $\TS$ recovers $\TFDRS$ by letting $\cB=\cN_V$ and $\cC=\cP_V\circ\tilde{\cC}\circ\cP_V$.
 
 \textbf{Forward-Backward-Forward Splitting (FBFS):} Composing $\TFBS$ with one more forward step gives $\TFBFS$ introduced in \cite{FBF_Tseng}:
 \begin{align}\label{eqn:fbf}
@@ -47,8 +47,8 @@ aims at finding a $x$ such that $0\in\cA\,x+\tilde{\cC}\,x+\cN_V\,x$. If an opti
 %\begin{equation}\label{eqn:2_problem}
 %\text{find } x \in \HH \qquad \text{ such that }  \qquad 0 \in \cA\,x + \cC\,x,
 %\end{equation}
-%is defined in the following 
-$\TFBFS$ is not  a special case of $\TS$. At the expense of one more application of $(\cI-\gamma \cC)$, $\TFBFS$ relaxes the convergence condition  of $\TFBS$ from  the cocoercivity of $\cC$ {to its monotonicity (for example, a nonzero skew symmetric matrix is monotonic but not cocoercive)}. 
+%is defined in the following
+$\TFBFS$ is not  a special case of $\TS$. At the expense of one more application of $(\cI-\gamma \cC)$, $\TFBFS$ relaxes the convergence condition  of $\TFBS$ from  the cocoercivity of $\cC$ {to its monotonicity (for example, a nonzero skew symmetric matrix is monotonic but not cocoercive)}.
 From Table \ref{table:comp-op}, we know that $\TFBFS$ is CF if both $\cC$ and $\cJ_{\gamma \cA}$ are separable.
 
 \subsubsection{Examples in Optimization}
@@ -62,7 +62,7 @@ where $X$ is the feasible set and $f$ and $g$ are objective functions. We presen
 
 \begin{example}[{proximal gradient method}]\label{alg:prox-grad} Let $X=\RR^m$, $f$ be differentiable, and $g$ be proximable in \eqref{eq:opt-example}. Letting $\cA=\partial g$ and $\cC=\nabla f$ in \eqref{eq:FBS} gives $\cJ_{\gamma \cA}=\prox_{\gamma g}$ and reduces $x^{k+1}=\TFBS(x^k)$ to prox-gradient iteration: \cut{. one can apply the proximal gradient method with update}
 \begin{equation}\label{eq:prox-grad}x^{k+1}=\prox_{\gamma g}(x^k-\gamma\nabla f(x^k)).
-\end{equation} 
+\end{equation}
 A special case of \eqref{eq:prox-grad} with $g=\iota_X$ is the projected gradient iteration:
 \begin{equation}\label{eq:proj-grad}
 x^{k+1}=\cP_X(x^k-\gamma \nabla f(x^k)).
@@ -79,10 +79,10 @@ If $\nabla f$ is CF and $\prox_{\gamma g}$ is (nearly-)separable (e.g., $g(x)=\|
 %\end{example}
 
 \DIFdelbegin %DIFDELCMD < \begin{example}[ADMM]%%%
-\DIFdelend \DIFaddbegin \begin{example}[Alternating Direction Method of Multipliers (ADMM)]\DIFaddend \label{alg:admm} Setting $X=\RR^m$ simplifies \eqref{eq:opt-example} to 
+\DIFdelend \DIFaddbegin \begin{example}[Alternating Direction Method of Multipliers (ADMM)]\DIFaddend \label{alg:admm} Setting $X=\RR^m$ simplifies \eqref{eq:opt-example} to
 \begin{equation}\label{eq:compx-y}
 \Min_{x,y}~f(x)+g(y),\quad\St~ x-y=0.
-\end{equation} 
+\end{equation}
 %and one can apply the alternating direction method of multiplier (ADMM) by the updates
 The ADMM method iterates:
 \begin{subequations}\label{eq:admmx-y}
@@ -97,10 +97,10 @@ The ADMM method iterates:
 %&s^k=\cJ_{\gamma \cB}(t^k),\\
 &t^{k+1}=\TDRS(t^k)=t^k-\cJ_{\gamma \cB}(t^k)+\cJ_{\gamma\cA}\circ(2\cJ_{\gamma \cB}-\cI)(t^k).
 \end{align*}  %If $\prox_{\gamma f}$ is easy-to-compute, and $\prox_{\gamma g}$ is separable, then the ADMM iteration  is CF.
-From the results in \S\ref{sc:comb}, a sufficient condition for the above iteration to be CF is that $\cJ_{\gamma\cA}$ is (nearly-)separable and $\cJ_{\gamma\cB}$ being CF. 
+From the results in \S\ref{sc:comb}, a sufficient condition for the above iteration to be CF is that $\cJ_{\gamma\cA}$ is (nearly-)separable and $\cJ_{\gamma\cB}$ being CF.
 \end{example}
 
-The above abstract operators and their CF properties will be applied in Section \ref{sec:applications} to several applications. 
+The above abstract operators and their CF properties will be applied in \S\ref{sec:applications} to several applications.
 
 
 %\begin{subsection}{Forward-backward splitting (FBS) and backward-forward splitting (BFS)}
@@ -116,7 +116,7 @@ The above abstract operators and their CF properties will be applied in Section 
 %\begin{equation}\label{eqn:fbs}
 %\cT_{BFS} \, x= (I - \gamma \cB) \circ \cJ_{\gamma \cA}(x),
 %\end{equation}
-%where $\cJ_{\gamma \cA} := (1+\gamma \, \cA)^{-1}$ is the \emph{resolvant} of $A$. It has been shown that $x$ solves \eqref{eqn:monotone_problem} if any only if $x$ is a fixed point of $\cT_{\text{FBS}}$ or $\cT_{BFS}$. As we discussed before, if $\cB$ is BC-friendly, and $J_{\gamma \cA}$ is block-separable, then $\cT_{\text{FBS}}$ is BC-friendly. However, if $J_{\gamma \cA}$ is easy-to-compute/update but not necessary block-separable, and $B$ is BC-friendly, then the $\cT_{\text{FBS}}$ is not necessary BC-friendly, but $\cT_{\text{BFS}}$ is BC-friendly. We will give some examples in Section \ref{sec:app} to illustrate the two different types of update scheme. 
+%where $\cJ_{\gamma \cA} := (1+\gamma \, \cA)^{-1}$ is the \emph{resolvant} of $A$. It has been shown that $x$ solves \eqref{eqn:monotone_problem} if any only if $x$ is a fixed point of $\cT_{\text{FBS}}$ or $\cT_{BFS}$. As we discussed before, if $\cB$ is BC-friendly, and $J_{\gamma \cA}$ is block-separable, then $\cT_{\text{FBS}}$ is BC-friendly. However, if $J_{\gamma \cA}$ is easy-to-compute/update but not necessary block-separable, and $B$ is BC-friendly, then the $\cT_{\text{FBS}}$ is not necessary BC-friendly, but $\cT_{\text{BFS}}$ is BC-friendly. We will give some examples in Section \ref{sec:app} to illustrate the two different types of update scheme.
 %
 %\end{subsection}
 
@@ -126,13 +126,13 @@ The relaxed Peaceman-Rachford splitting (RPRS) also targeted at solving \eqref{e
 \begin{equation}
 \cT_{\text{RPRS}} = (1 - \lambda)\, \cI + \lambda \, \cR_{\gamma \cA} \circ \cR_{\gamma \cB},
 \end{equation}
-where $\cR_{\gamma \cA}:= 2 J_{\gamma \cA} - I$ is the reflection operator. Note that $\lambda = 1$ gives the Peaceman-Rachford splitting (PRS) operator, and $\lambda = \frac{1}{2}$ gives the Douglas-Rachford splitting (DRS) operator. 
+where $\cR_{\gamma \cA}:= 2 J_{\gamma \cA} - I$ is the reflection operator. Note that $\lambda = 1$ gives the Peaceman-Rachford splitting (PRS) operator, and $\lambda = \frac{1}{2}$ gives the Douglas-Rachford splitting (DRS) operator.
 
 Applying the results of composite maps, the RPRS splitting operator is CF in either of the following two cases:
 
 Case 1. $ \cR_{\gamma A}$ is block-separable  and $\cR_{\gamma B}$ is CF.
 
-Case 2. $ \cR_{\gamma A}$ is Type-I CF and $\cR_{\gamma B}$ is easy-to-update. 
+Case 2. $ \cR_{\gamma A}$ is Type-I CF and $\cR_{\gamma B}$ is easy-to-update.
 \end{subsection}
 
 \subsection{Forward-Backward-Forward operator splitting}
@@ -140,7 +140,7 @@ The Forward-Backward-Forward operator splitting (FBF)~\cite{FBF_Tseng} for solvi
 \begin{equation}\label{eqn:2_problem}
 \text{find } x \in \HH \qquad \text{ such that }  \qquad 0 \in \cA\,x + \cC\,x,
 \end{equation}
-is defined in the following 
+is defined in the following
 \begin{align}\label{eqn:fbf}
 \cT_{\text{FBF}} = -\gamma \cC  + (I-\gamma \cC)\cJ_{\gamma \cA}(I-\gamma \cC).
 \end{align}
@@ -151,7 +151,7 @@ Then, we know that $\cT_{\text{FBF}}$ is CF, if both $\cC$ and $\cJ_{\gamma \cA}
 %\begin{subsection}{Three operator splitting (3S)}
 %The three operator splitting method solves the problem of finding the zero in the sum of three operators ($A, B, C$), where $A, B$ are maximally monotone and $C$ is cocoercive. The three operator splitting is defined as following:
 %$$\cT_{3S} = \cI- \cJ_{\gamma \cB}- \cJ_{\gamma \cA}\circ(2 \cJ_{\gamma \cB}- \cI - \gamma \cC\circ \cJ_{\gamma \cB}).$$
-%Then, we know that $\cT$ is BC-friendly, if $\cJ_{\gamma \cA}$ is separable, $\cJ_{\gamma \cB}$ is easy-to-compute/update and $\cC$ is BC-friendly. 
+%Then, we know that $\cT$ is BC-friendly, if $\cJ_{\gamma \cA}$ is separable, $\cJ_{\gamma \cB}$ is easy-to-compute/update and $\cC$ is BC-friendly.
 %
 %\end{subsection}
 

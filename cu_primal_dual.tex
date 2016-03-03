@@ -4,31 +4,31 @@
 \begin{equation}
 \underset{x\in\mathbb{H}}{\text{\normalfont minimize }} f(x)+g(x)+h(Ax),\label{pdproblem}
 \end{equation}
-{with primal-dual splitting algorithms and their coordinate updates, where $f$ is differentiable %, $g$ and $h$ are possibly nondifferentiable, 
+{with primal-dual splitting algorithms and their coordinate updates, where $f$ is differentiable %, $g$ and $h$ are possibly nondifferentiable,
 and $A$ is a ``$p$-by-$m$" linear operator from $\mathbb{H}=\HH_1\times\cdots\times\HH_m$ to $\mathbb{G}=\GG_1\times\cdots\times\GG_p$.
-%$\Box$ is the infimal convolution operator defined as $(h\Box l)(y)=\inf_{z\in\GG} h(z)+l(y-z)$. 
+%$\Box$ is the infimal convolution operator defined as $(h\Box l)(y)=\inf_{z\in\GG} h(z)+l(y-z)$.
 \cut{[do we mention saddle-point and VI at the end of this section?]} Problem~\eqref{pdproblem} abstracts many applications in image processing and machine learning.
 \begin{example}[image deblurring/denoising]
-Let $u^0$ be an image, where $u_i^0\in[0,255]$, and $B$ be the blurring linear operator. Let $\|\nabla u\|_1$ be the anisotropic\footnote{Our derivation can be easily generalized to the isotropic case.} total variation of $u$ (see \eqref{eqn:tv_def} for definition). Suppose that $b$ is a noisy observation of $Bu^0$. Then, we can try to recover $u^0$ by solving 
+Let $u^0$ be an image, where $u_i^0\in[0,255]$, and $B$ be the blurring linear operator. Let $\|\nabla u\|_1$ be the anisotropic\footnote{Our derivation can be easily generalized to the isotropic case.} total variation of $u$ (see \eqref{eqn:tv_def} for definition). Suppose that $b$ is a noisy observation of $Bu^0$. Then, we can try to recover $u^0$ by solving
 \begin{equation}
 \Min_u\, \frac{1}{2}\|Bu-b\|^2+\iota_{[0,255]}(u)+\lambda\|\nabla u\|_1,
 \end{equation}
 which can be written in the form of $\eqref{pdproblem}$ with $f=\frac{1}{2}\|B\cdot-b\|^2$, $g=\iota_{[0,255]}$, $A=\nabla$, and $h=\lambda\|\cdot\|_{1}$.
 \end{example}
-More examples with formulation \eqref{pdproblem} will be given in \S\ref{sec:emp}. %Definitions and examples are given in the subsection $\ref{sec:emp}$. 
+More examples with formulation \eqref{pdproblem} will be given in \S\ref{sec:emp}. %Definitions and examples are given in the subsection $\ref{sec:emp}$.
 In general, primal-dual methods are capable of solving complicated problems involving constraints and the compositions of proximable and linear maps.
 
-In many applications, although $h$ is  proximable, $h\circ A$  is generally non-proximable and non-differentiable. To avoid using slow subgradient methods,  we can consider the  primal-dual splitting approaches to separate $h$ and $A$ so that $\prox_{h}$ can be applied. 
-%From the given examples, we can see in many applications $h$ is not differentiable. In that case, it is also hard to evaluate the proximal operator of $h\circ A$. We need to find a way to separate $h$ and $A$. 
+In many applications, although $h$ is  proximable, $h\circ A$  is generally non-proximable and non-differentiable. To avoid using slow subgradient methods,  we can consider the  primal-dual splitting approaches to separate $h$ and $A$ so that $\prox_{h}$ can be applied.
+%From the given examples, we can see in many applications $h$ is not differentiable. In that case, it is also hard to evaluate the proximal operator of $h\circ A$. We need to find a way to separate $h$ and $A$.
 \cut{
-The first approach is \emph{variable splitting}: first rewrite the problem~\eqref{pdproblem} as $$\Min_{x,y}\, f(x)+g(x)+h(y),\quad \St~ y=Ax,$$ and then apply ADMM~\eqref{eq:admmx-y}. The $y$-subproblem of ADMM reduces to computing $\prox_{h}$. The $x$-subproblem of ADMM has the form 
+The first approach is \emph{variable splitting}: first rewrite the problem~\eqref{pdproblem} as $$\Min_{x,y}\, f(x)+g(x)+h(y),\quad \St~ y=Ax,$$ and then apply ADMM~\eqref{eq:admmx-y}. The $y$-subproblem of ADMM reduces to computing $\prox_{h}$. The $x$-subproblem of ADMM has the form
 \beq\label{admmx}
 \Min_x f(x)+g(x)+\frac{\eta}{2}\|Ax-y\|^2+(\mbox{linear terms in }x).
 \eeq
 When $f+g$ is differentiable or proximable, \eqref{admmx} can be solved by an iterative procedure. In image deblurring, with $g=0$ and proper boundary conditions, even a closed-form solution can be found~\cite{wang2008new}. Generally, it is not easy to directly solve \eqref{admmx}. By introducing more auxiliary variables, $A$ can also be separated from $g$ and $h$, but the resulting subproblem involving $A$ will need form and invert  $A^\top A$~\cite{o2014primal}. (A remedy is to linearize $\|Ax-y\|^2$ in the subproblem, yet it can be shown as a special case of the primal-dual splitting approach below.)
 
 
-The second approach is \emph{primal-dual splitting}. %, based on upd and the Fenchel biconjugation. 
+The second approach is \emph{primal-dual splitting}. %, based on upd and the Fenchel biconjugation.
 }
 We derive that the equivalent form (for convex case) of $\eqref{pdproblem}$ is to find $x$ such that
 \begin{equation}
@@ -71,9 +71,9 @@ In a variant of problem $\eqref{pdproblem}$\cite{}, $h(Ax)$ is replaced by $(h\B
 x\\
 s
 \end{bmatrix}$, which can be solved in the same way as $\eqref{pdproblem}$.
-\end{remark} 
+\end{remark}
 }
-%The monotone inclusion problem $\eqref{pdkkt}$ can be solved by introducing a metric 
+%The monotone inclusion problem $\eqref{pdkkt}$ can be solved by introducing a metric
 %$$M=\begin{bmatrix}
 %\frac{1}{\eta}I&A^\top\\
 %A&\frac{1}{\gamma}I
@@ -88,7 +88,7 @@ x^{k+1}=\prox_{\eta g}(x^k-\eta(\nabla f(x^k)+A^\top(2s^{k+1}-s^k))),
 \end{array}
 \right.\label{vucondat}
 \end{equation}
-%In particular, the algorithm applied to the extended monotropic programming $\eqref{emp}$ is 
+%In particular, the algorithm applied to the extended monotropic programming $\eqref{emp}$ is
 %\begin{equation}
 %\left\{
 %\begin{array}{l}
@@ -98,8 +98,8 @@ x^{k+1}=\prox_{\eta g}(x^k-\eta(\nabla f(x^k)+A^\top(2s^{k+1}-s^k))),
 %\right.\label{vucondatemp}
 %\end{equation}
 which explicitly applies $A$ and $A^\top$ and updates $s,x$ in a Gauss-Seidel style~\footnote{By the Moreau identity: $\prox_{\gamma h^*}=\cI -\gamma \prox_{\frac{1}{\gamma}h}(\frac{\cdot}{\gamma})$, one can compute $\prox_{\frac{1}{\gamma} h}$ instead of $\prox_{\gamma h^*}$. The latter inherits the same separability properties from the former.}.
-We introduce an operator $\TVC:\FF\to \FF$ and write 
-$$\mbox{iteration \eqref{vucondat}}\quad\Longleftrightarrow\quad z^{k+1}=\TVC(z^k).$$ 
+We introduce an operator $\TVC:\FF\to \FF$ and write
+$$\mbox{iteration \eqref{vucondat}}\quad\Longleftrightarrow\quad z^{k+1}=\TVC(z^k).$$
 
 %\begin{remark}
 
@@ -107,7 +107,7 @@ Switching the orders of  $x$ and $s$ yields the following algorithm: %, $x$ and 
 % updating order by changing the metric to $M=\begin{bmatrix}
 %%\frac{1}{\eta}I&-A^\top\\
 %%-A&\frac{1}{\gamma}I
-%%\end{bmatrix}$, 
+%%\end{bmatrix}$,
 %have another algorithm similar to $\eqref{vucondat}$:
 \begin{equation}
 \left\{
@@ -128,11 +128,11 @@ In this subsection, we make the following assumption.
 Functions $g$ and $h^*$ in the problem~\eqref{pdproblem} are separable and proximable. Specifically, $$g(x)=\displaystyle\sum_{i=1} ^m g_i(x_i)\quad\mbox{and}\quad h^*(y)=\displaystyle\sum_{j=1}^ph^*_i(y_i).$$\label{pdassum}
 Furthermore, $\nabla f$ is CF.
 \end{assumption}
-%We show that either $\TVC$ or $\cT'_{\textnormal{VC}}$ is CF under this assumption. 
+%We show that either $\TVC$ or $\cT'_{\textnormal{VC}}$ is CF under this assumption.
 \begin{proposition}\DIFaddbegin \label{prop1}
 \DIFaddend Under Assumption $\ref{pdassum}$, the followings hold:
 \begin{enumerate}[(a)]
-\item when $p=O(m)$, the Condat-Vu operator $\TVC$ in \eqref{vucondat} is CF, more specifically, $$\nops{\{z^k,Ax\}}{\{z^+,Ax^+\}}=O\left(\frac{1}{m+p}\nops{z^k}{\TVC z^k}\right);$$ 
+\item when $p=O(m)$, the Condat-Vu operator $\TVC$ in \eqref{vucondat} is CF, more specifically, $$\nops{\{z^k,Ax\}}{\{z^+,Ax^+\}}=O\left(\frac{1}{m+p}\nops{z^k}{\TVC z^k}\right);$$
 \item when $m\ll p$ and $\nops{x}{\nabla f(x)}=O(m)$, the Condat-Vu operator $\cT'_\textnormal{CV}$ in \eqref{vucondat2} is CF, more specifically, $$\nops{\{z^k,A^\top s\}}{\{z^+,A^\top s^+\}}=O\left(\frac{1}{m+p}\nops{z^k}{\cT'_{\textnormal{CV}} z^k}\right).$$
 \end{enumerate}
 \end{proposition}
@@ -147,8 +147,8 @@ $g(x)=\displaystyle\sum_{i=1} ^m g_i(x_i)$ and $h^*(y)=\displaystyle\sum_{j=1}^p
 \end{assumption}
 
 We show under this assumption either $\cT_1$ or $\cT_2$ is CF. }
-% Due to the nature of problem $\eqref{pdproblem}$ and algorithm $\eqref{vucondat}$, the variables $x$ and $s$ are coupled together by the matrix $A$. In order to study this coupling we make some definitions here. We define the set $\JJ(i)\subset \{1,2,\cdots, p\}$ s.t. $A^\top_{i,j}\neq 0,\forall j\in\JJ(i)$, and $\II(j)\subset\{1,2,\ldots,m\}$ s.t. $A_{j,i}\neq 0,\forall i\in \II(j)$. We also define $m_j=|\II(j)|$. 
-%We can now illustrate the coordinate update scheme further and verify it is BC-friendly under the above assumption. 
+% Due to the nature of problem $\eqref{pdproblem}$ and algorithm $\eqref{vucondat}$, the variables $x$ and $s$ are coupled together by the matrix $A$. In order to study this coupling we make some definitions here. We define the set $\JJ(i)\subset \{1,2,\cdots, p\}$ s.t. $A^\top_{i,j}\neq 0,\forall j\in\JJ(i)$, and $\II(j)\subset\{1,2,\ldots,m\}$ s.t. $A_{j,i}\neq 0,\forall i\in \II(j)$. We also define $m_j=|\II(j)|$.
+%We can now illustrate the coordinate update scheme further and verify it is BC-friendly under the above assumption.
 \begin{proof}
 Computing $z^{k+1}=\TVC z^k$ involves evaluating $\nabla f$, $\prox_g$, and $\prox_{h^*}$, applying $A$ and $A^\top$, and adding vectors.
 %$Ax^k$, with $O(mp)$ operations;
@@ -161,7 +161,7 @@ Formally, $\nops{z^k}{\TVC z^k}=O(mp+m+p)+\mathfrak{M}[x\to\nabla f(x)]$, and $\
 (a) We assume $\nabla f\in\cF_1$ for simplicity, and other cases are similar.
 %The reason to maintain $Ax$ is that in order to compute $x^{k+1}_i$, we need $(A^\top s^{k+1})_i$, thus $s^{k+1}$, and therefore the entire $Ax^k$. To avoid computing $Ax$ repeatedly, we cache it and update it accordingly.
 \begin{enumerate}
-\item If $(\TVC z^k)_j=s^{k+1}_i$, computing it involves: adding $s^k_i$ and $\gamma (Ax^k)_i$, and evaluating $\prox_{\gamma h^*_i}$. In this case $\nops{\{z^k,Ax\}}{\{z^+,Ax^+\}}=O(1)$. 
+\item If $(\TVC z^k)_j=s^{k+1}_i$, computing it involves: adding $s^k_i$ and $\gamma (Ax^k)_i$, and evaluating $\prox_{\gamma h^*_i}$. In this case $\nops{\{z^k,Ax\}}{\{z^+,Ax^+\}}=O(1)$.
 %Following this route, computing $s^{k+1}_i$ involves only evaluating $\prox_{\gamma h^*_i}$ from cached quantities, which costs $O(1)$ operations.
 \item If $(\TVC z^k)_j=x^{k+1}_i$, computing it involves evaluating: the entire $s^{k+1}$ for $O(p)$ operations, $(A^\top(2s^{k+1}-s^k))_i$ for $O(p)$ operations, $\prox_{\eta g_i}$ for $O(1)$ operations, $\nabla_i f({x}^{k})$ for $O(\frac{1}{m}\nops{x}{\nabla f(x)})$ operations, as well as updating $Ax^+$ for $O(p)$ operations.
 In this case\\ $\nops{\{z^k,Ax\}}{\{z^+,Ax^+\}}=O(p+\frac{1}{m}\nops{x}{\nabla f(x)})$.
@@ -175,11 +175,11 @@ Therefore, $\nops{\{z^k,Ax\}}{\{z^+,Ax^+\}}=O\big(\frac{1}{m+p}\nops{z^k}{\TVC z
 %We may maintain $A^\top s^k$ and update it, instead of computing it directly every time. But it won't affect the average coordinate update cost. Since either way, updating the entire $\cT z$ coordinate by coordinate will involve computing (or updating)all the coordinates of $A^\top s$ from every (updated) coordinate of $s$. For the same reason, even when $A$ has some sparsity patterns, using algorithm $\eqref{vucondat}$ or $\eqref{vucondat2}$ to do coordinate updates will have the same cost on average. However, caching $Ax$ is always useful even when $A$ has some sparsity patterns, because it helps avoid repetitive computations when computing $Ax$.
 %\end{remark}
 %we first need to compute all the new $x_i$ and $s_j$ using the cached values, which costs $O(m+p)$ operations; then we need to refresh $Ax$, $A^\top s$ and $\nabla f(x)$, which costs $O(mp)+\mathfrak{M}[x\to\nabla f(x)]$ operations. So the total number of operations we need is $O((m+1)(p+1))+\mathfrak{M}[x\to\nabla f(x)]$. When we need to compute $(\cT z)_i$ and it is a coordinate $s_j$ of $s$, we need to compute $s_j$ and update $A^\top s$, which costs $O(m+1)$ operations. It is less then $\frac{1}{p+1}$ of the operations to compute $\cT z$.
-%%When the coordinate chosen is a coordinate $x_i$ of $x$, we first need to update $s_j^{k+1}$ for every $j\in\JJ(i)$, which costs at most $O(p)$ operations; then we need to evaluate $A_i^\top s^{k+1}$, which costs another $O(p)$ operations at most; finally we need to compute $x_i^{k+1}$ and update $Ax^{k+1}$ and $\nabla f(x^{k+1})$, which costs $O(p+1)+\mathfrak{M}[\{x^k,\nabla f(x^k),(i)\}\to \nabla f(x^{k+1})]$ operations. So the total cost is $O(3p+1)+\mathfrak{M}[\{x^k,\nabla f(x^k),(i)\}\to \nabla f(x^{k+1})]$. Because $\nabla f$ is easy-to-update, we can see $\cT$ is BC-friendly if $m$ and $p$ are of the same order. 
-%%First we need $\prox_{\gamma h^*}$ and $\prox_{\eta g}$ to be BC-friendly or easy to update. We assume $g(x)=\displaystyle\sum_{i=1} ^m g_i(x_i)$ and $h^*(y)=\displaystyle\sum_{j=1}^ph^*_j(y_j)$. Secondly, we also need $\nabla f$ to be BC-friendly %and $A$ to be sparsely supported. 
+%%When the coordinate chosen is a coordinate $x_i$ of $x$, we first need to update $s_j^{k+1}$ for every $j\in\JJ(i)$, which costs at most $O(p)$ operations; then we need to evaluate $A_i^\top s^{k+1}$, which costs another $O(p)$ operations at most; finally we need to compute $x_i^{k+1}$ and update $Ax^{k+1}$ and $\nabla f(x^{k+1})$, which costs $O(p+1)+\mathfrak{M}[\{x^k,\nabla f(x^k),(i)\}\to \nabla f(x^{k+1})]$ operations. So the total cost is $O(3p+1)+\mathfrak{M}[\{x^k,\nabla f(x^k),(i)\}\to \nabla f(x^{k+1})]$. Because $\nabla f$ is easy-to-update, we can see $\cT$ is BC-friendly if $m$ and $p$ are of the same order.
+%%First we need $\prox_{\gamma h^*}$ and $\prox_{\eta g}$ to be BC-friendly or easy to update. We assume $g(x)=\displaystyle\sum_{i=1} ^m g_i(x_i)$ and $h^*(y)=\displaystyle\sum_{j=1}^ph^*_j(y_j)$. Secondly, we also need $\nabla f$ to be BC-friendly %and $A$ to be sparsely supported.
 %
 %
-%For the first choice, when $x_i$ are selected to be updated, we compute the coordinates of $s$ we need but discard them after updating $x_i$: 
+%For the first choice, when $x_i$ are selected to be updated, we compute the coordinates of $s$ we need but discard them after updating $x_i$:
 %\begin{equation}
 %\left\{
 %\begin{array}{l}
@@ -189,7 +189,7 @@ Therefore, $\nops{\{z^k,Ax\}}{\{z^+,Ax^+\}}=O\big(\frac{1}{m+p}\nops{z^k}{\TVC z
 %\text{then update }x_i^{k+1}=x_i^k+\eta_k(\tilde{x}_i^{k+1}-x_i^k)\text{ and discard all the }\tilde{s}_j^{k+1} \\
 %\text{when }s_j\text{ is chosen to be updated, compute}\\
 %\tilde{s_j}^{k+1}=\prox_{\gamma h_j^*} (s_j^k+\gamma Ax^k),\\
-%\text{then update }s_j^{k+1}=s_j^k+\eta_k(\tilde{s}_j^{k+1}-s_j^k) 
+%\text{then update }s_j^{k+1}=s_j^k+\eta_k(\tilde{s}_j^{k+1}-s_j^k)
 %\end{array}
 %\right.
 %\end{equation}
@@ -218,10 +218,10 @@ Therefore, $\nops{\{z^k,Ax\}}{\{z^+,Ax^+\}}=O\big(\frac{1}{m+p}\nops{z^k}{\TVC z
 %\end{array}
 %\right.\label{pd3rd}
 %\end{equation}
-%%Thus when we compute $s^{k+1}_j$, we need $s^k_j$ and $x^k_i$ for all $i\in \II(j)$; when we compute $x^{k+1}_i$, we need to compute $s^{k+1}_j$ first, for all $j\in \JJ(i)$, thus involving more components of $x$, and we also need to compute 
-%%$\nabla_i f(x^k)$. Note that when we compute the $s^{k+1}_j$'s, we don't actually update them. We can cache them for future use, depending on the actual type of algorithm we are running. 
+%%Thus when we compute $s^{k+1}_j$, we need $s^k_j$ and $x^k_i$ for all $i\in \II(j)$; when we compute $x^{k+1}_i$, we need to compute $s^{k+1}_j$ first, for all $j\in \JJ(i)$, thus involving more components of $x$, and we also need to compute
+%%$\nabla_i f(x^k)$. Note that when we compute the $s^{k+1}_j$'s, we don't actually update them. We can cache them for future use, depending on the actual type of algorithm we are running.
 %
-%%We can see under assumption $\ref{pdassum}$, the BC update version of $\eqref{vucondat}$ is still hard to implement. 
+%%We can see under assumption $\ref{pdassum}$, the BC update version of $\eqref{vucondat}$ is still hard to implement.
 %Note that, in the above coordinate update scheme, when we compute $x^{k+1}_i$, the $s^{k+1}$ we computed never get restored or cached, because they may never appear again in our coordinate updating process. This waste of computation is due to the nature of this algorithm. Caching $Ax$ and updating it whenever necessary is useful because it reduces the amount of the wasted computation. We will see this same idea in the next sections.
 %where the $s$ update depends on the $x$ update. We can design coordinate updating algorithms based on this algorithm and it is favorable when $A$ has sparse rows in stead of sparse columns.
 %\end{remark}
@@ -235,14 +235,14 @@ The extended monotropic program is the problem
 \end{array}\label{emp}
 \end{equation}
 where $x = (x_1, \ldots, x_m) \in \HH=\HH_1\times\ldots \times \HH_m$ with $\HH_i$ being Euclidean spaces. It generalizes linear, quadratic, second-order cone, semi-definite programs by allowing  general objective functions $g_i$ and $f$.
-It is a special case of $\eqref{pdproblem}$ by letting $g(x)=\displaystyle\sum_{i=1}^m g_i(x_i)$, $A=[A_1,\cdots, A_m]$ and 
+It is a special case of $\eqref{pdproblem}$ by letting $g(x)=\displaystyle\sum_{i=1}^m g_i(x_i)$, $A=[A_1,\cdots, A_m]$ and
 $h=\iota_{\{b\}}$.
 \begin{example}[quadratic programming]
 Consider the quadratic program
 \begin{equation}
 \underset{x\in\mathbb{R}^m}{\textnormal{minimize }} \frac{1}{2}x^\top Ux+c^\top x,~\St~ Ax=b,~x\in X,\label{qp}
 \end{equation}
-where $U$ is a symmetric positive semidefinite matrix, $X=\{x:x_i \geq 0~\forall i\}$.
+where $U$ is a symmetric positive semidefinite matrix and $X=\{x:x_i \geq 0~\forall i\}$.
 Then, \eqref{qp} is a special case of \eqref{emp}\cut{ $$\underset{x\in\mathbb{R}^n}{\textnormal{minimize }} \frac{1}{2}x^\top Ux+c^\top x+\iota_{X}(x)+\iota_{\{b\}}(Ax).$$}
 with  $g_i(x_i)=\iota_{\cdot\geq 0}(x_i)$, $f(x)=\frac{1}{2}x^\top Ux+c^\top x$ and $h=\iota_{\{b\}}$.
 \end{example}
@@ -252,7 +252,7 @@ The SOCP
 \underset{x\in\mathbb{R}^m}{\textnormal{minimize }} ~c^\top x,&\quad\St~ Ax=b,\\
 &\hspace{56pt} x\in X=Q_1\times \cdots\times Q_{n},
 \end{align*}
-(where the number of cones $n$ may not be equal to the number of blocks $m$,) can be written in the form of \eqref{emp}: $\Min_{x\in\mathbb{R}^m} \iota_X(x)+c^\top x+\iota_{\{b\}}(Ax).$ %Details of SOCP can be found in section $\ref{sec:socp}$. 
+(where the number of cones $n$ may not be equal to the number of blocks $m$,) can be written in the form of \eqref{emp}: $\Min_{x\in\mathbb{R}^m} \iota_X(x)+c^\top x+\iota_{\{b\}}(Ax).$ %Details of SOCP can be found in section $\ref{sec:socp}$.
 %and linear programming is a special case of this problem.
 \end{example}
 %Algorithm $\eqref{vucondat}$ applied to the extended monotropic programming is:
@@ -273,7 +273,7 @@ x^{k+1}=\prox_{\eta g}(x^k-\eta(\nabla f(x^k)+A^\top s^k+2\gamma A^\top Ax^k-2\g
 \end{array}
 \right.\label{pdemp}
 \end{equation}
-To the best of our knowledge, this update is never given in the literature. Note that $x^{k+1}$ no longer depends on $s^{k+1}$, making it more convenient to perform coordinate updates. 
+To the best of our knowledge, this update is never given in the literature. Note that $x^{k+1}$ no longer depends on $s^{k+1}$, making it more convenient to perform coordinate updates.
 %The coordinate updates of $\eqref{pdemp}$ have the same costs as those of $\eqref{vucondat}$, so \eqref{pdemp} is CF except when $m\ll p$. We do have $p<m$ since the linear constraints $Ax=b$ are generally under-determined.
 %, updating one coordinate of $s$ still costs $O(1)$ operations and the cost of updating one coordinate of $x$ is still $O(p)+\mathfrak{M}[\{x^k,\nabla f(x^k),(i)\}\to \nabla f(\hat{x}^{k+1})]$ operations. The cost for computing the entire $\cT z$ coordinate by coordinate is $O(mp+p)+m\mathfrak{M}[\{x^k,\nabla f(x^k),(i)\}\to \nabla f(\hat{x}^{k+1})]$ operations.
 %
@@ -290,7 +290,7 @@ s+\gamma (Ax-b)\\
 x-\eta(\nabla f(x)+A^\top s+2\gamma A^\top Ax-2\gamma A^\top b)
 \end{bmatrix}.$$
   Case 5 of Table $\ref{table:comp-op}$ gives the CF of $\cT_\textnormal{emp}$. When $O(m)=O(p)$, the separability condition on $\prox_g$ can be relaxed to $\prox_g\in\cF_1$ since in this case $\cT_2\in\cF_2$, and we can apply  Case 7 of Table $\ref{table:comp-op}$ (by maintaining $\nabla f(x)$, $A^\top s$, $Ax$ and $A^\top Ax$.)
-%, with $\prox_{\gamma h^*}$ possibly not in $\cC_2$ anymore. In that case we have 
+%, with $\prox_{\gamma h^*}$ possibly not in $\cC_2$ anymore. In that case we have
 %\begin{equation}
 %\left\{
 %\begin{array}{l}
@@ -299,7 +299,7 @@ x-\eta(\nabla f(x)+A^\top s+2\gamma A^\top Ax-2\gamma A^\top b)
 %\end{array}
 %\right.\label{vucondatquadratic}
 %\end{equation}
-%for some matrix $B$ and vector $b$. In that case $\eqref{vucondatquadratic}$ is more favorable than $\eqref{vucondat}$, because when updating $x^{k+1}_i$, instead of computing the entire $s^{k+1}$, which takes $O(p^2)$ operations, we only need to compute quantities such as $(A^\top Bs)_i$ and $(A^\top BAx)_i$, which both take $O(p)$ operations if we cache $Ax$. 
+%for some matrix $B$ and vector $b$. In that case $\eqref{vucondatquadratic}$ is more favorable than $\eqref{vucondat}$, because when updating $x^{k+1}_i$, instead of computing the entire $s^{k+1}$, which takes $O(p^2)$ operations, we only need to compute quantities such as $(A^\top Bs)_i$ and $(A^\top BAx)_i$, which both take $O(p)$ operations if we cache $Ax$.
 %{When we have $m\ll p$. Then, instead of using the iteration \eqref{vucondat2}, we can still use \eqref{pdemp} and cache $A^\top s$ instead of $Ax$ since the former is smaller. %In that way we still have a CF operator, with the same coordinate update costs as $\cT_2$.}
 %In this case, if we cache $A^\top A$ and $A^\top b$, refresh $A^\top s$ whenever a coordinate of $s$ is updated and refresh $Ax$, $A^\top A x$ and $\nabla f(x)$ whenever a coordinate of $x$ is updated, we have a BC-friendly algorithm with reduced coordinate update complexity compared to directly apply $\eqref{vucondatemp}$
 %\begin{remark}
@@ -312,15 +312,15 @@ We define, for each $i$,  $\JJ(i)\subset [p]$ as the set of indices $ j$ such th
 %otherwise we can simply delete the $j$th column of $A$ without affecting the solution of problem $\eqref{pdproblem}$.
 
 We arrange the coordinates of $z=[x;s]$ into $m$ (overlapping) blocks. The $i$th block consists of the coordinate $x_i$ and  $s_j$ for all $j\in\JJ(i)$. We propose a block coordinate update scheme based on $\eqref{vucondat}$. Because the blocks overlap, the $s_j$ update is relaxed with parameters $\rho_{i,j}\ge 0$ (see~\eqref{pdoverlap} below) that satisfy  $\sum_{i\in \II(j)}\rho_{i,j}=1,~~\forall j \in [p],$ so that the aggregated effect is to update $s_j$ without scaling. (Following the
-%Krasnosel'ski$\breve{\text{i}}$-Mann 
+%Krasnosel'ski$\breve{\text{i}}$-Mann
 KM iteration~\cite{krasnosel1955two}, we can also assign a relaxation parameter $\eta_k$ for the $x_i$ update; then, the $s_j$ update should be relaxed with $\rho_{i,j}\eta_k$.)
 
 %The new coordinate update scheme will work in the following manner: every time we choose a coordinate $x_i$ of $x$; compute the needed $s_j$'s (those with $j\in\JJ(i)$) and update them with scaling parameters $\rho_{i,j}\geq 0$; then update $x_i$ using the computed $s_j$.
-We propose the following new update scheme: 
+We propose the following  update scheme:
 \begin{equation}
 \left\{
 \begin{array}{l}
-\text{select }i\text{ from } 1,2,\ldots,m, \text{ then compute}\\
+\text{select }i\in[m], \text{ and then compute}\\
 \quad\tilde{s}_j^{k+1}=\prox_{\gamma h_j^*} (s_j^k+\gamma (Ax^k)_j),~\mbox{for all}~ j\in\JJ(i),\\
 \quad\tilde{x}_i^{k+1}=\prox_{\eta g_i}(x_i^k-\eta(\nabla_i f(x^k)+\sum_{j\in\JJ(i)}A_{i,j}^\top(2\tilde{s}_j^{k+1}-s_j^k))),\\
 \quad\text{update }x_i^{k+1}=x_i^k+(\tilde{x}_i^{k+1}-x_i^k), \\
@@ -328,11 +328,11 @@ We propose the following new update scheme:
 \end{array}
 \right.\label{pdoverlap}
 \end{equation}
-%In other words, we are grouping the coordinates into overlapping groups. Each group contains one coordinate $x_i$ of $x$ and all the $s_j$'s with $j\in\JJ(i)$. $s_j$ will be updated with every $x_i$ with $i\in\II(j)$ and we want the aggregate effect to be the same as updating $s_j$ with no scaling. 
-%So we need 
+%In other words, we are grouping the coordinates into overlapping groups. Each group contains one coordinate $x_i$ of $x$ and all the $s_j$'s with $j\in\JJ(i)$. $s_j$ will be updated with every $x_i$ with $i\in\II(j)$ and we want the aggregate effect to be the same as updating $s_j$ with no scaling.
+%So we need
 %As for the computing cost, we have no separate $s_j$ update and no significant extra cost are added to the $x_i$ update, so the computing cost is the same, if not reduced in this scheme.
 %Following the
-%%Krasnosel'ski$\breve{\text{i}}$-Mann 
+%%Krasnosel'ski$\breve{\text{i}}$-Mann
 %KM iteration\cite{krasnosel1955two}, we can also assign a relaxation parameter $\eta_k$ for the $x_i$ update, then the $s_j$ update should be relaxed by $\rho_{i,j}\eta_k$.
 \begin{remark}
 The use of relaxation parameters $\rho_{i,j}$ makes our scheme different from that in \cite{pesquet2014class}. %, and they are also critical to the convergence.
@@ -366,24 +366,24 @@ Typical choices of $\rho_{i,j}$ include: (1) one of the $\rho_{i,j}$'s is 1 for 
 %\end{equation}
 
 \begin{remark}
-The recent paper \cite{fercoq2015coordinate} proposes a different primal-dual coordinate update algorithm. 
+The recent paper \cite{fercoq2015coordinate} proposes a different primal-dual coordinate update algorithm.
 The authors produce a new matrix $\bar{A}$ based on $A$, with only one nonzero entry in each row, i.e. $m_j=1$ for each $j$. They also modify $h$ to $\bar{h}$ so that the problem
 \begin{equation}
 \underset{x\in\mathbb{H}}{\textnormal{minimize }} f(x)+g(x)+\bar{h}(\bar{A}x)\label{fbpdproblem}
 \end{equation}
-has the same solution as $\eqref{pdproblem}$. Then they solve $\eqref{fbpdproblem}$ by the scheme $\eqref{pdoverlap}$. Because they have $m_j=1$, every dual variable coordinate is only associated with one primal variable coordinate. 
+has the same solution as $\eqref{pdproblem}$. Then they solve $\eqref{fbpdproblem}$ by the scheme $\eqref{pdoverlap}$. Because they have $m_j=1$, every dual variable coordinate is only associated with one primal variable coordinate.
 They create non-overlap blocks of $z$ by duplicating each dual variable coordinate $s_j$ multiple times. The computation cost for each block coordinate update of their algorithm is the same as $\eqref{pdoverlap}$, but more memory is needed since duplicated copies of each $s_j$ are stored and updated.
 \end{remark}
 
 
-\subsection{Async-parallel primal-dual Coordinate Update Algorithms and Their Convergence}
+\subsection{Async-Parallel Primal-Dual Coordinate Update Algorithms and Their Convergence}
 
-In this section, we propose two async-parallel primal-dual coordinate update algorithms using the algorithmic framework of~\cite{Peng_2015_AROCK} and state their convergence results. 
+In this subsection, we propose two async-parallel primal-dual coordinate update algorithms using the algorithmic framework of~\cite{Peng_2015_AROCK} and state their convergence results.
 When there is only one agent, all algorithms proposed in this section become stochastic coordinate update algorithms~\cite{Patrick_2015}, and their convergence is a direct consequence of Theorem~\ref{thm:async-convergence}. Moreover, our convergence analysis also applies to sync-parallel algorithms.
 
 
 
-The two algorithms are based on Sections~\S\ref{sec:pdcu} and~\S\ref{sec:overlap}, respectively.
+The two algorithms are based on~\S\ref{sec:pdcu} and~\S\ref{sec:overlap}, respectively.
 
 
 %We assume a shared memory architecture and allow delays and inconsistent reading (see below for explanations).
@@ -419,8 +419,8 @@ z_i^{k+1}=z_i^k,\quad \forall i\neq i_k,
 \right.
 \end{equation}
 where $\eta_k$ is the step size, $z^k$ denotes the state of $z$ in global memory just before the update~\eqref{eqn:asyn_update} is applied, and $\hat{z}^k$ is the result that $z$ in global memory is read by an agent to its local cache. Due to possible updates to $z$ by other agents, $\hat{z}^k$
-can be different from $z^k$. We refer the reader to~\cite[Section 1.2]{Peng_2015_AROCK} for more details.
- 
+can be different from $z^k$. We refer the reader to~\cite[\S 1.2]{Peng_2015_AROCK} for more details.
+
 The async-parallel algorithm using the overlapping-block coordinate update~\eqref{pdoverlap} is in Algorithm~\ref{alg:asyn_overlap} (recall the overlapping-block coordinate update is introduced to save computation).
 
 \begin{algorithm}[H]\label{alg:asyn_overlap}
@@ -455,5 +455,5 @@ Let $Z^*$ be the set of optimal solutions of problem~\eqref{pdproblem} and $(z^k
 \in [\eta_{\min}, \eta_{\max}]$ for certain $\eta_{\min},\eta_{\max}>0$.
 \end{enumerate}
 Then $(z^k)_{k\geq 0}$ converges to a $Z^*$-valued random variable with probability 1.
-\end{thm} 
-The explicit formulas for $\eta_{\min}$ and $\eta_{\max}$, the proof of Theorem~\ref{thm:async-convergence}, and additional remarks are included in Appendix \ref{pf:pdasync}. The algorithms can be applied to solve application problems formulated as~\eqref{pdproblem}. A variety of examples are provided in~\S\ref{sec:ML} and~\S\ref{sec:Imaging}.
+\end{thm}
+The explicit formulas for $\eta_{\min}$ and $\eta_{\max}$, the proof of Theorem~\ref{thm:async-convergence}, and additional remarks are included in Appendix \ref{pf:pdasync}. The algorithms can be applied to solve  problems formulated as~\eqref{pdproblem}. A variety of examples are provided in~\S\ref{sec:ML} and~\S\ref{sec:Imaging}.

@@ -18,7 +18,7 @@ For example, $\nops{x}{(\cT x)_i}$ denotes the number of operations to compute t
 For a given matrix $A$, let $A_{i,:}$ and $A_{:,j}$ be its $i$th row and $j$th column, respectively. Let $A^\top$ be the transpose of $A$ and $A^\top_{i,:}$ be $(A^\top)_{i,:}$, i.e., the $i$th row of the transpose of $A$.
 
 \subsection{Single Coordinate Friendly Operators}
-This subsection studies a few classes of CF operators and then formally define the CF operator. We motivate the first class through an example.
+This subsection studies a few classes of CF operators and then formally defines the CF operator. We motivate the first class through an example.
 \begin{example}[least squares]\label{ex:lsq1}
 Consider the least squares problem
 \begin{equation}
@@ -31,11 +31,11 @@ $x^{k+1}= \cT x^k $ where $\cT$ is defined as
 \cT x:=x-\eta\nabla f(x)=x-\eta A^\top Ax + \eta A^\top b.
 \end{equation}
 Assuming that $ A^\top A$ and $ A^\top b$ are already computed, we have $\nops{x}{\cT x}=O(m^2)$. The coordinate update at the $k$th iteration performs
-$$x_{i_k}^{k+1}=\cT_{i_k} x^k =x^k_{i_k}-\eta\nabla_{i_k} f(x^k),$$
+$$x_{i_k}^{k+1}=(\cT x^k)_{i_k} =x^k_{i_k}-\eta\nabla_{i_k} f(x^k),$$
 and $x_j^{k+1}=x_j^{k},\forall j\neq i_k$, where $i_k$ is some selected coordinate.
 
 Since for all $i$, $\nabla_i f(x^k)=\left(A^\top (Ax-b)\right)_{i}=(A^\top A)_{i,:}\cdot x-(A^\top b)_{i}$,
-we have $\nops{x}{\cT_i x }=O(m)=O(\frac{1}{m}\nops{x}{\cT x})$. Therefore, the coordinate gradient descent is computationally worthy.
+we have $\nops{x}{(\cT x)_i }=O(m)=O(\frac{1}{m}\nops{x}{\cT x})$. Therefore, the coordinate gradient descent is computationally worthy.
 \end{example}
 The operator $\cT$ in the above example is a special \emph{Type-I CF} operator.
 \begin{definition}[Type-I CF]
@@ -45,7 +45,7 @@ We say $\cT$ is \emph{Type-I CF} (denoted as $\cF_1$) if for any $x\in\HH$ and $
 $$\nops{x}{(\cT x)_i}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg).$$
 \end{definition}
 \begin{example}[least squares II]\label{ex:lsq2}
-We can implement the coordinate update in Example \ref{ex:lsq1} in a different manner by maintaining the result $\cT x^k$ in the memory throughout, which works when $m=\Theta(n)$ or $p\gg m$. The full update is unchanged.
+We can implement the coordinate update in Example \ref{ex:lsq1} in a different manner by maintaining the result $\cT x^k$ in the memory throughout, which works when $m=\Theta(p)$ or $p\gg m$. The full update is unchanged.
 At each iteration, from $\cT x^k$ we immediately obtain $x_{i_k}^{k+1}=(\cT x^k )_{i_k}$ but  need to refresh $\cT x^k$ to $\cT x^{k+1}$.
 Since $x^{k+1}$ and $x^k$ only differ by just one coordinate, the refreshing only requires multiplying the $i_k$th column of $A^\top A$ by $x^{k+1}_{i_k}-x^k_{i_k}$, which is much cheaper than multiplying $A^\top A$ by $x^{k+1}$. The work of refreshing takes $O(m)$ operations, which is $O(\frac{1}{m}\nops{x}{\cT (x)})$.
 Therefore,
@@ -74,7 +74,7 @@ Combining Type-I and Type-II CF operators with the last example, we arrive at th
 
 \begin{definition}[CF operator]
  We say that an operator $\cT:\HH\to\HH$ is \emph{CF} if, for any $x,i,\delta_i,x^+$ satisfying \eqref{singleupdate}, the following holds
-%given any $x\in\HH$ and an arbitrary $i\in\{1,\ldots,m\}$, the coordinate update from $x$ to $x^+$ where $x^+_i = (\cT x)_i$ and $x_{j}^+=x_{j}$ for $j\not=i$, satisfies
+%given any $x\in\HH$ and an arbitrary $i\in[m]$, the coordinate update from $x$ to $x^+$ where $x^+_i = (\cT x)_i$ and $x_{j}^+=x_{j}$ for $j\not=i$, satisfies
 \begin{equation}\label{op-cuf} \nops{\{x,\cM(x)\}}{\{x^+,\cM(x^+)\}}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg),
 \end{equation}
 where $\cM(x)$ is some quantity maintained in the memory to facilitate each coordinate update and refreshed to $\cM(x^+)$. $\cM(x)$ can be empty, i.e., besides $x$, there is no other varying quantity maintained.
@@ -109,7 +109,7 @@ On the other hand, $\nops{x}{\cT x}=O(m)$. Therefore,~the inequality \eqref{op-c
 \begin{itemize}
 Let $\mathfrak{M}(x\to (\cT x)_i)$ be the number of operations of computing the $i$-th coordinate of $\cT x$ given $x$ and $\mathfrak{M}(x\to\cT x)$ the number for computing $\cT x$ given $x$.
 
-\item $\cT$ is \emph{Type-I CF} (denoted as $\cF_1$) if for any $x\in\HH$ and $\forall\, i\in\{1,\ldots,m\}$, it holds
+\item $\cT$ is \emph{Type-I CF} (denoted as $\cF_1$) if for any $x\in\HH$ and $\forall\, i\in[m]$, it holds
 $$\nops{x}{(\cT x)_i}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg).$$
 
 %\item Type-II CF ($\cF_2$): an operator $\cT:\HH\to\GG$ is in $\cF_2$ if, for any $x\in\HH$,  $c\in\RR$, it holds that, $\forall i=1,\ldots,\dim\GG$ and $\forall j=1,\ldots,\dim\HH$:  $$\nops{\{x,\cT x,c\}}{(\cT (x+c e_j))_i}\le O\left(\frac{1}{\dim\GG}\nops{\{x,\cT x,c\}}{\cT (x+ce_j)}\right).$$
@@ -384,7 +384,7 @@ If the complexity of evaluating $\cT_2 x$ is smaller or equals to the complexity
 \begin{remark}By  definition, a separable operator is easy to update (and no quantity needs to be maintained), but not all nearly-separable operators easy to update. For example, consider a sparse matrix $A\in R^{m\times m}$ where all of its non-zero entries are in the last column. Let $\cT x=Ax$ and, given a point $x$ nd $\tilde x=x+\eta_me_m$, compute $(T(x+\eta_me_m))_m$. We have $\nops{\{x,\cT x,\eta_m\}}{\cT \tilde x}=O(m)$ and $\nops{\{x,\eta_m\}}{\tilde x} +\nops{\tilde x}{\cT(\tilde x)}=O(1)+O(m)=O(m)$. There is not benefit  from maintaining $\cT x$.
 \end{remark}
 }
-\begin{example}[square hinge loss function]\label{ex:qhloss}
+\begin{example}[squared hinge loss function]\label{ex:qhloss}
 Consider for $a,x\in\RR^m$, $$f(x):=\frac{1}{2}\big(\max(0,1-\beta a^\top x)\big)^2,$$ which is the squared hinge loss function. Consider the operator
 \beq\label{qhlossT}
 \cT x:=\nabla f(x)=-\beta \max(0,1-\beta a^\top x) a.
@@ -445,7 +445,7 @@ For both full gradient descent method, the step size $\eta$ is set to $\frac{2}{
 }
 
 \cut{
-\begin{example}[scalar map pre-composing affine function]\label{exp:log-grad} Let $a_j\in \RR^m, b_j\in \RR$ and $\phi_j:\RR\to \RR$ be differentiable functions, $j=1,\ldots,p$. Let $$f(x)=\sum_{j=1}^p \phi_j(a_j^\top x +b_j).$$ Assume that evaluating $\phi'_j$ costs $O(1)$ for all $j$. Then, $\nabla f$ is CF (by maintaining $a_j^\top x+b_j,\,\forall j$), but it is neither Type-I nor Type-II CF if $A=[a_1,\ldots,a_p]^\top$ is dense. Indeed, let $$\cT_1 y:=A^\top y,\quad \cT_2 y := \Diag(\phi_1'(y_1),\ldots,\phi_p'(y_p)), \quad \cT_3 x := Ax+b.$$ Then $\nabla f(x)= \cT_1\circ\cT_2\circ\cT_3 x$. For any $x$ and $i\in\{1,\ldots,m\}$, let $x^+_i=\nabla_i f(x)$ and $x^+_j=x_j,\forall j\neq i$, and let $\cM(x)=\cT_3 x$. We can first compute $\cT_2\circ\cT_3 x$ from $\cT_3 x$ for $O(p)$ operations, then compute $\nabla_i f(x)$ and thus $x^+$ from $\{x, \cT_2\circ\cT_3 x\}$ for $O(p)$, and finally update the maintained $\cT_3 x$ to $\cT_3 x^+$ from $\{x, x^+,\cT_3 x\}$ for another $O(p)$. Formally,
+\begin{example}[scalar map pre-composing affine function]\label{exp:log-grad} Let $a_j\in \RR^m, b_j\in \RR$ and $\phi_j:\RR\to \RR$ be differentiable functions, $j=1,\ldots,p$. Let $$f(x)=\sum_{j=1}^p \phi_j(a_j^\top x +b_j).$$ Assume that evaluating $\phi'_j$ costs $O(1)$ for all $j$. Then, $\nabla f$ is CF (by maintaining $a_j^\top x+b_j,\,\forall j$), but it is neither Type-I nor Type-II CF if $A=[a_1,\ldots,a_p]^\top$ is dense. Indeed, let $$\cT_1 y:=A^\top y,\quad \cT_2 y := \Diag(\phi_1'(y_1),\ldots,\phi_p'(y_p)), \quad \cT_3 x := Ax+b.$$ Then $\nabla f(x)= \cT_1\circ\cT_2\circ\cT_3 x$. For any $x$ and $i\in[m]$, let $x^+_i=\nabla_i f(x)$ and $x^+_j=x_j,\forall j\neq i$, and let $\cM(x)=\cT_3 x$. We can first compute $\cT_2\circ\cT_3 x$ from $\cT_3 x$ for $O(p)$ operations, then compute $\nabla_i f(x)$ and thus $x^+$ from $\{x, \cT_2\circ\cT_3 x\}$ for $O(p)$, and finally update the maintained $\cT_3 x$ to $\cT_3 x^+$ from $\{x, x^+,\cT_3 x\}$ for another $O(p)$. Formally,
 \begin{align*}
 &\nops{\{x,\cT_3 x\}}{\{x^+, \cT_3x^+\}}\cr
 =& \nops{\cT_3x}{\cT_2\circ\cT_3 x}+\nops {\{x,\cT_2\circ\cT_3 x\}}{x^+}+\nops{\{x,\cT_3 x, x^+\}}{\{\cT_3x^+\}}\cr
