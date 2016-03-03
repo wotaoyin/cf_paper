@@ -1,20 +1,22 @@
 % !TEX root = ./amsa_main.tex
 \subsection{Operator Splitting Schemes}\label{sec:splitting}
-Before we apply our discussions above to operator splitting schemes for new algorithms, we review several major operator splitting schemes and discuss their CF properties by applying the results from \S\ref{sc:comb}. For basic operator concepts like monotonicity and cocoercivity, please refer to Appendix \ref{sec:op-concept}. The definitions of resolvent and reflective-resolvent operators $\cJ_{\cA}$ and $\cR_{\cA}$ are also given there, in~\eqref{def-resolvent} and~\eqref{def-ref}, respectively. \cut{The coordinate update methods we propose, based on operator splitting schemes, all have convergence guarantee, at least for async-parallel (thus also stochastic) update \cite{Peng_2015_AROCK}. However, naively extending existing convergent algorithms to coordinate update schemes may result in divergence or wrong solutions; see also Appendix  \ref{sec:op-concept} for a counterexample.}  %goes over the definitions and properties of operators that are used to build  and ensure their convergence.
+We will apply our discussions above to operator splitting and  obtain new algorithms. But first, we review several major operator splitting schemes and discuss their CF properties. We will encounter important concepts such as \emph{(maximum) monotonicity} and \emph{cocoercivity}, which are given in Appendix \ref{sec:op-concept}. For a monotone  operator $\cA$, the \emph{resolvent operator} $\cJ_{\cA}$ and the \emph{reflective-resolvent operator}  $\cR_{\cA}$ are also defined there, in~\eqref{def-resolvent} and~\eqref{def-ref}, respectively. \cut{The coordinate update methods we propose, based on operator splitting schemes, all have convergence guarantee, at least for async-parallel (thus also stochastic) update \cite{Peng_2015_AROCK}. However, naively extending existing convergent algorithms to coordinate update schemes may result in divergence or wrong solutions; see also Appendix  \ref{sec:op-concept} for a counterexample.}  %goes over the definitions and properties of operators that are used to build  and ensure their convergence.
 
 Consider the following problem: given three operators $\cA,\cB,\cC$, possibly set-valued,  \begin{equation}\label{eqn:3s_problem}
-\text{find } x \in \HH \qquad \text{ such that }  \qquad 0 \in \cA x + \cB x +\cC x.
+\text{find } x \in \HH \qquad \text{ such that }  \qquad 0 \in \cA x + \cB x +\cC x,
 \end{equation}
-This is a high-level abstraction of many problems or their optimality conditions. The study began in the 1960s, and since then a large number of algorithms and applications have been introduced. We review a few general methods in this subsection.
+where ``$+$" is the Minkowski sum.
+This is a high-level abstraction of many problems or their optimality conditions. The study began in the 1960s, followed by a large number of algorithms and applications over the last fifty years. Next, we review a few basic methods for solving \eqref{eqn:3s_problem}.
 
 When $\cA, \cB$ are maximally monotone (think it as the subdifferential $\partial f$ of a proper convex function $f$) and $\cC$ is $\beta$-cocoercive (think it as the gradient $\nabla f$ of a $1/\beta$-Lipschitz differentiable function $f$),  a solution can be found by the iteration \eqref{fpi} with $\cT=\TS$, introduced recently in \cite{davis2015three}, where  \cut{three operator splitting (3S) for solving \eqref{eqn:3s_problem} is defined by}
 \beq\label{3s}
 \TS := \cI- \cJ_{\gamma \cB}+ \cJ_{\gamma \cA}\circ(2 \cJ_{\gamma \cB}- \cI - \gamma \cC\circ \cJ_{\gamma \cB}).
-\eeq \cut{It can be shown that if $\cC$ is $\beta$-cocoercive, then}Indeed, by setting  $\gamma\in(0,2\beta)$, $\cT_{3S}$ is $(\frac{2\beta}{4\beta-\gamma})$-averaged (think it as a property weaker than the Picard contraction that no longer guarantees $\cT$ having a fixed point, yet ensures convergence where a fixed point does exist.) Following the standard convergence result (cf. textbook \cite{bauschke2011convex}), provided that $\cT$ has a  fixed point, the sequence from~\eqref{fpi} converges to a fixed-point $x^*$ of $\cT$. Instead of $x^*$, $\cJ_{\gamma\cB}(x^*)$ is a solution to~\eqref{eqn:3s_problem}.  \cut{, and one can choose $\gamma\in(0,2\beta)$ for convergence.}
-Applying the results in \S\ref{sc:comb},  $\TS$ {is CF if } $\cJ_{\gamma \cA}$ is separable ($\cC_1$), $\cJ_{\gamma \cB}$ is \cut{easy-to-compute or }Type-II CF ($\cF_2$), and $\cC$ is Type-I CF ($\cF_1$). %Given $x$, $(\cT_{3S} x)_i = ......$
+\eeq \cut{It can be shown that if $\cC$ is $\beta$-cocoercive, then}Indeed, by setting  $\gamma\in(0,2\beta)$, $\cT_{3S}$ is $(\frac{2\beta}{4\beta-\gamma})$-averaged (think it as a property weaker than the Picard contraction; in particular,  $\cT$ may not have a fixed point.) Following the standard convergence result (cf. textbook \cite{bauschke2011convex}), provided that $\cT$ has a  fixed point, the sequence from~\eqref{fpi} converges to a fixed-point $x^*$ of $\cT$. Note that, instead of $x^*$, $\cJ_{\gamma\cB}(x^*)$ is a solution to~\eqref{eqn:3s_problem}.  \cut{, and one can choose $\gamma\in(0,2\beta)$ for convergence.}
+
+Following \S\ref{sc:comb},  $\TS$ {is CF if } $\cJ_{\gamma \cA}$ is separable ($\cC_1$), $\cJ_{\gamma \cB}$ is \cut{easy-to-compute or }Type-II CF ($\cF_2$), and $\cC$ is Type-I CF ($\cF_1$). %Given $x$, $(\cT_{3S} x)_i = ......$
 
 %\subsubsection{Special cases}
-We give a few special cases of $\TS$ below, which have much longer history. They all converge to a fixed point $x^*$ whenever a solution exists and $\gamma$ is properly chosen. Whenever $\cB\neq 0$, {$\cJ_{\gamma \cB}(x^*)$ replaces $x^*$  as a solution to \eqref{eqn:3s_problem}.
+We give a few special cases of $\TS$ below, which have much longer history. They all converge to a fixed point $x^*$ whenever a solution exists and $\gamma$ is properly chosen. If $\cB\neq 0$, then {$\cJ_{\gamma \cB}(x^*)$, instead of $x^*$, is a solution to \eqref{eqn:3s_problem}.
 
  \textbf{Forward-Backward Splitting (FBS):} Letting $\cB=0$ yields $\cJ_{\gamma\cB}=\cI$. Then, $\TS$ reduces to FBS \cite{passty1979FBS}:
  \begin{equation}\label{eq:FBS}
@@ -25,7 +27,7 @@ We give a few special cases of $\TS$ below, which have much longer history. They
 \textbf{Backward-Forward Splitting (BFS):} Letting $\cA=0$ yields $\cJ_{\gamma\cA}=\cI$. Then, $\TS$ reduces to BFS:
   \begin{equation}\label{eq:BFS}\TBFS:=(\cI-\gamma \cC)\circ \cJ_{\gamma \cB}
   \end{equation}
-for solving the problem $0\in\cB x+\cC x$. When $\cA=\cB$, $\TFBS$ and $\TBFS$ apply the same pair of operators in the opposite orders, and they solve the same problem. Iterations based on $\TBFS$ are rarely used in the literature because they  need an extra application of $\cJ_{\gamma B}$ before returning the solution, so $\TBFS$ is seemingly an unnecessary variant of $\TFBS$. However, they become  different in coordinate update algorithms; in particular, $\TBFS$ is CF (but $\TFBS$ is generally not) when $\cJ_{\gamma \cB}$ is \cut{easy-to-compute or }Type-II CF ($\cF_2$) and $\cC$ is Type-I CF ($\cF_1$). Therefore, $\TBFS$ is worth discussing alone.
+for solving the problem $0\in\cB x+\cC x$. When $\cA=\cB$, $\TFBS$ and $\TBFS$ apply the same pair of operators in the opposite orders, and they solve the same problem. Iterations based on $\TBFS$ are rarely used in the literature because they  need an extra application of $\cJ_{\gamma B}$ to return the solution, so $\TBFS$ is seemingly an unnecessary variant of $\TFBS$. However, they become  different for coordinate update; in particular, $\TBFS$ is CF (but $\TFBS$ is generally not) when $\cJ_{\gamma \cB}$ is \cut{easy-to-compute or }Type-II CF ($\cF_2$) and $\cC$ is Type-I CF ($\cF_1$). Therefore, $\TBFS$ is worth discussing alone.
 
 \textbf{Douglas-Rachford Splitting (DRS):} Letting $\cC=0$, $\TS$ reduces to
   \begin{equation}\label{eq:DRS}\TDRS:=\cI-\cJ_{\gamma \cB}+\cJ_{\gamma\cA}\circ(2\cJ_{\gamma \cB}-\cI)=\frac{1}{2}(\cI+\cR_{\gamma\cA}\circ \cR_{\gamma\cB})
@@ -48,7 +50,7 @@ aims at finding a point $x$ such that $0\in\cA\,x+\tilde{\cC}\,x+\cN_V\,x$. If a
 %\text{find } x \in \HH \qquad \text{ such that }  \qquad 0 \in \cA\,x + \cC\,x,
 %\end{equation}
 %is defined in the following
-$\TFBFS$ is not  a special case of $\TS$. At the expense of one more application of $(\cI-\gamma \cC)$, $\TFBFS$ relaxes the convergence condition  of $\TFBS$ from  the cocoercivity of $\cC$ {to its monotonicity (for example, a nonzero skew symmetric matrix is monotonic but not cocoercive)}.
+$\TFBFS$ is not  a special case of $\TS$. At the expense of one more application of $(\cI-\gamma \cC)$, $\TFBFS$ relaxes the convergence condition  of $\TFBS$ from  the cocoercivity of $\cC$ {to its monotonicity. (For example, a nonzero skew symmetric matrix is monotonic but not cocoercive.)}
 From Table \ref{table:comp-op}, we know that $\TFBFS$ is CF if both $\cC$ and $\cJ_{\gamma \cA}$ are separable.
 
 \subsubsection{Examples in Optimization}
@@ -60,7 +62,7 @@ where $X$ is the feasible set and $f$ and $g$ are objective functions. We presen
 
 \cut{We discuss a few well-known optimization methods for solving problems in the form of \eqref{eq:opt-example} and relate them to the previous operator splitting methods.}
 
-\begin{example}[{proximal gradient method}]\label{alg:prox-grad} Let $X=\RR^m$, $f$ be differentiable, and $g$ be proximable in \eqref{eq:opt-example}. Letting $\cA=\partial g$ and $\cC=\nabla f$ in \eqref{eq:FBS} gives $\cJ_{\gamma \cA}=\prox_{\gamma g}$ and reduces $x^{k+1}=\TFBS(x^k)$ to prox-gradient iteration: \cut{. one can apply the proximal gradient method with update}
+\begin{example}[{proximal gradient method}]\label{alg:prox-grad} Let $X=\RR^m$, $f$ be differentiable, and $g$ be proximable in \eqref{eq:opt-example}. Setting $\cA=\partial g$ and $\cC=\nabla f$ in \eqref{eq:FBS} gives $\cJ_{\gamma \cA}=\prox_{\gamma g}$ and reduces $x^{k+1}=\TFBS(x^k)$ to prox-gradient iteration: \cut{. one can apply the proximal gradient method with update}
 \begin{equation}\label{eq:prox-grad}x^{k+1}=\prox_{\gamma g}(x^k-\gamma\nabla f(x^k)).
 \end{equation}
 A special case of \eqref{eq:prox-grad} with $g=\iota_X$ is the projected gradient iteration:
@@ -68,7 +70,7 @@ A special case of \eqref{eq:prox-grad} with $g=\iota_X$ is the projected gradien
 x^{k+1}=\cP_X(x^k-\gamma \nabla f(x^k)).
 \end{equation}
 
-If $\nabla f$ is CF and $\prox_{\gamma g}$ is (nearly-)separable (e.g., $g(x)=\|x\|_1$ or the indicator function of a box constraint) or if $\nabla f$ is Type-II CF and $\prox_{\gamma g}$ is cheap (e.g., $\nabla f(x)=Ax-b$ and $g=\|x\|_2$), the FBS iteration in \eqref{eq:prox-grad} is CF. In the latter case, we can also apply the BFS iteration \eqref{eq:BFS} (i.e,  compute $\prox_ {\gamma g}$ and then the gradient update), which is also CF.
+If $\nabla f$ is CF and $\prox_{\gamma g}$ is (nearly-)separable (e.g., $g(x)=\|x\|_1$ or the indicator function of a box constraint) or if $\nabla f$ is Type-II CF and $\prox_{\gamma g}$ is cheap (e.g., $\nabla f(x)=Ax-b$ and $g=\|x\|_2$), then the FBS iteration in \eqref{eq:prox-grad} is CF. In the latter case, we can also apply the BFS iteration \eqref{eq:BFS} (i.e,  compute $\prox_ {\gamma g}$ and then perform the gradient update), which is also CF.
 
 \end{example}
 
@@ -100,7 +102,7 @@ The ADMM method iterates:
 From the results in \S\ref{sc:comb}, a sufficient condition for the above iteration to be CF is that $\cJ_{\gamma\cA}$ is (nearly-)separable and $\cJ_{\gamma\cB}$ being CF.
 \end{example}
 
-The above abstract operators and their CF properties will be applied in \S\ref{sec:applications} to several applications.
+The above abstract operators and their CF properties will be applied in \S\ref{sec:applications} to give interesting algorithms for several applications.
 
 
 %\begin{subsection}{Forward-backward splitting (FBS) and backward-forward splitting (BFS)}

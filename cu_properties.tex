@@ -5,7 +5,7 @@
 For convenience, we do not distinguish \emph{a coordinate} from \emph{a block of coordinates} throughout this paper. We assume our variable $x$ consists of $m$ coordinates: $$x = (x_1, \ldots, x_m) \in\HH := \HH_1 \times \cdots \times \HH_m\quad\mbox{and}\quad x_i\in\HH_i,~ i=1,\ldots,m.$$ For simplicity, we assume that $\HH_1,\ldots,\HH_m$ are finite-dimensional real Hilbert spaces, though most results hold for general Hilbert spaces.
 A function maps from $\HH$ to $\RR$, the set of real numbers, and an operator maps from $\HH$ to $\GG$, where the definition of $\GG$ depends on the context. Again, we define $[m]$ as the index set $\{1, \ldots, m\}$.\cut{The operator $\cT$ and those operators in the splitting methods in \S\ref{sec:splitting} map from $\HH$ to $\HH$.}
 
-Our discussion often involves two points $x,x^+\in\HH$ that \emph{differ by one coordinate}: there exists an index $i\in [m]$ and a point $\delta_i\in\HH$ that is supported on $\HH_i$, such that
+Our discussion often involves two points $x,x^+\in\HH$ that \emph{differ over one coordinate}: there exists an index $i\in [m]$ and a point $\delta_i\in\HH$ that is supported on $\HH_i$, such that
 \beq\label{singleupdate}
 x^+ = x+\delta_i.
 \eeq
@@ -15,10 +15,12 @@ We let $\nops{a}{b}$ denote \emph{the number of basic operations} that it takes 
 \end{definition}
 For example, $\nops{x}{(\cT x)_i}$ denotes the number of operations to compute the $i$th component of $\cT x$ given $x$. We explore the possibility to compute  $(\cT x)_i$ with much fewer operations than what is needed to first compute $\cT x$ and  then take its $i$th component. %Obviously, this number  depends on the structure of $\cT$.
 
-For a given matrix $A$, let $A_{i,:}$ and $A_{:,j}$ be its $i$th row and $j$th column, respectively. Let $A^\top$ be the transpose of $A$ and $A^\top_{i,:}$ be $(A^\top)_{i,:}$, i.e., the $i$th row of the transpose of $A$.
 
 \subsection{Single Coordinate Friendly Operators}
 This subsection studies a few classes of CF operators and then formally defines the CF operator. We motivate the first class through an example.
+
+In the example below,  we let $A_{i,:}$ and $A_{:,j}$ be the $i$th row and $j$th column of a matrix $A$, respectively. Let $A^\top$ be the transpose of $A$ and $A^\top_{i,:}$ be $(A^\top)_{i,:}$, i.e., the $i$th row of the transpose of $A$.
+
 \begin{example}[least squares]\label{ex:lsq1}
 Consider the least squares problem
 \begin{equation}
@@ -26,8 +28,8 @@ Consider the least squares problem
 \end{equation}
 where $A \in \RR^{p \times m}$ and $b \in \RR^p$. In this example, assume that $m=\Theta(p)$, namely, $m$ and $p$ are of the same order.  We compare the full update of gradient descent to its coordinate update.\footnote{Although gradient descent is seldom used to solve least squares, it often appears as a part in first-order algorithms for problems involving a least squares term.}
 The full update is referred to as the iteration
-$x^{k+1}= \cT x^k $ where $\cT$ is defined as
-\begin{equation}
+$x^{k+1}= \cT x^k $ where $\cT$ is given by
+\begin{equation}\label{eq:LSfull}
 \cT x:=x-\eta\nabla f(x)=x-\eta A^\top Ax + \eta A^\top b.
 \end{equation}
 Assuming that $ A^\top A$ and $ A^\top b$ are already computed, we have $\nops{x}{\cT x}=O(m^2)$. The coordinate update at the $k$th iteration performs
@@ -35,19 +37,20 @@ $$x_{i_k}^{k+1}=(\cT x^k)_{i_k} =x^k_{i_k}-\eta\nabla_{i_k} f(x^k),$$
 and $x_j^{k+1}=x_j^{k},\forall j\neq i_k$, where $i_k$ is some selected coordinate.
 
 Since for all $i$, $\nabla_i f(x^k)=\left(A^\top (Ax-b)\right)_{i}=(A^\top A)_{i,:}\cdot x-(A^\top b)_{i}$,
-we have $\nops{x}{(\cT x)_i }=O(m)=O(\frac{1}{m}\nops{x}{\cT x})$. Therefore, the coordinate gradient descent is computationally worthy.
+we have $\nops{x}{(\cT x)_i }=O(m)$ and thus $\nops{x}{(\cT x)_i }=O(\frac{1}{m}\nops{x}{\cT x})$. Therefore, the coordinate gradient descent is computationally worthy.
 \end{example}
 The operator $\cT$ in the above example is a special \emph{Type-I CF} operator.
 \begin{definition}[Type-I CF]
 For an operator $\cT: \HH\to\HH$, let $\nops{x}{(\cT x)_i}$ be the number of operations for computing the $i$th coordinate of $\cT x$ given $x$ and $\nops{x}{\cT x}$ the number of operations for computing $\cT x$ given $x$.
-
 We say $\cT$ is \emph{Type-I CF} (denoted as $\cF_1$) if for any $x\in\HH$ and $\forall\, i\in [m]$, it holds
 $$\nops{x}{(\cT x)_i}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg).$$
 \end{definition}
 \begin{example}[least squares II]\label{ex:lsq2}
-We can implement the coordinate update in Example \ref{ex:lsq1} in a different manner by maintaining the result $\cT x^k$ in the memory throughout, which works when $m=\Theta(p)$ or $p\gg m$. The full update is unchanged.
-At each iteration, from $\cT x^k$ we immediately obtain $x_{i_k}^{k+1}=(\cT x^k )_{i_k}$ but  need to refresh $\cT x^k$ to $\cT x^{k+1}$.
-Since $x^{k+1}$ and $x^k$ only differ by just one coordinate, the refreshing only requires multiplying the $i_k$th column of $A^\top A$ by $x^{k+1}_{i_k}-x^k_{i_k}$, which is much cheaper than multiplying $A^\top A$ by $x^{k+1}$. The work of refreshing takes $O(m)$ operations, which is $O(\frac{1}{m}\nops{x}{\cT (x)})$.
+We can implement the coordinate update in Example \ref{ex:lsq1} in a different manner by maintaining the result $\cT x^k$ in the memory. This approach works when $m=\Theta(p)$ or $p\gg m$. The full update \eqref{eq:LSfull} is unchanged.
+At coordinate update, from the maintained quantity $\cT x^k$ we immediately obtain $x_{i_k}^{k+1}=(\cT x^k )_{i_k}$, but we need to update $\cT x^k$ to $\cT x^{k+1}$.
+Since $x^{k+1}$ and $x^k$ only differ over  the coordinate $i_k$, this update can be computed as  
+$$\cT x^{k+1} =\cT x^k + (x^{k+1}_{i_k}-x^k_{i_k})(A^\top A)_{:,i_k},  $$
+which is a scalar-vector multiplication followed by a vector addition, taking only $O(m)$ operations. Computing $\cT x^{k+1}$ from scratch involves  a matrix-vector multiplication, taking $O(\nops{x}{\cT (x)})=O(m^2)$ operations. 
 Therefore,
 $$\nops{\{ x^k,\cT x^k, x^{k+1}\}}{ \cT x^{k+1}}= O\bigg(\frac{1}{m}\DIFdelbegin  \nops{x^{k+1}}{\cT  x^{k+1}} \bigg).$$
 \end{example}
@@ -58,16 +61,16 @@ An operator $\cT$ is called \emph{Type-II CF} (denoted as $\cF_2$) if, for any $
 \begin{equation}\label{op-cuf2} \nops{\{ x,\cT x, x^+\}}{ \cT x^+}= O\bigg(\frac{1}{m}\nops{x^+}{\cT x^+}\bigg).
 \end{equation}
 \end{definition}
-Sometimes, maintaining certain quantities other than $\cT x$ can also make the coordinate update computationally worthy.
+The next example illustrates an efficient coordinate update by maintaining certain quantities other than $\cT x$.
 \begin{example}[least squares III]\label{ex:lsq3}
-For the case $p\ll m$, we should avoid pre-computing $A^\top A$ because multiplying $A$ and then $A^\top$ is cheaper. Therefore, we change the implementations of both the full and coordinate updates in Example \ref{ex:lsq1}. In particular, the full update
+For the case $p\ll m$, we should avoid pre-computing the relative large matrix $A^\top A$ and it is cheaper to compute $A^\top(Ax)$ than $(A^\top A)x$. Therefore, we change the implementations of both the full and coordinate updates in Example \ref{ex:lsq1}. In particular, the full update
 $$x^{k+1}=\cT x^k =x^k-\eta\nabla f(x^k)=x^k-\eta A^\top (Ax^k-b),$$
 pre-multiplies $x^k$ by $A$ and then $A^\top$. Hence,
 $\nops{x^k}{\cT(x^k)}=O(mp)$.
 
-We change the coordinate update to maintain the intermediate quantity $Ax^k$. The coordinate update computes
-$$(\cT x^k)_{i_k}=x^k_{i_k}-\eta (A^\top Ax^k-A^\top b)_{i_k},$$
-by pre-multiplying $Ax^k$ by $A^{\top}_{i_k,:}$ and refreshing $Ax^k$ to $Ax^{k+1}$ by adding $(x^{k+1}_{i_k}-x^k_{i_k}) A_{:,i_k}$ to $A x^k$. Both steps take $O(p)$ operations, so
+We change the coordinate update to maintain the intermediate quantity $Ax^k$. In the first step, the coordinate update computes
+$$(\cT x^k)_{i_k}=x^k_{i_k}-\eta (A^\top (Ax^k)-A^\top b)_{i_k},$$
+by pre-multiplying $Ax^k$ by $A^{\top}_{i_k,:}$. Then, the second step updates $Ax^k$ to $Ax^{k+1}$ by adding $(x^{k+1}_{i_k}-x^k_{i_k}) A_{:,i_k}$ to $A x^k$. Both steps take $O(p)$ operations, so
 \begin{displaymath}{\nops{\{x^k,Ax^k\}}{\{x^{k+1},Ax^{k+1}\}}=O(p)=O\left(\frac{1}{m}\nops{x^k}{\cT x^k}\right)}.\end{displaymath}
 \end{example}
 Combining Type-I and Type-II CF operators with the last example, we arrive at the following CF definition.
@@ -77,7 +80,7 @@ Combining Type-I and Type-II CF operators with the last example, we arrive at th
 %given any $x\in\HH$ and an arbitrary $i\in[m]$, the coordinate update from $x$ to $x^+$ where $x^+_i = (\cT x)_i$ and $x_{j}^+=x_{j}$ for $j\not=i$, satisfies
 \begin{equation}\label{op-cuf} \nops{\{x,\cM(x)\}}{\{x^+,\cM(x^+)\}}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg),
 \end{equation}
-where $\cM(x)$ is some quantity maintained in the memory to facilitate each coordinate update and refreshed to $\cM(x^+)$. $\cM(x)$ can be empty, i.e., besides $x$, there is no other varying quantity maintained.
+where $\cM(x)$ is some quantity maintained in the memory to facilitate each coordinate update and refreshed to $\cM(x^+)$. $\cM(x)$ can be empty, i.e., besides $x$, no other varying quantity is maintained.
 \end{definition}
 
 \cut{\begin{definition}[CF operator]
@@ -151,16 +154,16 @@ In general, the set of CF operators is much larger than the union of Type-I and 
 %{\color{red} we have to declare what one coordinate means here (it can be one block of coordinate whenever it is used together}
 
 %CF operators, as the name suggests, let one compute coordinate updates at little overhead.
-Another important subclass of CF operators are operators $\cT:\HH\to\HH$ where   $(\cT x)_i$ only depends on one, or a few, entries out of $x_1,\ldots,x_m$.\cut{, obviously $(\cT x)_i$ is relatively easy to compute. Therefore, they belong to $\cF$.} Based on how many input coordinates they depend on, we partition them into three subclasses.
+Another important subclass of CF operators are operators $\cT:\HH\to\HH$ where   $(\cT x)_i$ only depends on one, or a few, entries among $x_1,\ldots,x_m$.\cut{, obviously $(\cT x)_i$ is relatively easy to compute. Therefore, they belong to $\cF$.} Based on how many input coordinates they depend on, we partition them into three subclasses.
  \DIFdelbegin %DIFDELCMD <
 
 %DIFDELCMD < %%%
-\DIFdelend \begin{definition}[Separable operator]\label{def:sep-op} Consider $\mathfrak{T}:=\{\cT ~|~\cT:\HH\to\HH\}$. We have the partition $\mathfrak{T}=\cC_1\cup\cC_2\cup\cC_3$, where
+\DIFdelend \begin{definition}[separable operator]\label{def:sep-op} Consider $\mathfrak{T}:=\{\cT ~|~\cT:\HH\to\HH\}$. We have the partition $\mathfrak{T}=\cC_1\cup\cC_2\cup\cC_3$, where
 \cut{We divide the operators into three categories base on the dependency of other coordinates when updating one coordinate.}
 \begin{itemize}
-\item \emph{separable operators:} $\cT\in\cC_1$ if, for any index $i$, there exists $\cT_i: \HH_i \rightarrow \HH_i$ such that $(\cT x)_i = \cT_i x_i$, that is,   $(\cT x)_i$ only depends on $x_i$.
-\item \emph{nearly-separable operators:} $\cT\in \cC_2$ if, for any index $i$, there exists $\cT_i$ and index set $I_i$ such that $(\cT x)_i = \cT_i(\{x_j\}_{j\in I_i})$ with $|I_i| \ll m$, that is, each $(\cT x)_i$ depends on a few  coordinates of $x$.
-\item \emph{non-separable operators:} $\cC_3:=\mathfrak{T}\setminus(\cC_1\cup \cC_2)$. If $\cT\in\cC_3$, there exists some  $i$ such that $(\cT x)_i$ depends on many coordinates of $x$.
+\item \emph{separable operator:} $\cT\in\cC_1$ if, for any index $i$, there exists $\cT_i: \HH_i \rightarrow \HH_i$ such that $(\cT x)_i = \cT_i x_i$, that is,   $(\cT x)_i$ only depends on $x_i$.
+\item \emph{nearly-separable operator:} $\cT\in \cC_2$ if, for any index $i$, there exists $\cT_i$ and index set $I_i$ such that $(\cT x)_i = \cT_i(\{x_j\}_{j\in I_i})$ with $|I_i| \ll m$, that is, each $(\cT x)_i$ depends on a few  coordinates of $x$.
+\item \emph{non-separable operator:} $\cC_3:=\mathfrak{T}\setminus(\cC_1\cup \cC_2)$. If $\cT\in\cC_3$, there exists some  $i$ such that $(\cT x)_i$ depends on many coordinates of $x$.
 \end{itemize}
 \end{definition}
 
@@ -385,7 +388,7 @@ If the complexity of evaluating $\cT_2 x$ is smaller or equals to the complexity
 \end{remark}
 }
 \begin{example}[squared hinge loss function]\label{ex:qhloss}
-Consider for $a,x\in\RR^m$, $$f(x):=\frac{1}{2}\big(\max(0,1-\beta a^\top x)\big)^2,$$ which is the squared hinge loss function. Consider the operator
+Consider for $a,x\in\RR^m$, $$f(x):=\frac{1}{2}\big(\max(0,1-\beta a^\top x)\big)^2,$$ which is known as the squared hinge loss function. Consider the operator
 \beq\label{qhlossT}
 \cT x:=\nabla f(x)=-\beta \max(0,1-\beta a^\top x) a.
 \eeq
