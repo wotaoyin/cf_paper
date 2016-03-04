@@ -46,7 +46,7 @@ In many cases, the operator $\cT$ itself represents an iteration:
 \beq\label{fpi}
 x^{k+1} = \cT x^k
 \eeq
-such that the limit of the sequence $\{x^k\}$  exists and is a fixed point of $\cT$, which is also a solution to the application. We call the scheme~\eqref{fpi} a \emph{full update}, as opposed to updating one $x_i$ at a time. The  scheme~\eqref{fpi} has an number of interesting special cases including  methods of gradient descent, gradient projection, proximal gradient,  operator splitting, and many others.
+such that the limit of the sequence $\{x^k\}$  exists and is a fixed point of $\cT$, which is also a solution to the application. We call the scheme~\eqref{fpi} a \emph{full update}, as opposed to updating one $x_i$ at a time. The  scheme~\eqref{fpi} has a number of interesting special cases including  methods of gradient descent, gradient projection, proximal gradient,  operator splitting, and many others.
 
 We study the structures of $\cT$ that make the  following coordinate update algorithm \emph{computationally worthy}
 \beq\label{cuitr}
@@ -109,7 +109,7 @@ x^{k+1}_{i} = x_i^k,&\text{for all } i\not= i_k.
 $$
 Sequential updates have been applied to many problems such as the Gauss-Seidel iteration for solving a linear system of equations, alternating projection \cite{von1949rings,bauschke1993convergence} for finding a point in the intersection of two sets,  ADMM~\cite{glowinski1975ADMM, gabay1976ADMM} for solving monotropic programs, and Douglas-Rachford Splitting (DRS)~\cite{douglas1956DRS}  for finding a zero to the sum of two operators. %(ADMM and DRS also involve additional variables.)
 
-In optimization,  \emph{coordinate descent} algorithms, at each iteration, minimize the function $f(x_1,\ldots,x_n)$ by fixing all but one variable $x_i$. Let $$x_{-i}:=(x_1,\ldots,x_{i-1},x_{i+1},\ldots,x_n)$$
+In optimization,  \emph{coordinate descent} algorithms, at each iteration, minimize the function $f(x_1,\ldots,x_m)$ by fixing all but one variable $x_i$. Let $$x_{-i}:=(x_1,\ldots,x_{i-1},x_{i+1},\ldots,x_m)$$
 collect all but the $i$th coordinate of $x$. Coordinate descent solves one of the following subproblems:
 \begin{subequations}\label{coordes}
 \begin{align}
@@ -119,7 +119,7 @@ collect all but the $i$th coordinate of $x$. Coordinate descent solves one of th
 (\cT x^k)_i & = \argmin_{x_i}\,\langle \nabla_i f^{\mathrm{diff}}(x^k),x_i \rangle+f_i^{\mathrm{prox}}(x_i)+\frac{1}{2\eta_k}\|x_i-x_i^k\|^2,
 \end{align}
 \end{subequations}
-which are called \emph{direct} update, \emph{proximal} update,  \emph{gradient} update, and \emph{prox-gradient} update, respectively. The last update applies to the function $$f(x) = f^{\mathrm{diff}}(x)+\sum_{i=1}^nf^{\mathrm{prox}}_i(x_i),$$ where $f^{\mathrm{diff}}$ is differentiable and each $f^{\mathrm{prox}}_i$ is proximable (its proximal map takes $O\big(\dim(x_i)\,\mathrm{polylog}(\dim(x_i))\big)$ operations to compute).
+which are called \emph{direct} update, \emph{proximal} update,  \emph{gradient} update, and \emph{prox-gradient} update, respectively. The last update applies to the function $$f(x) = f^{\mathrm{diff}}(x)+\sum_{i=1}^mf^{\mathrm{prox}}_i(x_i),$$ where $f^{\mathrm{diff}}$ is differentiable and each $f^{\mathrm{prox}}_i$ is proximable (its proximal map takes $O\big(\dim(x_i)\,\mathrm{polylog}(\dim(x_i))\big)$ operations to compute).
 
 %If the objective function has a \emph{proximable}+smooth structure,  the \emph{prox-gradient} update applies the proximal update to the result of the gradient update.
 
@@ -136,7 +136,7 @@ $$x^{k+1} = x^k - \eta_k A^{\top}(A x^k - b).$$
 The four tested index rules are: cyclic, cyclic permutation, random, and greedy under the Gauss-Southwell\footnote{it selects $i_k=\argmax_i\|\nabla_if(x^k)\|$.} rule.
 Note that because this example is very special, the comparisons of different index rules are far from conclusive.
 
-In the full update, the step size $\eta_k$ is set to the theoretical upper bound $\frac{2}{\|A\|_2^2}$. For each coordinate update to $x_i$, the step size $\eta_k$ is set to $\frac{1}{(A^{\top}A)_{ii}}$. All of the full and coordinate updates have the same \emph{per-epoch} complexity, so we plot the objective errors in Figure \ref{fig:ls_full_vs_coord}.
+In the full update, the step size $\eta_k$ is set to the theoretical upper bound $\frac{2}{\|A\|_2^2}$, where  $\|A\|_2$ denotes the matrix operator norm and equals the largest singular value of $A$. For each coordinate update to $x_i$, the step size $\eta_k$ is set to $\frac{1}{(A^{\top}A)_{ii}}$. All of the full and coordinate updates have the same \emph{per-epoch} complexity, so we plot the objective errors in Figure \ref{fig:ls_full_vs_coord}.
 %Note that the performance of coordinate update algorithms depend on many factors such as the condition number, the level of coupling among different coordinates, whether greedy index selections can be efficiently made, as well as the amount of data movement in a memory hierarchy needed. The demonstration here is limited.
 \begin{figure}[!htbp] \centering
 \includegraphics[width=50mm]{./figs/randn_matrix_cropped}
@@ -149,13 +149,13 @@ In the full update, the step size $\eta_k$ is set to the theoretical upper bound
 
 \subsubsection{Parallel Update} As one of their main advantages, coordinate update algorithms are easy to parallelize. In this subsection, we discuss  both synchronous (sync) and asynchronous (async) parallel updates.
 
-\textbf{Sync-parallel (Jacobi) update} specifies a sequence of index subsets $\II_1,\II_2,\ldots \subseteq [n]$, and at each iteration $k$,  the coordinates in $\II_k$ are updated in parallel by multiple agents:
+\textbf{Sync-parallel (Jacobi) update} specifies a sequence of index subsets $\II_1,\II_2,\ldots \subseteq [m]$, and at each iteration $k$,  the coordinates in $\II_k$ are updated in parallel by multiple agents:
 $$ \begin{cases}
 x^{k+1}_{i} = x_{i}^k - \eta_k(x^k-\cT x^k)_{i},& i\in \II_k,\\
 x^{k+1}_{i} = x_i^k,&i\not\in \II_k.
 \end{cases}
 $$
-Synchronization across all agents ensures that  all $x_i$ in $\II_k$ are updated and also written to the memory before the next iteration starts. Note that, if $\II_k= [n]$, then all the coordinates are updated and, thus, each iteration reduces to the full update: $x^{k+1} =  x^k - \eta_k(x^k-\cT x^k).$ \cut{\color{red}This, of course, does not mean solving $x=\cT x$ in one step; therefore, do not confuse performing an  update in \eqref{coordes} for all the coordinates in parallel from the joint minimization over all the variables.}
+Synchronization across all agents ensures that  all $x_i$ in $\II_k$ are updated and also written to the memory before the next iteration starts. Note that, if $\II_k= [m]$, then all the coordinates are updated and, thus, each iteration reduces to the full update: $x^{k+1} =  x^k - \eta_k(x^k-\cT x^k).$ \cut{\color{red}This, of course, does not mean solving $x=\cT x$ in one step; therefore, do not confuse performing an  update in \eqref{coordes} for all the coordinates in parallel from the joint minimization over all the variables.}
 
 \textbf{Async-parallel update.} In this setting, a set of agents  still perform parallel updates, but synchronization is eliminated or weakened. Hence, each agent continuously applies \eqref{fm:async} below, which reads    $x$  from the shared memory and writes $x_i$ back (or through communicating without shared memory):
 \beq\label{fm:async} \begin{cases}

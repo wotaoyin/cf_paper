@@ -1,6 +1,6 @@
 % !TEX root = ./amsa_main.tex
 \section{Numerical Experiments}\label{sec:numerical}
-We illustrate the behavior of coordinate update algorithms for solving portfolio optimization, image processing, and machine learning problems. Our primary goal is to show the efficiency of coordinate update compared to the corresponding full update algorithms. We will also illustrate that asynchronous parallel coordinate update algorithms are more scalable than their synchronous parallel counterparts. 
+We illustrate the behavior of coordinate update algorithms for solving portfolio optimization, image processing, and sparse logistic regression problems. Our primary goal is to show the efficiency of coordinate update compared to the corresponding full update algorithms. We will also illustrate that asynchronous parallel coordinate update algorithms are more scalable than their synchronous parallel counterparts. 
 
 Our first two experiments run on Mac OSX 10.9 with 2.4 GHz Intel Core i5 and 8 Gigabytes of RAM. The experiments were coded in Matlab. The sparse logistic regression experiment runs on 1 to 16 threads on a machine with two 2.5Ghz 10-core Intel Xeon E5-2670v2 (20 cores in total) and $64$ Gigabytes of RAM. The experiment was coded in C++ with OpenMP enabled. We use the Eigen library\footnote{\url{http://eigen.tuxfamily.org}} for sparse matrix operations.
 
@@ -92,26 +92,26 @@ We compare the performance of algorithm~\eqref{eqn:pd_tvl2} and its correspondin
 
 \begin{figure}[!htb] \centering
     \begin{subfigure}{0.45\linewidth}
-    	\centering
+        \centering
         \includegraphics[width=0.9\linewidth]{./figs/origin_img}
-         \caption{Phantom image}\label{fig:pds_a}		
+         \caption{Phantom image}\label{fig:pds_a}               
     \end{subfigure} %
     \quad
     \begin{subfigure}{0.45\linewidth}
-    	\centering
+        \centering
         \includegraphics[width=0.9\linewidth]{./figs/new_fig_pds_img}
-         \caption{Recovered by PDS}\label{fig:pds_b}		        
+         \caption{Recovered by PDS}\label{fig:pds_b}                    
     \end{subfigure} %
     \begin{subfigure}{0.45\linewidth}
-    	\centering
+        \centering
         \includegraphics[width=0.9\linewidth]{./figs/new_fig_pds_coord_img}
-         \caption{Recovered by PDS coord}\label{fig:pds_c}		        
+         \caption{Recovered by PDS coord}\label{fig:pds_c}                      
     \end{subfigure} %
     \quad
     \begin{subfigure}{0.45\linewidth}
-    	\centering
+        \centering
         \includegraphics[width=\linewidth]{./figs/new_fig_func_val}
-         \caption{Objective function value}\label{fig:pds_d}		                
+         \caption{Objective function value}\label{fig:pds_d}                            
     \end{subfigure} %    
     \caption{CT image reconstruction.}
     \label{fig:pds_results}

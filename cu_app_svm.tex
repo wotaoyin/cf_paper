@@ -16,7 +16,7 @@ The dual problem of \eqref{eq:ksvm} is
 where $Q_{ij}=\beta_i\beta_j k(a_i,a_j)$, $k(\cdot,\cdot)$ is a so-called \emph{kernel function}, and $e = (1, ..., 1)^\top$. If $\phi(a)=a$, then $k(a_i,a_j)=a_i^\top a_j$.
 
 \subsubsection*{Unbiased case}
-If $y=0$ is enforced in \eqref{eq:ksvm}, then the solution hyperplane $\{w:x^\top w=0\}$ passes through the origin and is called \emph{unbiased}. Consequently, the dual problem \eqref{eq:dksvm} will no longer have the linear constraint $\sum_i \beta_i s_i=0$, leaving it with the coordinate-wise separable box constraints $0\le s_i\le C$.  To solve \eqref{eq:dksvm}, we can apply the FBS operator $\cT$ defined by \eqref{eq:FBS}. Letting $d(s):= \frac{1}{2}s^\top Q s- e^\top s$}, $\cA = \prox_{[0, C]}$ and $\cC = \nabla d$, the coordinate update based on FBS is
+If $y=0$ is enforced in \eqref{eq:ksvm}, then the solution hyperplane $\{w:x^\top w=0\}$ passes through the origin and is called \emph{unbiased}. Consequently, the dual problem \eqref{eq:dksvm} will no longer have the linear constraint $\sum_i \beta_i s_i=0$, leaving it with the coordinate-wise separable box constraints $0\le s_i\le C$.  To solve \eqref{eq:dksvm}, we can apply the FBS operator $\cT$ defined by \eqref{eq:FBS}. Let $d(s):= \frac{1}{2}s^\top Q s- e^\top s$}, $\cA = \prox_{[0, C]}$ and $\cC = \nabla d$.  The coordinate update based on FBS is
 $$s_i^{k+1}=\prj_{[0,C]}(s_i^k-\gamma_i\nabla_i d(s^k)),$$
 where we can take $\gamma_i=\frac{1}{Q_{ii}}$. 
 
