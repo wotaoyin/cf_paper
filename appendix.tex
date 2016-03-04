@@ -29,7 +29,7 @@ A common firmly-nonexpansive operator is the resolvent of a maximally monotone m
 \end{example}
 
 \begin{definition}[proximal map]\label{def-prox-map}
-The \emph{proximal map} for a function $f$ is a special resolvent and defined as:
+The proximal map for a function $f$ is a special resolvent and defined as:
 \begin{equation}\label{def-prox}\prox_{\gamma f}(y) = \argmin_x \big\{f(x)+\frac{1}{2\gamma}\|x-y\|^2 \big\},
 \end{equation}
 where $\gamma > 0$. The first-order variational condition of the minimization yields $\prox_{\gamma f}(y)=(\cI+\gamma\partial f)^{-1}$; hence, $\prox_{\gamma f}$ is firmly-nonexpansive. When $x\in\RR^m$ and $\prox_{\gamma f}$ can be computed in $O(m)$ or $O(m\log m)$, we call $f$ \emph{proximable}.
@@ -157,8 +157,8 @@ A&\frac{1}{\gamma}I
 and iterate $$z^{k+1}=\cT z^k=(\cI+M^{-1}\cB)^{-1}\circ(\cI-M^{-1}\cA)z^k.$$
 We have $Mz^{k+1}+{\cB}z^{k+1}= Mz^k-\cA z^k$:
 $$\left\{\begin{array}{ll}
-\frac{1}{\eta}x^k  +A^\top s^{k}- \nabla f(x^k)&\in \frac{1}{\eta}x^{k+1} + A^\top s^{k+1}+A^\top s^{k+1}+\nabla g (x^{k+1}),\\ 
-\frac{1}{\gamma}s^k + A~ x^{k~}&\in \frac{1}{\gamma}s^{k+1}+ A~ x^{k+1~} -A ~x^{k+1} ~+\nabla h^*(s^{k+1}),
+\frac{1}{\eta}x^k  +A^\top s^{k}- \nabla f(x^k)&\in \frac{1}{\eta}x^{k+1} + A^\top s^{k+1}+A^\top s^{k+1}+\partial g (x^{k+1}),\\ 
+\frac{1}{\gamma}s^k + A~ x^{k~}&\in \frac{1}{\gamma}s^{k+1}+ A~ x^{k+1~} -A ~x^{k+1} ~+\partial h^*(s^{k+1}),
 \end{array}\right.$$
 which is equivalent to
 $$\left\{
@@ -172,7 +172,7 @@ Now we derived the Condat-V\~{u} algorithm. With proper choices of $\eta$ and $\
 If we change the matrix $M$ to $\begin{bmatrix}
 \frac{1}{\eta}I&-A^\top\\
 -A&\frac{1}{\gamma}I
-\end{bmatrix}$, the other algorithm $\eqref{vucondat2}$ can be derived in the same way.
+\end{bmatrix}$, the other algorithm $\eqref{vucondat2}$ can be derived similarly.
 \section{Proof of convergence for async-parallel primal dual coordinate update algorithms}\label{pf:pdasync}
 Algorithms~\ref{alg:asyn_core} and~\ref{alg:asyn_overlap} differ from that in~\cite{Peng_2015_AROCK} in the following aspects:
 \begin{enumerate}

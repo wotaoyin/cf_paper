@@ -127,7 +127,6 @@ where $\{(a_i, b_i)\}_{i=1}^N$ is the set of sample-label pairs with $b_i \in \{
 
 \begin{table}[htbp]
 \centering
- \caption{\label{tab:log_data}Two  datasets for  sparse logistic regression }
  \begin{tabular}{rrr}
 \hline
   Name & \# samples & \# features \\
@@ -136,6 +135,7 @@ where $\{(a_i, b_i)\}_{i=1}^N$ is the set of sample-label pairs with $b_i \in \{
   news20 & 19,996 & 1,355,191\\
   \hline
  \end{tabular}
+  \caption{\label{tab:log_data}Two  datasets for  sparse logistic regression.}
 \end{table}
 
 We let each coordinate hold roughly 50 features. {Since the total number of features is not divisible by 50, some coordinates have 51 features.} We let each thread draw a coordinate uniformly at random at each iteration. We stop all the tests after 10 epochs since they have nearly identical progress per epoch. %The size of the block of coordinates is set to 50. In each iteration, each core randomly draws a block and updates it.
@@ -143,16 +143,16 @@ The step size is set to $\eta_k=0.9,\,\forall k$. Let $A = [a_1, \ldots, a_N]^{\
 
 Table \ref{tab:log_time} gives the running times of  the sync-parallel and async-parallel implementations on the two datasets. We can observe that async-parallel achieves almost-linear speedup, but sync-parallel scales very poorly as we explain below.
 
-In the sync-parallel implementation,  all the running cores have to wait for the last core to finish an iteration, and therefore if a core has a large load, it slows down the iteration. Although every core is (randomly) assigned to roughly the same number of features (either 50 or 51 components of $x$) at each iteration, their  $a_i$'s have very different numbers of nonzeros, and the core with the largest number of nonzeros is the slowest. (Sparse matrix computation is used for both datasets, which are very large.) As more cores are used,  despite that they altogether do more work at each iteration,  the per-iteration time reduces as the slowest core tends to be slower. On the other hand, async-parallel coordinate update does not suffer from the  load imbalance. Its performance grows nearly linear with the number of cores.
+In the sync-parallel implementation,  all the running threads have to wait for the last thread to finish an iteration, and therefore if a thread has a large load, it slows down the iteration. Although every thread is (randomly) assigned to roughly the same number of features (either 50 or 51 components of $x$) at each iteration, their  $a_i$'s have very different numbers of nonzeros, and the thread with the largest number of nonzeros is the slowest. (Sparse matrix computation is used for both datasets, which are very large.) As more threads are used,  despite that they altogether do more work at each iteration,  the per-iteration time reduces as the slowest thread tends to be slower. On the other hand, async-parallel coordinate update does not suffer from the  load imbalance. Its performance grows nearly linear with the number of threads.
 
-Finally, we have observed that the progress toward solving \eqref{eqn:log} is mainly a function of the number of epochs and does not change appreciably  when the number of cores increases or between sync-parallel and async-parallel. Therefore, we always stop at 10 epochs.
+Finally, we have observed that the progress toward solving \eqref{eqn:log} is mainly a function of the number of epochs and does not change appreciably  when the number of threads increases or between sync-parallel and async-parallel. Therefore, we always stop at 10 epochs.
 
 
 \begin{table}[htbp]
 \centering
  \begin{tabular}{|c|r|r|r|r|r|r|r|r|}
   \hline
-  \multirow{3}{*}{\# cores} & \multicolumn{4}{|c|}{real-sim} & \multicolumn{4}{c|}{news20} \\
+  \multirow{3}{*}{\# threads} & \multicolumn{4}{|c|}{real-sim} & \multicolumn{4}{c|}{news20} \\
   \cline{2-9}
   & \multicolumn{2}{|c|}{time (s)} &  \multicolumn{2}{c|}{speedup} &  \multicolumn{2}{c|}{time (s)} & \multicolumn{2}{c|}{speedup}\\
   \cline{2-9}
@@ -165,5 +165,5 @@ Finally, we have observed that the progress toward solving \eqref{eqn:log} is ma
    16 & 7.1     &  46.4   & 11.5 & 1.8 & 41.6     & 493.2 & 14.2 & 1.2\\
   \hline
  \end{tabular}
- \caption{\label{tab:log_time}Running times of async-parallel and sync-parallel FBS implementations for $\ell_1$ regularized logistic regression on two datasets. Sync-parallel has very poor speedup  due to the large distribution of coordinate sparsity and thus the large load imbalance across cores.}
+ \caption{\label{tab:log_time}Running times of async-parallel and sync-parallel FBS implementations for $\ell_1$ regularized logistic regression on two datasets. Sync-parallel has very poor speedup  due to the large distribution of coordinate sparsity and thus the large load imbalance across threads.}
 \end{table}

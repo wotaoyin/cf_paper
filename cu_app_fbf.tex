@@ -1,10 +1,10 @@
 % !TEX root = ./amsa_main.tex
 \subsubsection{Network}\label{sec:network}
-Consider that $m$ worker agents and one master agent form a star-shaped network, where the master agent at the center connects to each of the worker agents. The $m+1$ agents collaboratively solve the consensus problem:  $$\Min_{x_c} \sum_{i=1}^m f_i(x_c),$$ where $x_c\in \RR^d$ is the common variable and each proximable function $f_i$ is held privately by agent $i$. The problem can be reformulated as
+Consider that $m$ worker agents and one master agent form a star-shaped network, where the master agent at the center connects to each of the worker agents. The $m+1$ agents collaboratively solve the consensus problem:  $$\Min_{x} \sum_{i=1}^m f_i(x),$$ where $x\in \RR^d$ is the common variable and each proximable function $f_i$ is held privately by agent $i$. The problem can be reformulated as
 \begin{align}
-\Min_{x_1,\cdots,x_m,y\in \RR^d} F(x) := \sum_{i=1}^mf_i(x_i),\quad \St~ x_i=y,
+\Min_{x_1,\dots,x_m,y\in \RR^d} F(x) := \sum_{i=1}^mf_i(x_i),\quad \St~ x_i=y, ~\forall i \in [m],
 \end{align}
-{which has the  KKT condition}:
+{which has the  KKT condition}
 \begin{equation}\label{pro:decentral}
 0\in\underbrace{
 \begin{bmatrix}
