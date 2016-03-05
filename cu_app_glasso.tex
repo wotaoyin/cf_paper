@@ -4,7 +4,7 @@ The group Lasso regression problem \cite{YL2006GrpLasso} is
 \begin{equation}\label{eq:glasso}
 \Min_{x\in\RR^n}  f(x)+\sum_{i=1}^m\lambda_i\|x_i\|_2,
 \end{equation} 
-where $ f$ is a differentiable convex function, often bearing the form $\frac{1}{2}\|Ax-b\|_2^2$, and $x_i\in \RR^{n_i}$ is a subvector of $x\in\RR^n$ supported on $\II_i\subset [n]$, and $\cup_i \II_i= [n]$. If $\II_i\cap \II_j =\emptyset, \,\forall i\neq j$, it is called \emph{non-overlapping group Lasso}, and if there are two different groups $\II_i$ and $\II_j$ with a non-empty intersection, it is called \emph{overlapping group Lasso}. The model finds a coefficient vector $x$ that minimizes the fitting (or loss) function $f(x)$ and that is group sparse: all but a few $x_i$ are zero.  
+where $ f$ is a differentiable convex function, often bearing the form $\frac{1}{2}\|Ax-b\|_2^2$, and $x_i\in \RR^{n_i}$ is a subvector of $x\in\RR^n$ supported on $\II_i\subset [n]$, and $\cup_i \II_i= [n]$. If $\II_i\cap \II_j =\emptyset, \,\forall i\neq j$, it is called \emph{non-overlapping group Lasso}, and if there are two different groups $\II_i$ and $\II_j$ with a non-empty intersection, it is called \emph{overlapping group Lasso}. The model finds a coefficient vector $x$ that minimizes the fitting (or loss) function $f(x)$ and that is group sparse: all but a few $x_i$'s are zero.  
 
 Let $U_i$ be formed by the columns of the identity matrix $I$ in $\II_i$, and let $U=[U_1,\ldots,U_m]^\top\in\RR^{(\Sigma_i n_i)\times n}$. Then, $x_i=U_i^\top x$. Let $h_i(y_i)=\lambda_i\|y_i\|_2,\,y_i\in\RR^{n_i}$ for $i \in [m]$, and $h(y)=\sum_{i=1}^m h_i(y_i)$ for $y=[y_1;\ldots;y_m]\in\RR^{\Sigma_i n_i}$. In this way, \eqref{eq:glasso} becomes
 \begin{equation}\label{eq:glasso2}
@@ -22,9 +22,9 @@ The corresponding coordinate update is the following
 \end{array}
 \right.
 }\end{equation}
-where the step size can be taken to $\gamma_i=\frac{1}{\|A_{:,i}\|^2}$. When $\nabla f$ is either cheap or easy-to-maintain,  the coordinate update in \eqref{update-nonlap-gl} is inexpensive.
+where the step size can be taken to be $\gamma_i=\frac{1}{\|A_{:,i}\|^2}$. When $\nabla f$ is either cheap or easy-to-maintain,  the coordinate update in \eqref{update-nonlap-gl} is inexpensive.
 
-\subsubsection*{Overlapping case~\cite{jacob2009group}} This case allows $\II_i\cap \II_j \neq\emptyset$ for some $i\neq j$, causing the evaluation of $\cJ_{\gamma\cT_1}$ be generally difficult. However, we can apply the primal-dual update \eqref{vucondat} to this problem as
+\subsubsection*{Overlapping case~\cite{jacob2009group}} This case allows $\II_i\cap \II_j \neq\emptyset$ for some $i\neq j$, causing the evaluation of $\cJ_{\gamma\cT_1}$ to be generally difficult. However, we can apply the primal-dual update \eqref{vucondat} to this problem as
 \begin{subequations}\label{eq:pd-glasso}
 \begin{align}
 s^{k+1}=&\,\prox_{\gamma h^*} (s^k+\gamma U x^k),\label{eq:pd-glasso-s}\\
