@@ -54,7 +54,7 @@ where $A=[a_1^\top; a_2^\top; \ldots,a_p^\top]\in \RR^{p\times m}$ and $b=[b_1;b
 Since $\nops{x}{\nabla f(x)}=O(pm)$, therefore
 $\nabla f= \cT_1\circ\cT_2\circ\cT_3$ is CF. 
 
-If $p=m$, $\cT_1,\cT_2,\cT_3$ all map from $\RR^m$ to $\RR^m$. Then, it is easy to check that $\cT_1$ is Type-I CF, $\cT_2$ is separable, and $\cT_3$ is Type-II CF. The last one is crucial since not maintaining $\cT_3 x$ would disqualify $\cT$ from CF. Indeed, to obtain $(\cT x)_i$, we must multiple $A_i^\top$ to all the entries of $\cT_2\circ\cT_3 x$, which in turn needs all the entries of $\cT_3 x$, computing which from scratch would cost $O(pm)$.
+If $p=m$, $\cT_1,\cT_2,\cT_3$ all map from $\RR^m$ to $\RR^m$. Then, it is easy to check that $\cT_1$ is Type-I CF, $\cT_2$ is separable, and $\cT_3$ is Type-II CF. The last one is crucial since not maintaining $\cT_3 x$ would disqualify $\cT$ from CF. Indeed, to obtain $(\cT x)_i$, we must multiply $A_i^\top$ to all the entries of $\cT_2\circ\cT_3 x$, which in turn needs all the entries of $\cT_3 x$, computing which from scratch would cost $O(pm)$.
 
 There are general rules to preserve Type-I and Type-II CF. For example, $\cT_1\circ \cT_2$ is still Type-I CF, and $\cT_2\circ\cT_3$ is still CF, but there are counter examples where  $\cT_2\circ\cT_3$  can be neither Type-I nor Type-II CF. Such properties are important for developing efficient coordinate update algorithms for complicated problems; we will formalize them in the following.
 \end{example}
