@@ -47,7 +47,7 @@ $$\nops{x}{(\cT x)_i}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg).$$
 \end{definition}
 \begin{example}[least squares II]\label{ex:lsq2}
 We can implement the coordinate update in Example \ref{ex:lsq1} in a different manner by maintaining the result $\cT x^k$ in the memory. This approach works when $m=\Theta(p)$ or $p\gg m$. The full update \eqref{eq:LSfull} is unchanged.
-At coordinate update, from the maintained quantity $\cT x^k$ we immediately obtain $x_{i_k}^{k+1}=(\cT x^k )_{i_k}$, but we need to update $\cT x^k$ to $\cT x^{k+1}$.
+At each coordinate update, from the maintained quantity $\cT x^k$ we immediately obtain $x_{i_k}^{k+1}=(\cT x^k )_{i_k}$, but we need to update $\cT x^k$ to $\cT x^{k+1}$.
 Since $x^{k+1}$ and $x^k$ only differ over  the coordinate $i_k$, this update can be computed as  
 $$\cT x^{k+1} =\cT x^k + (x^{k+1}_{i_k}-x^k_{i_k})(A^\top A)_{:,i_k},  $$
 which is a scalar-vector multiplication followed by a vector addition, taking only $O(m)$ operations. Computing $\cT x^{k+1}$ from scratch involves  a matrix-vector multiplication, taking $O(\nops{x}{\cT (x)})=O(m^2)$ operations. 
@@ -257,7 +257,7 @@ Consider a \emph{separable} function
 $$f(x) = \sum_{i=1}^m f_i(x_i).$$
 Then, both $\nabla f$ and $\prox_{\gamma f}$ are separable, in particular,
 $$(\nabla f(x))_i = \nabla f_i (x_i) \quad \mbox{and}\quad (\prox_{\gamma f}(x))_i= \prox_{\gamma f_i} (x_i).$$\cut{$$\nabla f(x) = \begin{bmatrix} \nabla f_1 (x_1) \\ \vdots \\ \nabla f_m(x_m) \end{bmatrix} \quad \mbox{and}\quad \prox_{\gamma f}(x) = \begin{bmatrix}  \prox_{\gamma f_1} (x_1) \\ \vdots \\  \prox_{\gamma f_m}(x_m) \end{bmatrix}.$$}
-Here, $\prox_{\gamma f} (x)$ ( $\gamma >0$) is the \emph{proximal operator} that we  define in Appendix~\ref{sec:op-concept}. %returns the minimizer $y^*$ of the function $f(x) + \frac{1}{2\gamma } \|x - y\|^2$. The minimizer exists and is unique when $f$ is a closed proper convex function.
+Here, $\prox_{\gamma f} (x)$ ($\gamma >0$) is the \emph{proximal operator} that we  define in Appendix~\ref{sec:op-concept}. %returns the minimizer $y^*$ of the function $f(x) + \frac{1}{2\gamma } \|x - y\|^2$. The minimizer exists and is unique when $f$ is a closed proper convex function.
 % $$\prox_{\gamma f} (x): = \argmin_{y \in \HH} f(x) + \frac{1}{2\gamma } \|x - y\|^2,$$
 % for which we assume unique minimizer (true if $f$ is closed proper convex).
 \end{example}
