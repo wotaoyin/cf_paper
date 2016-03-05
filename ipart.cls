@@ -17,11 +17,11 @@
 %% The original distribution is located at:
 %% http://www.e-publications.org/ims/support
 %%
-%% This class file loads standart "article.cls" with appropriate 
+%% This class file loads standart "article.cls" with appropriate
 %% settings and then style file "imsart.sty" with additional macros
 %%
-%% You are free to use this style file as you see fit, provided 
-%% that you do not make changes to the file. 
+%% You are free to use this style file as you see fit, provided
+%% that you do not make changes to the file.
 %% If you DO make changes, you are required to rename this file.
 %%
 %% It may be distributed under the terms of the LaTeX Project Public
@@ -112,11 +112,11 @@
   \PassOptionsToClass{letter,11pt,twoside,leqno}{article}
   \PassOptionsToPackage{leqno}{amsmath}
   \PassOptionsToPackage{autosecdot}{imsart}
-  \AtEndOfPackage{\def\journal@id{-amsa}}
-  \AtBeginDocument{\def\journal@name{Annals of Mathematical Sciences and Applications}}
-  \AtBeginDocument{\def\journal@issn{ISSN: 2168-0930}}
-  \AtBeginDocument{\def\journal@eissn{ISSN: 2168-0949}}
-  \AtBeginDocument{\def\journal@url{http://intlpress.com/site/pub/pages/journals/items/amsa/_home/_main/index.html}}
+%  \AtEndOfPackage{\def\journal@id{-amsa}}
+%  \AtBeginDocument{\def\journal@name{Annals of Mathematical Sciences and Applications}}
+%  \AtBeginDocument{\def\journal@issn{ISSN: 2168-0930}}
+%  \AtBeginDocument{\def\journal@eissn{ISSN: 2168-0949}}
+%  \AtBeginDocument{\def\journal@url{http://intlpress.com/site/pub/pages/journals/items/amsa/_home/_main/index.html}}
   \AtBeginDocument{\setattribute{bauthor}{style}{\rm}}
   \AtBeginDocument{\setattribute{beditor}{style}{\rm}}
   \AtEndOfPackage{\let\affiliation\@gobble}
@@ -233,7 +233,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
 \setattribute{abstractname}{skip} {\hskip12\p@}
 \setattribute{history}     {skip} {\medskipamount}
 
-% FRONT MATTER FONTS 
+% FRONT MATTER FONTS
 \setattribute{title}      {size} {\LARGE\sffamily\bfseries}
 \setattribute{author}     {size} {\large\scshape}
 \setattribute{address}    {size} {\normalsize\sffamily}
@@ -315,7 +315,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
   \stepcounter{author}%
   \author@fmt@init%
   \let\author@fmt@init\relax%
-  \bgroup% 
+  \bgroup%
      \def\degs##1{##1}\def\fnms##1{##1}\def\inits##1{##1}\def\snm##1{##1}\def\roles##1{##1}%
      \@tempcnta=\author@num\relax%
      \ifnum\c@author=\@tempcnta \def\author@sep{ and }\else \def\author@sep{, }\fi%
@@ -480,7 +480,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
 
 
   \def\@appsectionnostar#1{%
-     \ifx.#1.% 
+     \ifx.#1.%
        \def\section@numbersep{}\old@section[\appendixname\ \thesection]{}%
      \else%
        \def\section@numbersep{.}\old@section{#1}%
@@ -629,7 +629,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
 \setattribute{abstractname}{skip} {}
 
 
-% FRONT MATTER FONTS 
+% FRONT MATTER FONTS
 \setattribute{title}      {size} {\LARGE}
 \setattribute{author}     {size} {\normalsize\scshape}
 \setattribute{address}    {size} {\footnotesize\scshape}
@@ -652,7 +652,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
 \setattribute{copyright}  {text} {\url@fmt{}{\scshape}{\journal@name}{\journal@url}%
                                  \print@copyrightowner\break%
                                   \@ifundefined{volume@title}{}{\textbf{\volume@title}\break}%
-                                  \@ifnonempty{\@volume, \@issue, \@pagerange, \@pubyear\break}%
+                                  %\@ifnonempty{\@volume, \@issue, \@pagerange, \@pubyear\break}%
                                   \doi@text}%
 \def\abstractname{}
 
@@ -688,7 +688,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
   \stepcounter{author}%
   \author@fmt@init%
   \let\author@fmt@init\relax%
-  \bgroup% 
+  \bgroup%
      \def\degs##1{##1}\def\fnms##1{##1}\def\inits##1{##1}\def\snm##1{##1}\def\roles##1{##1}%
      \@tempcnta=\author@num\relax%
      \ifnum\c@author=\@tempcnta \def\author@sep{ and }\else \def\author@sep{, }\fi%
@@ -827,7 +827,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
 
 
   \def\@appsectionnostar#1{%
-     \ifx.#1.% 
+     \ifx.#1.%
        \def\section@numbersep{}\old@section[\appendixname\ \thesection]{}%
      \else%
        \def\section@numbersep{.}\old@section{#1}%
@@ -837,7 +837,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% table, figure
 
 
-\newdimen\tablewidth 
+\newdimen\tablewidth
 \tablewidth\textwidth
 
 \long\def\@maketablecaption#1#2{%
@@ -886,7 +886,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
 
 \if@load@natbib
    \set@natbib
-\else 
+\else
   \g@addto@macro\@openbib@code{\itemsep6\p@}
 \fi
 
@@ -951,4 +951,3 @@ File could be downloaded from http://www.e-publications.org/ims/support
 2008.04.04 - "." removed after history line
 2008.03.19 - bug with abstract fixed;
 2008.03.07 - address formatting rewritten;
-

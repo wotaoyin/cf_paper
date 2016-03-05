@@ -19,7 +19,7 @@ $\|\cT x-\cT y\|\le\|x-y\|,\ \forall x, y\in\HH.$ We say $\cT$ is averaged, or $
 %and $\cT$ is \emph{firmly nonexpansive} if
 %$\|u-v\|^2\le\langle u-v,x-y\rangle,\ \forall u\in \cT(x), \forall v\in \cT(y).$ 
 \end{definition}
-By definition, a nonexpansive operator is single-valued. Let $\cT$ be averaged. If $\cT$ has a fixed point, the iteration \eqref{fpi} converges to a fixed point; otherwise, the iteration diverges unboundedly. Now let  $\cT$ be nonexpansive. The convergence is guaranteed~\cite{krasnosel1955two} after damping: $x^{k+1} = x^k-\eta(x^k- \cT x^k)$, for any $0<\eta<1$. 
+By definition, a nonexpansive operator is single-valued. Let $\cT$ be averaged. If $\cT$ has a fixed point, the iteration \eqref{fpi} converges to a fixed point; otherwise, the iteration diverges unboundedly. Now let  $\cT$ be nonexpansive. The damped update of $\cT$: $x^{k+1} = x^k-\eta(x^k- \cT x^k)$, is equivalent to applying the averaged operator $(1-\eta)\cI+\eta\cT$. 
 
 \begin{example}
 A common firmly-nonexpansive operator is the resolvent of a maximally monotone map $\cT$, written as 
@@ -29,12 +29,12 @@ A common firmly-nonexpansive operator is the resolvent of a maximally monotone m
 \end{example}
 
 \begin{definition}[proximal map]\label{def-prox-map}
-The proximal map for a function $f$ is a special resolvent and defined as:
+The proximal map for a function $f$ is a special resolvent defined as:
 \begin{equation}\label{def-prox}\prox_{\gamma f}(y) = \argmin_x \big\{f(x)+\frac{1}{2\gamma}\|x-y\|^2 \big\},
 \end{equation}
-where $\gamma > 0$. The first-order variational condition of the minimization yields $\prox_{\gamma f}(y)=(\cI+\gamma\partial f)^{-1}$; hence, $\prox_{\gamma f}$ is firmly-nonexpansive. When $x\in\RR^m$ and $\prox_{\gamma f}$ can be computed in $O(m)$ or $O(m\log m)$, we call $f$ \emph{proximable}.
+where $\gamma > 0$. The first-order variational condition of the minimization yields $\prox_{\gamma f}(y)=(\cI+\gamma\partial f)^{-1}$; hence, $\prox_{\gamma f}$ is firmly-nonexpansive. When $x\in\RR^m$ and $\prox_{\gamma f}$ can be computed in $O(m)$ or $O(m\log m)$ operations, we call $f$ \emph{proximable}.
 
-Examples of proximal functions include $\ell_1,\ell_2,\ell_\infty$-norms, several matrix norms, the owl-norm \cite{davis2015n}, (piece-wise) linear functions, certain quadratic functions, and many more.
+Examples of proximable functions include $\ell_1,\ell_2,\ell_\infty$-norms, several matrix norms, the owl-norm \cite{davis2015n}, (piece-wise) linear functions, certain quadratic functions, and many more.
 \end{definition}
 
 \begin{example}
@@ -96,7 +96,7 @@ t^{k+1}=&\ \left(\frac{1}{2}(2\cJ_{\eta\cA}-\cI)\circ(2\cJ_{\eta \cB}-\cI)+\frac
 where $\cA=-\partial f^*(-\cdot)$ and $\cB=\partial g^*$.
 
 
-Note \eqref{eqop-s} is equivalent to $t^k\in s^k+\eta \partial g^*(s^k)$, i.e., there is $y^k\in \partial g^*(s^k)$ such that $t^k = s^k+\eta y^k$, so
+Note \eqref{eqop-s} is equivalent to $t^k\in s^k+\eta \partial g^*(s^k)$, i.e., there is a $y^k\in \partial g^*(s^k)$ such that $t^k = s^k+\eta y^k$, so
 \begin{equation}\label{tempeq1}
 t^k-\eta y^k=s^k\in\partial g(y^k).
 \end{equation} 
@@ -122,7 +122,7 @@ s^{k+1}\overset{\eqref{tempeq1}}=t^{k+1}-\eta y^{k+1}=s^k+\eta x^{k+1}-\eta y^{k
 \end{equation}
 which together with $s^{k+1}\in\partial g(y^{k+1})$ gives
 \begin{equation}\label{up-y}
-y^{k+1}=(\eta\cI+\partial g)^{-1}(t^k+\eta x^{k+1})=(\cI+\frac{1}{\eta}\partial g)^{-1}(x^{k+1}+\frac{1}{\eta}s^k).
+y^{k+1}=(\eta\cI+\partial g)^{-1}(s^k+\eta x^{k+1})=(\cI+\frac{1}{\eta}\partial g)^{-1}(x^{k+1}+\frac{1}{\eta}s^k).
 \end{equation}
 Hence, from \eqref{up-x}, \eqref{up-s}, and \eqref{up-y}, the ADMM update in \eqref{eq:admmx-y} is equivalent to the DRS update in \eqref{eqop} with $\eta=\frac{1}{\gamma}$.
 \section{Representing the Condat-V\~{u} Algorithm as a Nonexpansive Operator}\label{sec:vc-op}
