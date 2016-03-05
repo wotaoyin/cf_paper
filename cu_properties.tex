@@ -3,7 +3,7 @@
 
 \subsection{Notation}
 For convenience, we do not distinguish \emph{a coordinate} from \emph{a block of coordinates} throughout this paper. We assume our variable $x$ consists of $m$ coordinates: $$x = (x_1, \ldots, x_m) \in\HH := \HH_1 \times \cdots \times \HH_m\quad\mbox{and}\quad x_i\in\HH_i,~ i=1,\ldots,m.$$ For simplicity, we assume that $\HH_1,\ldots,\HH_m$ are finite-dimensional real Hilbert spaces, though most results hold for general Hilbert spaces.
-A function maps from $\HH$ to $\RR$, the set of real numbers, and an operator maps from $\HH$ to $\GG$, where the definition of $\GG$ depends on the context. Again, we define $[m]$ as the index set $\{1, \ldots, m\}$.\cut{The operator $\cT$ and those operators in the splitting methods in \S\ref{sec:splitting} map from $\HH$ to $\HH$.}
+A function maps from $\HH$ to $\RR$, the set of real numbers, and an operator maps from $\HH$ to $\GG$, where the definition of $\GG$ depends on the context. \cut{Again, we define $[m]$ as the index set $\{1, \ldots, m\}$.}\cut{The operator $\cT$ and those operators in the splitting methods in \S\ref{sec:splitting} map from $\HH$ to $\HH$.}
 
 Our discussion often involves two points $x,x^+\in\HH$ that \emph{differ over one coordinate}: there exists an index $i\in [m]$ and a point $\delta_i\in\HH$ that is supported on $\HH_i$, such that
 \beq\label{singleupdate}
@@ -42,13 +42,13 @@ we have $\nops{x}{(\cT x)_i }=O(m)$ and thus $\nops{x}{(\cT x)_i }=O(\frac{1}{m}
 The operator $\cT$ in the above example is a special \emph{Type-I CF} operator.
 \begin{definition}[Type-I CF]
 For an operator $\cT: \HH\to\HH$, let $\nops{x}{(\cT x)_i}$ be the number of operations for computing the $i$th coordinate of $\cT x$ given $x$ and $\nops{x}{\cT x}$ the number of operations for computing $\cT x$ given $x$.
-We say $\cT$ is \emph{Type-I CF} (denoted as $\cF_1$) if for any $x\in\HH$ and $\forall\, i\in [m]$, it holds
+We say $\cT$ is \emph{Type-I CF} (denoted as $\cF_1$) if for any $x\in\HH$ and $i\in [m]$, it holds
 $$\nops{x}{(\cT x)_i}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg).$$
 \end{definition}
 \begin{example}[least squares II]\label{ex:lsq2}
-We can implement the coordinate update in Example \ref{ex:lsq1} in a different manner by maintaining the result $\cT x^k$ in the memory. This approach works when $m=\Theta(p)$ or $p\gg m$. The full update \eqref{eq:LSfull} is unchanged.
-At each coordinate update, from the maintained quantity $\cT x^k$ we immediately obtain $x_{i_k}^{k+1}=(\cT x^k )_{i_k}$, but we need to update $\cT x^k$ to $\cT x^{k+1}$.
-Since $x^{k+1}$ and $x^k$ only differ over  the coordinate $i_k$, this update can be computed as  
+We can implement the coordinate update in Example~\ref{ex:lsq1} in a different manner by maintaining the result $\cT x^k$ in the memory. This approach works when $m=\Theta(p)$ or $p\gg m$. The full update~\eqref{eq:LSfull} is unchanged.
+At each coordinate update, from the maintained quantity $\cT x^k$, we immediately obtain $x_{i_k}^{k+1}=(\cT x^k )_{i_k}$. But we need to update $\cT x^k$ to $\cT x^{k+1}$.
+Since $x^{k+1}$ and $x^k$  differ only over  the coordinate $i_k$, this update can be computed as  
 $$\cT x^{k+1} =\cT x^k + (x^{k+1}_{i_k}-x^k_{i_k})(A^\top A)_{:,i_k},  $$
 which is a scalar-vector multiplication followed by a vector addition, taking only $O(m)$ operations. Computing $\cT x^{k+1}$ from scratch involves  a matrix-vector multiplication, taking $O(\nops{x}{\cT (x)})=O(m^2)$ operations. 
 Therefore,
@@ -57,13 +57,13 @@ $$\nops{\{ x^k,\cT x^k, x^{k+1}\}}{ \cT x^{k+1}}= O\bigg(\frac{1}{m}\DIFdelbegin
 The operator $\cT$ in the above example is a special \emph{Type-II CF} operator.
 
 \begin{definition}[Type-II CF]
-An operator $\cT$ is called \emph{Type-II CF} (denoted as $\cF_2$) if, for any $x,i,\delta_i,x^+$ satisfying \eqref{singleupdate}, the following holds
+An operator $\cT$ is called \emph{Type-II CF} (denoted as $\cF_2$) if, for any $x,i,\delta_i,x^+$ satisfying~\eqref{singleupdate}, the following holds
 \begin{equation}\label{op-cuf2} \nops{\{ x,\cT x, x^+\}}{ \cT x^+}= O\bigg(\frac{1}{m}\nops{x^+}{\cT x^+}\bigg).
 \end{equation}
 \end{definition}
-The next example illustrates an efficient coordinate update by maintaining certain quantities other than $\cT x$.
+The next example illustrates an efficient coordinate update by maintaining certain quantity other than $\cT x$.
 \begin{example}[least squares III]\label{ex:lsq3}
-For the case $p\ll m$, we should avoid pre-computing the relative large matrix $A^\top A$ and it is cheaper to compute $A^\top(Ax)$ than $(A^\top A)x$. Therefore, we change the implementations of both the full and coordinate updates in Example \ref{ex:lsq1}. In particular, the full update
+For the case $p\ll m$, we should avoid pre-computing the relative large matrix $A^\top A$, and it is cheaper to compute $A^\top(Ax)$ than $(A^\top A)x$. Therefore, we change the implementations of both the full and coordinate updates in Example \ref{ex:lsq1}. In particular, the full update
 $$x^{k+1}=\cT x^k =x^k-\eta\nabla f(x^k)=x^k-\eta A^\top (Ax^k-b),$$
 pre-multiplies $x^k$ by $A$ and then $A^\top$. Hence,
 $\nops{x^k}{\cT(x^k)}=O(mp)$.
@@ -76,7 +76,7 @@ by pre-multiplying $Ax^k$ by $A^{\top}_{i_k,:}$. Then, the second step updates $
 Combining Type-I and Type-II CF operators with the last example, we arrive at the following CF definition.
 
 \begin{definition}[CF operator]
- We say that an operator $\cT:\HH\to\HH$ is \emph{CF} if, for any $x,i,\delta_i,x^+$ satisfying \eqref{singleupdate}, the following holds
+ We say that an operator $\cT:\HH\to\HH$ is \emph{CF} if, for any $x,i,\delta_i,x^+$ satisfying~\eqref{singleupdate}, the following holds
 %given any $x\in\HH$ and an arbitrary $i\in[m]$, the coordinate update from $x$ to $x^+$ where $x^+_i = (\cT x)_i$ and $x_{j}^+=x_{j}$ for $j\not=i$, satisfies
 \begin{equation}\label{op-cuf} \nops{\{x,\cM(x)\}}{\{x^+,\cM(x^+)\}}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg),
 \end{equation}
@@ -92,7 +92,7 @@ The \emph{set} of CF operators is denoted by  $\cF$. \commzp{$e_j$ is not define
 \end{definition}
 }
 
-The left-hand side of \eqref{op-cuf} measures the cost of performing one coordinate update (including the cost of updating $\cM(x)$ to $\cM(x^+)$)  while the right-hand side measures the average per-coordinate cost of updating all the coordinates together. When~\eqref{op-cuf} holds, $\cT$ is amenable to coordinate updates.
+The left-hand side of~\eqref{op-cuf} measures the cost of performing one coordinate update (including the cost of updating $\cM(x)$ to $\cM(x^+)$)  while the right-hand side measures the average per-coordinate cost of updating all the coordinates together. When~\eqref{op-cuf} holds, $\cT$ is amenable to coordinate updates.
 
 \cut{\begin{example}Consider for $a,x\in\RR^m$, $$f(x):=\frac{1}{2}\big(\max(0,1-\beta a^\top x)\big)^2,$$ which is the squared hinge loss function. Consider the operator
 \beq\label{qhlossT}
@@ -104,7 +104,7 @@ Let us maintain $\cM(x)=a^\top x$. For arbitrary $x$ and $i$,  let $$x^+_i:=(\cT
 =&\nops{\{x,a^\top x\}}{x^+}+\nops{\{a^\top x,x^+_i-x_i\}}{a^\top x^+}\\
 =&O(1)+O(1)=O(1).
 \end{align*}
-On the other hand, $\nops{x}{\cT x}=O(m)$. Therefore,~the inequality \eqref{op-cuf} holds, and $\cT$ defined in~\eqref{qhlossT} is CF.
+On the other hand, $\nops{x}{\cT x}=O(m)$. Therefore,~the inequality~\eqref{op-cuf} holds, and $\cT$ defined in~\eqref{qhlossT} is CF.
 \end{example}
 }
 \cut{Next, we specify two sub-types of CF operators. They have  stronger properties that are useful when composing with other operators.
@@ -117,7 +117,7 @@ $$\nops{x}{(\cT x)_i}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg).$$
 
 %\item Type-II CF ($\cF_2$): an operator $\cT:\HH\to\GG$ is in $\cF_2$ if, for any $x\in\HH$,  $c\in\RR$, it holds that, $\forall i=1,\ldots,\dim\GG$ and $\forall j=1,\ldots,\dim\HH$:  $$\nops{\{x,\cT x,c\}}{(\cT (x+c e_j))_i}\le O\left(\frac{1}{\dim\GG}\nops{\{x,\cT x,c\}}{\cT (x+ce_j)}\right).$$
 
-\item $\cT$ is \emph{Type-II CF} (denoted as $\cF_2$) if, for any $x,i,\delta_i,x^+$ satisfying \eqref{singleupdate}, the following holds:
+\item $\cT$ is \emph{Type-II CF} (denoted as $\cF_2$) if, for any $x,i,\delta_i,x^+$ satisfying~\eqref{singleupdate}, the following holds:
 \begin{equation}\label{op-cuf2} \nops{\{ x,\cT x, x^+\}}{\cT x^+}= O\bigg(\frac{1}{m}\nops{x^+}{\cT x^+}\bigg)
 \end{equation}
 
@@ -126,7 +126,7 @@ $$\nops{x}{(\cT x)_i}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg).$$
 %\begin{remark}
 By definition, a Type-I CF operator $\cT$ is CF without maintaining any quantity, i.e., $\cM(x)=\emptyset$.
 
-A Type-II CF operator $\cT$ satisfies \eqref{op-cuf} with $\cM(x)= \cT x$, so it is also CF. Indeed, given any $x$ and $i$, we can compute $x^+$ by immediately letting $x^+_i=(\cT x)_i$ (at $O(1)$ cost) and keeping $x^+_{j}=x_{j},\,\forall j\neq i$; then, by \eqref{op-cuf2}, we update $\cT x$ to $\cT x^+$ at a low cost. Formally, letting $\cM(x)= \cT x$, %Assume $x$ is updated from $x^-$ and they differ only at the $j$th coordinate, i.e., $x_j=(\cT x^-)_j$ and $x_{j'}=x^-_{j'},\,\forall j'\neq j$. Then we have
+A Type-II CF operator $\cT$ satisfies~\eqref{op-cuf} with $\cM(x)= \cT x$, so it is also CF. Indeed, given any $x$ and $i$, we can compute $x^+$ by immediately letting $x^+_i=(\cT x)_i$ (at $O(1)$ cost) and keeping $x^+_{j}=x_{j},\,\forall j\neq i$; then, by~\eqref{op-cuf2}, we update $\cT x$ to $\cT x^+$ at a low cost. Formally, letting $\cM(x)= \cT x$, %Assume $x$ is updated from $x^-$ and they differ only at the $j$th coordinate, i.e., $x_j=(\cT x^-)_j$ and $x_{j'}=x^-_{j'},\,\forall j'\neq j$. Then we have
 \begin{align*}
 &\nops{\{x, \cM(x)\}}{\{x^+,\cM(x^+)\}}\\
 \le &\nops{\{x, \cT x\}}{x^+} + \nops{\{x, \cT x, x^+\}}{\cT x^+}\\
@@ -136,7 +136,7 @@ A Type-II CF operator $\cT$ satisfies \eqref{op-cuf} with $\cM(x)= \cT x$, so it
 
 \cut{\begin{example}[Matrix-vector multiplication]\label{ex:mtx}
 Let $A \in \RR^{m \times m}$ be dense, and $A_{i,:},A_{:,i}$ be the $i$th row and the $i$th column of $A$, respectively. Let $b\in\RR^{m}$. Consider $$\cT x:= A x + b,$$
-and   $x,i,\delta_i,x^+$ satisfying \eqref{singleupdate} for $\HH=\RR^m$. Clearly, $\nops{x}{\cT x}=O(m^2)$.
+and   $x,i,\delta_i,x^+$ satisfying~\eqref{singleupdate} for $\HH=\RR^m$. Clearly, $\nops{x}{\cT x}=O(m^2)$.
 
 \begin{enumerate}
 \item Since $(\cT x)_i=A_{i,:} x+b_i$ takes $(m+1)$ operations, we have $\nops{x}{(\cT x)_i}=m+1=O(\frac{1}{m}\nops{x}{\cT x})$, so $\cT$ is Type-I CF.
@@ -169,7 +169,7 @@ Another important subclass of CF operators are operators $\cT:\HH\to\HH$ where  
 
 \cut{For operators in $\cC_1$, the evaluation of $(\cT x)_i$ only involves coordinates $x_i$ and small operator $\cT_i$.  Thus, all the coordinates and the $\cT_i$s are independent with each other, and this is ideal case for coordinate update. For operators in $\cC_2$, the evaluation of $(\cT x)_i$ needs knowledge of some components of $x$.}
 
-Throughout the paper, we assume the coordinate update of a (nearly-) separable operator costs roughly the same for all coordinates. Under this assumption, separable operators are both Type-I CF and Type-II CF, and nearly-separable operators are Type-I CF.\footnote{\label{note1}Not all nearly-separable operators are Type-II CF. Indeed, consider a sparse matrix $A\in \RR^{m\times m}$ whose  non-zero entries are only located  in the last column. Let $\cT x=Ax$ and $x^+=x+\delta_m$. As $x^+$ and $x$ differ by the last entry, $\cT x^+=\cT x+(x^+_m-x_m)A_{:,m}$ takes $m$ operations. Therefore, we have $\nops{\{x,\cT x,x^+\}}{\cT  x^+}=O(m)$. Since $\cT x^+=x^+_mA_{:,m}$ takes $m$ operations, we also have $\nops{x^+}{\cT x^+}=O(m)$. Therefore,~\eqref{op-cuf2} is violated, and there is no benefit  from maintaining $\cT x$.}  %DIF > There are non-separable  CF operators, e.g., Example \ref{ex:lsq1}, \ref{ex:lsq2}, \ref{ex:lsq3}.
+Throughout the paper, we assume the coordinate update of a (nearly-) separable operator costs roughly the same for all coordinates. Under this assumption, separable operators are both Type-I CF and Type-II CF, and nearly-separable operators are Type-I CF.\footnote{\label{note1}Not all nearly-separable operators are Type-II CF. Indeed, consider a sparse matrix $A\in \RR^{m\times m}$ whose  non-zero entries are only located  in the last column. Let $\cT x=Ax$ and $x^+=x+\delta_m$. As $x^+$ and $x$ differ over the last entry, $\cT x^+=\cT x+(x^+_m-x_m)A_{:,m}$ takes $m$ operations. Therefore, we have $\nops{\{x,\cT x,x^+\}}{\cT  x^+}=O(m)$. Since $\cT x^+=x^+_mA_{:,m}$ takes $m$ operations, we also have $\nops{x^+}{\cT x^+}=O(m)$. Therefore,~\eqref{op-cuf2} is violated, and there is no benefit  from maintaining $\cT x$.}  %DIF > There are non-separable  CF operators, e.g., Example \ref{ex:lsq1}, \ref{ex:lsq2}, \ref{ex:lsq3}.
 %For example, with a (dense) matrix $A\in\RR^{m\times m}$ and vector $b\in\RR^{m}$, the operator $\cT:x\mapsto A x+b$ is non-separable yet CF. Indeed, let $a_i$ be the $i$th row of $A$. We have $\nops{x}{\cT(x)}=\nops{x}{Ax+b}=m^2+m$, and  $\nops{x}{(\cT x)_i}=\nops{x}{a_i^\top x+b_i}=m+1$, which is much smaller.
 
 \cut{There are CF operators that are not Type-I . For example, let $f(x)=\sum_{i=1}^m \log [1+\exp(-b_i a_i^\top x)]$. The gradient operator $\nabla f$ is not Type-I CF, but it is CF by caching $a_i^\top x,\, \forall i$.}
@@ -194,8 +194,8 @@ Finally, we define \emph{cheap} and \emph{easy-to-maintain} operators from $\HH$
 \begin{definition}[Cheap operator] In an operator composition $\cT=\cT_1 \circ\cdots \circ \cT_p$, an operator $\cT_i:\HH\to\GG$ is cheap if $\nops{x}{\cT_i x}$ is less than or equal to the number of remaining coordinate-update operations, in order of magnitude.
 \end{definition}
 \begin{definition}[Easy-to-maintain operator]
-%If $\cT$ maps from $\HH$ to a different space $\GG$ and it satisfies \eqref{op-cuf2}, we call it
-In an operator composition $\cT=\cT_1 \circ\cdots \circ \cT_p$, an operator $\cT_i:\HH\to\GG$ is \emph{easy-to-maintain} if, for any $x,i,\delta_i,x^+$ satisfying \eqref{singleupdate}, $\nops{\{ x,\cT x, x^+\}}{\cT x^+}$ is less than or equal to the number of remaining coordinate-update operations, in order of magnitude, \emph{or} belongs to $O(\frac{1}{\dim \GG}\nops{x^+}{\cT x^+})$.
+%If $\cT$ maps from $\HH$ to a different space $\GG$ and it satisfies~\eqref{op-cuf2}, we call it
+In an operator composition $\cT=\cT_1 \circ\cdots \circ \cT_p$, an operator $\cT_i:\HH\to\GG$ is \emph{easy-to-maintain} if, for any $x,i,\delta_i,x^+$ satisfying~\eqref{singleupdate}, $\nops{\{ x,\cT x, x^+\}}{\cT x^+}$ is less than or equal to the number of remaining coordinate-update operations, in order of magnitude, \emph{or} belongs to $O(\frac{1}{\dim \GG}\nops{x^+}{\cT x^+})$.
 
 The set of  easy-to-maintain operators is denoted by $\cE$. %We call an operator $\cT: \HH\to\GG$ \emph{easy-to-update} if it  and denote the set of these operators as $\cE$.
 \end{definition}
@@ -257,7 +257,7 @@ Consider a \emph{separable} function
 $$f(x) = \sum_{i=1}^m f_i(x_i).$$
 Then, both $\nabla f$ and $\prox_{\gamma f}$ are separable, in particular,
 $$(\nabla f(x))_i = \nabla f_i (x_i) \quad \mbox{and}\quad (\prox_{\gamma f}(x))_i= \prox_{\gamma f_i} (x_i).$$\cut{$$\nabla f(x) = \begin{bmatrix} \nabla f_1 (x_1) \\ \vdots \\ \nabla f_m(x_m) \end{bmatrix} \quad \mbox{and}\quad \prox_{\gamma f}(x) = \begin{bmatrix}  \prox_{\gamma f_1} (x_1) \\ \vdots \\  \prox_{\gamma f_m}(x_m) \end{bmatrix}.$$}
-Here, $\prox_{\gamma f} (x)$ ($\gamma >0$) is the \emph{proximal operator} that we  define in Appendix~\ref{sec:op-concept}. %returns the minimizer $y^*$ of the function $f(x) + \frac{1}{2\gamma } \|x - y\|^2$. The minimizer exists and is unique when $f$ is a closed proper convex function.
+Here, $\prox_{\gamma f} (x)$ ($\gamma >0$) is the \emph{proximal operator} that we  define in Definition~\ref{def-prox-map} in Appendix~\ref{sec:op-concept}. %returns the minimizer $y^*$ of the function $f(x) + \frac{1}{2\gamma } \|x - y\|^2$. The minimizer exists and is unique when $f$ is a closed proper convex function.
 % $$\prox_{\gamma f} (x): = \argmin_{y \in \HH} f(x) + \frac{1}{2\gamma } \|x - y\|^2,$$
 % for which we assume unique minimizer (true if $f$ is closed proper convex).
 \end{example}

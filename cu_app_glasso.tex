@@ -6,7 +6,7 @@ The group Lasso regression problem \cite{YL2006GrpLasso} is
 \end{equation} 
 where $ f$ is a differentiable convex function, often bearing the form $\frac{1}{2}\|Ax-b\|_2^2$, and $x_i\in \RR^{n_i}$ is a subvector of $x\in\RR^n$ supported on $\II_i\subset [n]$, and $\cup_i \II_i= [n]$. If $\II_i\cap \II_j =\emptyset, \,\forall i\neq j$, it is called \emph{non-overlapping group Lasso}, and if there are two different groups $\II_i$ and $\II_j$ with a non-empty intersection, it is called \emph{overlapping group Lasso}. The model finds a coefficient vector $x$ that minimizes the fitting (or loss) function $f(x)$ and that is group sparse: all but a few $x_i$'s are zero.  
 
-Let $U_i$ be formed by the columns of the identity matrix $I$ in $\II_i$, and let $U=[U_1,\ldots,U_m]^\top\in\RR^{(\Sigma_i n_i)\times n}$. Then, $x_i=U_i^\top x$. Let $h_i(y_i)=\lambda_i\|y_i\|_2,\,y_i\in\RR^{n_i}$ for $i \in [m]$, and $h(y)=\sum_{i=1}^m h_i(y_i)$ for $y=[y_1;\ldots;y_m]\in\RR^{\Sigma_i n_i}$. In this way, \eqref{eq:glasso} becomes
+Let $U_i$ be formed by the columns of the identity matrix $I$ corresponding to the indices in $\II_i$, and let $U=[U_1^\top;\ldots;U_m^\top]\in\RR^{(\Sigma_i n_i)\times n}$. Then, $x_i=U_i^\top x$. Let $h_i(y_i)=\lambda_i\|y_i\|_2,\,y_i\in\RR^{n_i}$ for $i \in [m]$, and $h(y)=\sum_{i=1}^m h_i(y_i)$ for $y=[y_1;\ldots;y_m]\in\RR^{\Sigma_i n_i}$. In this way, \eqref{eq:glasso} becomes
 \begin{equation}\label{eq:glasso2}
 \Min_x f(x)+h(Ux).
 \end{equation}

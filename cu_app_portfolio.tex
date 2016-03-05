@@ -7,7 +7,7 @@ Assume that we have one unit of capital and $m$ assets to invest on. The $i$th a
 \displaystyle
 \Min_x ~ \frac{1}{2} x^\top Q x, \\
 \displaystyle
-\text{subject to}~ x\ge0, \sum_{i=1}^m x_i\le 1,\, \sum_{i=1}^m\xi_i x_i\ge c
+\text{subject to}~ x\ge0, \sum_{i=1}^m x_i\le 1,\, \sum_{i=1}^m\xi_i x_i\ge c,
 \end{array}
 \end{equation*}
 where the objective function is a measure of risk, and the last constraint imposes that the expected return is at least $c$. Let $a_1=e/\sqrt{m}$, $b_1=1/\sqrt{m}$, $a_2=\xi/\|\xi\|_2$, and $b_2=c/\|\xi\|_2$, where $e = (1, \dots, 1)^\top, \xi = (\xi_1, \dots, \xi_m)^\top$. The above problem is rewritten as
@@ -48,12 +48,12 @@ Hence, the coordinate update of~\eqref{eq:3op-portfolio} is
 \begin{subequations}\label{eq:3op-portfolio2}
 \begin{align}
 x^k\in P_1:\ x_i^{k+1}= & \textstyle (1-\eta_k)x_i^k+\eta_k\max(0, x_i^k-\gamma q_i^\top x^k),\\
-x^k\in P_2:\  x_i^{k+1}= & \textstyle (1-\eta_k)x_i^k+\eta_kw_2^ka_{i2}+\eta_k\max\left(0, \right.\nonumber\\
-&\textstyle \left.x_i^k-\gamma q_i^\top x^k-w_2^k(2a_{i2}-\gamma q_i^\top a_2)\right),\\
-x^k\in P_3:\ x_i^{k+1}= &\textstyle  (1-\eta_k)x_i^k+\eta_k\left(w_1^k \tilde{a}_{i1}+w_2^k\tilde{a}_{i2}\right)+\eta_k\max\left(0,\right.\nonumber\\
-&\textstyle \left.x_i^k-\gamma q_i^\top x^k-w_1^k (2\tilde{a}_{i1}-\gamma q_i^\top \tilde{a}_1)-{w}_2^k(2\tilde{a}_{i2}-\gamma q_i^\top \tilde{a}_2)\right),\\
-x^k\in P_4:\ x_i^{k+1}= &\textstyle  (1-\eta_k)x_i^k+\eta_k w_1^ka_{i1}+\eta_k\max\left(0, \right.\nonumber\\
-&\textstyle \left.x_i^k-\gamma q_i^\top x^k-w_1^k(2a_{i1}-\gamma q_i^\top a_1)\right),
+x^k\in P_2:\  x_i^{k+1}= & \textstyle (1-\eta_k)x_i^k+\eta_kw_2^k(a_2)_i+\eta_k\max\left(0, \right.\nonumber\\
+&\textstyle \left.x_i^k-\gamma q_i^\top x^k-w_2^k(2(a_{2})_i-\gamma q_i^\top a_2)\right),\\
+x^k\in P_3:\ x_i^{k+1}= &\textstyle  (1-\eta_k)x_i^k+\eta_k\left(w_1^k (\tilde{a}_{1})_i+w_2^k(\tilde{a}_{2})_i\right)+\eta_k\max\left(0,\right.\nonumber\\
+&\textstyle \left.x_i^k-\gamma q_i^\top x^k-w_1^k (2(\tilde{a}_{1})_i-\gamma q_i^\top \tilde{a}_1)-{w}_2^k(2(\tilde{a}_{2})_i-\gamma q_i^\top \tilde{a}_2)\right),\\
+x^k\in P_4:\ x_i^{k+1}= &\textstyle  (1-\eta_k)x_i^k+\eta_k w_1^k(a_{1})_i+\eta_k\max\left(0, \right.\nonumber\\
+&\textstyle \left.x_i^k-\gamma q_i^\top x^k-w_1^k(2(a_{1})_i-\gamma q_i^\top a_1)\right),
 \end{align}
 \end{subequations}
 where $q_i$ is the $i$th column of $Q$. At each iteration, we select $i \in [m]$, and perform an update to $x_i$ according to~\eqref{eq:3op-portfolio2} based on where $x^k$ is. We then renew $w_j^{k+1}=w_j^k+a_{ij}(x_i^{k+1}-x_i^k), j=1,2$. Note that checking $x^k$ in some $P_j$ requires only $O(1)$ operations by using $w_1$ and $w_2$, so the coordinate update in \eqref{eq:3op-portfolio2} is inexpensive.

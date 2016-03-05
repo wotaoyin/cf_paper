@@ -16,21 +16,21 @@ Applying the projected gradient method \eqref{eq:proj-grad} to \eqref{eq:nmf}, w
 \end{subequations}
 In general, we do not know the Lipschitz constant of $\nabla F$, so we have to choose $\eta_k$ by line search such that the Armijo condition is satisfied.
 
-Partitioning the variables into $2p$ block coordinates: $(w_1, \ldots, w_p, h_1,\ldots, h_p)$, we can apply the coordinate update based on the projected-gradient method: 
+Partitioning the variables into $2r$ block coordinates: $(w_1, \ldots, w_r, h_1,\ldots, h_r)$ where $w_i$ and $h_i$ are the $i$th columns of $W$ and $H$, respectively, we can apply the coordinate update based on the projected-gradient method: 
 \begin{equation}\label{pcg-nmf}
 {\left\{
 \begin{array}{l}
-\text{if $w_{i_k}$  is chosen for some $i_k \in [p]$, then compute}\\
+\text{if $w_{i_k}$  is chosen for some $i_k \in [r]$, then compute}\\
 \qquad w_{i_k}^{k+1}=\max\big(0, w_{i_k}^k-\eta_k\nabla_{w_{i_k}} F(W^k, H^k)\big) \\
-\text{if $h_{i_k-p}$  is chosen for some $i_k \in \{p+1, ..., 2p\}$, then compute}\\
-\qquad h_{i_k-p}^{k+1}=\max\big(0, h_{i_k-p}^k-\eta_k \nabla_{h_{i_k-p}} F(W^k, H^k) \big) 
+\text{if $h_{i_k-r}$  is chosen for some $i_k \in \{r+1, ..., 2r\}$, then compute}\\
+\qquad h_{i_k-r}^{k+1}=\max\big(0, h_{i_k-r}^k-\eta_k \nabla_{h_{i_k-r}} F(W^k, H^k) \big) 
 \end{array}
 \right.
 }\end{equation}
 It is easy to see that $\nabla_{w_i} F(W^k, H^k)$ and $\nabla_{h_i} F(W^k, H^k)$ are both Lipschitz continuous with constants $\|h_i^k\|_2^2$ and $\|w_i^k\|_2^2$ respectively. Hence, we can set 
 $$\eta_k=\left\{\begin{array}{ll}
-\frac{1}{\|h_{i_k}^k\|_2^2},&\text{ if }1\le i_k\le p,\\[0.1cm]
-\frac{1}{\|w_{i_k-p}^k\|_2^2},&\text{ if }p+1\le i_k\le 2p.
+\frac{1}{\|h_{i_k}^k\|_2^2},&\text{ if }1\le i_k\le r,\\[0.1cm]
+\frac{1}{\|w_{i_k-r}^k\|_2^2},&\text{ if }r+1\le i_k\le 2r.
 \end{array}\right.$$
 However, it is possible to have $w_i^k=0$ or $h_i^k=0$ for some $i$ and $k$, and thus the setting in the above formula may have trouble of being divided by zero. To overcome this problem, one can first modify the problem \eqref{eq:nmf} by restricting $W$ to have unit-norm columns and then apply the coordinate update method in \eqref{pcg-nmf}. Note that the modification does not change the optimal value since $WH^\top=(WD)(HD^{-1})^\top$ for any $r\times r$ invertible diagonal matrix $D$. We refer the readers to \cite{XY_2014_ecd} for more details.
 

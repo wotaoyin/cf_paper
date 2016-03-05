@@ -4,10 +4,10 @@ Many convex image processing problems have the general form
 $$\Min_{x} f(x) + g(Ax),$$
 where $A$ is a matrix such as a dictionary, sampling operator, or finite difference operator. We can reduce the problem to the system: $0\in\cA(z) + \cB(z)$, where $z=[x;s]$,
 $$\cA(z):=\begin{bmatrix}\partial f(x)\\\partial g^*(s)\end{bmatrix},\quad\mbox{and}\quad \cB(z):=\begin{bmatrix}0 & ~A^\top  \\ -A & 0\end{bmatrix}\begin{bmatrix}x\\s\end{bmatrix}.$$
-(See Appendix~\ref{sec:vc-op} for the reduction.) The work \mbox{%DIFAUXCMD
+(see Appendix~\ref{sec:vc-op} for the reduction.) The work \mbox{%DIFAUXCMD
 \cite{o2014primal} }%DIFAUXCMD
 gives their resolvents    
-\begin{align*}\cJ_{\gamma \cA} &= \begin{bmatrix}\prox_{\gamma f}\\\prox_{\gamma g^*}\end{bmatrix},\\ 
+\begin{align*}\cJ_{\gamma \cA} &= \begin{bmatrix}\prox_{\gamma f}&0\\0&\prox_{\gamma g^*}\end{bmatrix},\\ 
 \cJ_{\gamma \cB} &= (I+\gamma \cB)^{-1}= \begin{bmatrix} 0 &~ 0 \\ 0 &~ I\end{bmatrix}+\begin{bmatrix}I\\ \gamma A\end{bmatrix}(I+\gamma^2 A^\top A)^{-1}\begin{bmatrix}I\\ -\gamma A\end{bmatrix}^\top ,
 \end{align*}
 where $\cJ_{\gamma \cA}$ is often cheap or separable and we can \emph{explicitly form}  $\cJ_{\gamma \cB}$  as a matrix or implement it based on a fast transform. With the defined $\cJ_{\gamma \cA}$ and $\cJ_{\gamma \cB}$, we can apply the RPRS method as $z^{k+1} = \cT_{\text{RPRS}} z^k$. The resulting RPRS operator is CF when $\cJ_{\gamma \cB}$ is CF. Hence, we can derive a new RPRS coordinate update algorithm. We leave the derivation to the readers. Derivations of coordinate update algorithms for more specific image processing problems are shown in the following subsections.
@@ -17,7 +17,7 @@ We consider the following Total Variation (TV) image processing model
 \begin{equation}\label{eqn:tvl2}
 \Min_{x}~\lambda \|x\|_{\text{TV}} + \frac{1}{2} \|A\,x - b\|^2,
 \end{equation}
-where $x\in \RR^n$ is the vector representation of the unknown image, $A$ is an $m \times n$ matrix describing the transformation from the image to the measurements $b$. Common $A$ includes sampling matrices in MRI, CT, denoising, deblurring, etc.  Let $(\nabla_i^h,\nabla_i^v)$ be the discrete gradient at pixel $i$. Then the TV semi-norm $\|\cdot\|_{\text{TV}}$ in the isotropic and anisotropic fashions are, respectively,
+where $x\in \RR^n$ is the vector representation of the unknown image, $A$ is an $m \times n$ matrix describing the transformation from the image to the measurements $b$. Common $A$ includes sampling matrices in MRI, CT, denoising, deblurring, etc.  Let $(\nabla_i^h,\nabla_i^v)$ be the discrete gradient at pixel $i$ and $\nabla x=(\nabla_1^hx,\nabla_1^vx,\dots,\nabla_n^hx,\nabla_n^vx)^\top$. Then the TV semi-norm $\|\cdot\|_{\text{TV}}$ in the isotropic and anisotropic fashions are, respectively,
 \begin{subequations}\label{eqn:tv_def}
 \begin{align}
 \|x\|_{\text{TV}} &= {\sum_{i} \sqrt{(\nabla_i^h x)^2 + (\nabla_i^v x)^2},}\\

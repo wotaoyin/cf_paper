@@ -1,8 +1,8 @@
 % !TEX root = ./amsa_main.tex
 \section{Numerical Experiments}\label{sec:numerical}
-We illustrate the behavior of coordinate update algorithms for solving portfolio optimization, image processing, and sparse logistic regression problems. Our primary goal is to show the efficiency of coordinate update compared to the corresponding full update algorithms. We will also illustrate that asynchronous parallel coordinate update algorithms are more scalable than their synchronous parallel counterparts. 
+We illustrate the behavior of coordinate update algorithms for solving portfolio optimization, image processing, and sparse logistic regression problems. Our primary goal is to show the efficiency of coordinate update algorithms compared to the corresponding full update algorithms. We will also illustrate that asynchronous parallel coordinate update algorithms are more scalable than their synchronous parallel counterparts. 
 
-Our first two experiments run on Mac OSX 10.9 with 2.4 GHz Intel Core i5 and 8 Gigabytes of RAM. The experiments were coded in Matlab. The sparse logistic regression experiment runs on 1 to 16 threads on a machine with two 2.5Ghz 10-core Intel Xeon E5-2670v2 (20 cores in total) and $64$ Gigabytes of RAM. The experiment was coded in C++ with OpenMP enabled. We use the Eigen library\footnote{\url{http://eigen.tuxfamily.org}} for sparse matrix operations.
+Our first two experiments run on Mac OSX 10.9 with 2.4 GHz Intel Core i5 and 8 Gigabytes of RAM. The experiments were coded in Matlab. The sparse logistic regression experiment runs on 1 to 16 threads on a machine with two 2.5 Ghz 10-core Intel Xeon E5-2670v2 (20 cores in total) and $64$ Gigabytes of RAM. The experiment was coded in C++ with OpenMP enabled. We use the Eigen library\footnote{\url{http://eigen.tuxfamily.org}} for sparse matrix operations.
 
 \cut{\subsection{Least Square}\label{lsqexperiment2}
 In this subsection, we compare the efficiency of four different coordinate update schemes (cyclic, cyclic shuffle, random, and greedy with Gauss-Southwell rule) with the full gradient descent method for solving the least square problem
@@ -50,7 +50,7 @@ For both full gradient descent method and greedy coordinate update method with G
 
 
 \subsection{Portfolio Optimization}
-In this subsection, we compare the performance of the 3S splitting scheme~\eqref{eq:3op-portfolio} with the corresponding coordinate update algorithm~\eqref{eq:3op-portfolio2} for solving the portfolio optimization problem \eqref{eq:portfolio}. In this problem, our goal is to distribute our investment resources to all the assets so that the investment risk is minimized and the expected return is greater than $r$. This test uses two datasets, which are summarized in Table \ref{tab:3s-data}. The NASDAQ dataset is collected through Yahoo! Finance. We collected one year (from 10/31/2014 to 10/31/2015) of historical closing prices for 2730 stocks. 
+In this subsection, we compare the performance of the 3S splitting scheme~\eqref{eq:3op-portfolio} with the corresponding coordinate update algorithm~\eqref{eq:3op-portfolio2} for solving the portfolio optimization problem~\eqref{eq:portfolio}. In this problem, our goal is to distribute our investment resources to all the assets so that the investment risk is minimized and the expected return is greater than $c$. This test uses two datasets, which are summarized in Table~\ref{tab:3s-data}. The NASDAQ dataset is collected through Yahoo! Finance. We collected one year (from 10/31/2014 to 10/31/2015) of historical closing prices for 2730 stocks. 
 
 \begin{table}[htbp]
 \centering
@@ -58,7 +58,7 @@ In this subsection, we compare the performance of the 3S splitting scheme~\eqref
   \toprule
     & Synthetic data  & NASDAQ data\\
    \midrule
-   Num. assets (N) & 1000 & 2730 \\
+   Number of assets (N) & 1000 & 2730 \\
    Expected return rate & 0.02 & 0.02 \\
    Asset return rate & \texttt{3 * rand(N, 1) - 1} & mean of 30 days return rate \\
    Risk & covariance matrix + $0.01\cdot I$ & positive definite matrix \\
@@ -67,7 +67,7 @@ In this subsection, we compare the performance of the 3S splitting scheme~\eqref
  \caption{Two datasets for portfolio optimization \label{tab:3s-data}}
 \end{table}
 
-In our numerical experiments, for comparison purposes, we first obtain a high accurate solution by solving \eqref{eq:portfolio} with an interior point solver. For both full update and coordinate update, $\eta_k$ is set to 0.8. However, we use different $\gamma$. For 3S full update, we used the step size parameter $\gamma_1 = \frac{2}{\|Q\|_2}$, and for 3S coordinate update, $\gamma_2 = \frac{2}{\max\{Q_{11}, ..., Q_{NN}\}}$. In general, coordinate update can benefit from more relaxed parameters. The results are reported in Figure \ref{fig:3s_results}. We can observe that the coordinate update method converges much faster than the 3S method for the synthetic data. This is due to the fact that $\gamma_2$ is much larger than $\gamma_1$. However, for the NASDAQ dataset, $\gamma_1 \approx \gamma_2$, so 3S coordinate update is only moderately faster than 3S full update.
+In our numerical experiments, for comparison purposes, we first obtain a high accurate solution by solving~\eqref{eq:portfolio} with an interior point solver. For both full update and coordinate update, $\eta_k$ is set to 0.8. However, we use different $\gamma$. For 3S full update, we used the step size parameter $\gamma_1 = \frac{2}{\|Q\|_2}$, and for 3S coordinate update, $\gamma_2 = \frac{2}{\max\{Q_{11}, ..., Q_{NN}\}}$. In general, coordinate update can benefit from more relaxed parameters. The results are reported in Figure \ref{fig:3s_results}. We can observe that the coordinate update method converges much faster than the 3S method for the synthetic data. This is due to the fact that $\gamma_2$ is much larger than $\gamma_1$. However, for the NASDAQ dataset, $\gamma_1 \approx \gamma_2$, so 3S coordinate update is only moderately faster than 3S full update.
 
 \begin{figure} \centering
     \begin{subfigure}[b]{0.45\linewidth}
@@ -119,11 +119,11 @@ We compare the performance of algorithm~\eqref{eqn:pd_tvl2} and its correspondin
 
 
 \subsection{$\ell_1$ Regularized Logistic Regression}
-In this subsection, we compare the performance of sync-parallel coordinate update and the async-parallel coordinate update for solving the sparse logistic regression problem 
+In this subsection, we compare the performance of sync-parallel coordinate update and  async-parallel coordinate update for solving the sparse logistic regression problem 
 \begin{equation}\label{eqn:log}
-\Min_{x \in \mathbb{R}^n} \lambda \|x\|_1 + \frac{1}{N} \sum_{i=1}^N \log\big(1 + \exp(-b_i \cdot a_i^{\top} x)\big),
+\Min_{x \in \mathbb{R}^n} \lambda \|x\|_1 + \frac{1}{N} \sum_{j=1}^N \log\big(1 + \exp(-b_j \cdot a_j^{\top} x)\big),
 \end{equation}
-where $\{(a_i, b_i)\}_{i=1}^N$ is the set of sample-label pairs with $b_i \in \{1, -1\}$, $\lambda=0.0001$, and $n$ and $N$ represent the numbers of features and samples, respectively. This test uses the datasets\footnote{\url{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/}}: real-sim and news20, which are summarized in Table \ref{tab:log_data}.
+where $\{(a_j, b_j)\}_{j=1}^N$ is the set of sample-label pairs with $b_j \in \{1, -1\}$, $\lambda=0.0001$, and $n$ and $N$ represent the numbers of features and samples, respectively. This test uses the datasets\footnote{\url{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/}}: real-sim and news20, which are summarized in Table \ref{tab:log_data}.
 
 \begin{table}[htbp]
 \centering
@@ -143,7 +143,7 @@ The step size is set to $\eta_k=0.9,\,\forall k$. Let $A = [a_1, \ldots, a_N]^{\
 
 Table \ref{tab:log_time} gives the running times of  the sync-parallel and async-parallel implementations on the two datasets. We can observe that async-parallel achieves almost-linear speedup, but sync-parallel scales very poorly as we explain below.
 
-In the sync-parallel implementation,  all the running threads have to wait for the last thread to finish an iteration, and therefore if a thread has a large load, it slows down the iteration. Although every thread is (randomly) assigned to roughly the same number of features (either 50 or 51 components of $x$) at each iteration, their  $a_i$'s have very different numbers of nonzeros, and the thread with the largest number of nonzeros is the slowest. (Sparse matrix computation is used for both datasets, which are very large.) As more threads are used,  despite that they altogether do more work at each iteration,  the per-iteration time reduces as the slowest thread tends to be slower. On the other hand, async-parallel coordinate update does not suffer from the  load imbalance. Its performance grows nearly linear with the number of threads.
+In the sync-parallel implementation,  all the running threads have to wait for the last thread to finish an iteration, and therefore if a thread has a large load, it slows down the iteration. Although every thread is (randomly) assigned to roughly the same number of features (either 50 or 51 components of $x$) at each iteration, their  $a_i$'s have very different numbers of nonzeros, and the thread with the largest number of nonzeros is the slowest. (Sparse matrix computation is used for both datasets, which are very large.) As more threads are used,  despite that they altogether do more work at each iteration,  the per-iteration time may increase as the slowest thread tends to be slower. On the other hand, async-parallel coordinate update does not suffer from the  load imbalance. Its performance grows nearly linear with the number of threads.
 
 Finally, we have observed that the progress toward solving \eqref{eqn:log} is mainly a function of the number of epochs and does not change appreciably  when the number of threads increases or between sync-parallel and async-parallel. Therefore, we always stop at 10 epochs.
 

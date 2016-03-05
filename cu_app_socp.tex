@@ -1,9 +1,9 @@
 % !TEX root = ./amsa_main.tex
 \subsubsection{Second-Order Cone Programming (SOCP)}\label{sec:socp}
 SOCP extends LP by incorporating second-order cones. A second-order cone in $\RR^n$ is $$Q=\big\{(x_1,x_2,\ldots,x_n)\in\RR^n:\|(x_2,\ldots,x_n)\|_2\le x_1\big\}.$$
-Given a point $v\in\RR^n$, let  $\rho_1^v:=\|(v_2,\ldots,v_n)\|_2$ and $\rho_2^v:=\frac{1}{2}(v_1+\rho_1^v)$}. Then, the projection {of  $v$ to $Q$ {returns $0$ if $v_1<-\rho_1$, returns $v$ if $v_1 \ge \rho_1$, and returns $(\rho_2^v,\frac{\rho_2^v}{\rho_1^v}\cdot(v_2,\ldots,v_n))$ otherwise. Therefore, if we define the scalar couple:
-$$(\xi_1^v,\xi_2^v) = \begin{cases}(0,0),&\quad v_1<-\rho_2^v,\\
-(1,1), &\quad v_1 \ge \rho_2^v,\\
+Given a point $v\in\RR^n$, let  $\rho_1^v:=\|(v_2,\ldots,v_n)\|_2$ and $\rho_2^v:=\frac{1}{2}(v_1+\rho_1^v)$}. Then, the projection {of  $v$ to $Q$ {returns $0$ if $v_1<-\rho_1^v$, returns $v$ if $v_1 \ge \rho_1^v$, and returns $(\rho_2^v,\frac{\rho_2^v}{\rho_1^v}\cdot(v_2,\ldots,v_n))$ otherwise. Therefore, if we define the scalar couple:
+$$(\xi_1^v,\xi_2^v) = \begin{cases}(0,0),&\quad v_1<-\rho_1^v,\\
+(1,1), &\quad v_1 \ge \rho_1^v,\\
 \big(\rho_2^v,\frac{\rho_2^v}{\rho_1^v}\big),&\quad \mbox{otherwise},\end{cases}
 $$
 then we have $u=\prj_{Q}(v) = \big(\xi_1 ^vv_1,\,\xi_2^v\cdot (v_2,\ldots,v_n)\big)$. Based on this, we have
@@ -15,7 +15,7 @@ then we have $u=\prj_{Q}(v) = \big(\xi_1 ^vv_1,\,\xi_2^v\cdot (v_2,\ldots,v_n)\b
 \end{proposition}
 By the proposition, if $\cT_1$ is an affine operator, then in the composition $\cT_1\circ \prj_{Q}$, {the computation of $\prj_{Q}$ is cheap as long as we maintain $\rho_1^v,\rho_2^v,\xi_1^v,\xi_2^v$.
 
-Given $x,c\in\RR^n$, $b\in\RR^m$ and $A\in\RR^{m\times n}$, the standard form of SOCP is
+Given $x,c\in\RR^n$, $b\in\RR^m$, and $A\in\RR^{m\times n}$, the standard form of SOCP is
 \begin{subequations}\label{eq:socp}
 \begin{align}
 \Min_x~c^\top x,&\quad\St~ Ax=b,\\
@@ -40,7 +40,7 @@ It is easy to apply coordinate updates to $z^{k+1} = \TDRS (z^k)$ following Prop
 \end{array}
 \right.
 }\end{equation}
-where $B_i \in \RR^{n_i \times n}$ is the $i$th row block submatrix of $B$, and $y_i^k$ is the intermediate variable.
+where $B_i \in \RR^{n_i \times n}$ is the $i$th row block submatrix of $B$, and $y_i^{k+1}$ is the intermediate variable.
 
 
 It is trivial to extend this method for  SOCPs with a quadratic objective:

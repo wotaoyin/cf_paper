@@ -1,4 +1,4 @@
-\section{Some Key Concepts of Operator}\label{sec:op-concept}
+\section{Some Key Concepts of Operators}\label{sec:op-concept}
 In this section, we go over a few key concepts in monotone operator theory and operator splitting theory.
 \cut{some of them and discuss when they are CF. First, %We first give some definitions.
 }
@@ -108,7 +108,7 @@ t^{k+1}=&\ \cJ_{\eta\cA}(2s^k-t^k)+t^k-s^k\cr
 =&\ s^k+\eta(\eta\cI+\partial f)^{-1}(t^k-2s^k)\cr
 =&\ s^k+\eta(\eta\cI+\partial f)^{-1}(\eta y^k-s^k),\label{tempeq2}
 \end{align} 
-where in the fourth equality, we have used Moreau's Identity \cite{rockafellar1997convex}: $(\cI+\partial h)^{-1}+(\cI+\partial h^*)^{-1}=\cI$ for any closed convex function $h$. Let
+where in the fourth equality, we have used the Moreau's Identity \cite{rockafellar1997convex}: $(\cI+\partial h)^{-1}+(\cI+\partial h^*)^{-1}=\cI$ for any closed convex function $h$. Let
 \begin{equation}\label{up-x}
 x^{k+1}=(\eta\cI+\partial f)^{-1}(\eta y^k-s^k)=(\cI+\frac{1}{\eta}\partial f)^{-1}(y^k-\frac{1}{\eta}s^k).
 \end{equation}
@@ -127,22 +127,40 @@ y^{k+1}=(\eta\cI+\partial g)^{-1}(s^k+\eta x^{k+1})=(\cI+\frac{1}{\eta}\partial 
 Hence, from \eqref{up-x}, \eqref{up-s}, and \eqref{up-y}, the ADMM update in \eqref{eq:admmx-y} is equivalent to the DRS update in \eqref{eqop} with $\eta=\frac{1}{\gamma}$.
 \section{Representing the Condat-V\~{u} Algorithm as a Nonexpansive Operator}\label{sec:vc-op}
 We show how to derive the Condat-V\~{u} algorithm $\eqref{vucondat}$ by applying a forward-backward operator to the optimality condition $\eqref{pdkkt}$:
+%\begin{equation}
+%0\in\underbrace{\begin{bmatrix}
+%\nabla f(x)\\
+%0
+%\end{bmatrix}}_{\mbox{operator}~\cA}+\underbrace{
+%\begin{bmatrix}
+%\partial g(x)\\
+%\partial h^*(s)
+%\end{bmatrix}+\begin{bmatrix}
+%0&A^\top\\
+%-A&0
+%\end{bmatrix}\begin{bmatrix}
+%x\\
+%s
+%\end{bmatrix}}_{\mbox{operator}~\cB}.
+%\end{equation} 
+
 \begin{equation}
-0\in\underbrace{\begin{bmatrix}
-\nabla f(x)\\
-0
+0\in\bigg(\underbrace{\begin{bmatrix}
+\nabla f & 0\\
+0 & 0
 \end{bmatrix}}_{\mbox{operator}~\cA}+\underbrace{
 \begin{bmatrix}
-\partial g(x)\\
-\partial h^*(s)
+\partial g\\
+\partial h^*
 \end{bmatrix}+\begin{bmatrix}
 0&A^\top\\
 -A&0
-\end{bmatrix}\begin{bmatrix}
+\end{bmatrix}}_{\mbox{operator}~\cB}\bigg) \underbrace{\begin{bmatrix}
 x\\
 s
-\end{bmatrix}}_{\mbox{operator}~\cB}.
-\end{equation} 
+\end{bmatrix}}_{z},
+\end{equation}
+
 It can be written as $0\in\cA z+\cB z$ after we define $z=\begin{bmatrix}x\\ s\end{bmatrix}$. Let $M$ be a symmetric positive definite matrix, we have
 \begin{align*}
 &0\in\cA z+\cB z\\
@@ -173,7 +191,8 @@ If we change the matrix $M$ to $\begin{bmatrix}
 \frac{1}{\eta}I&-A^\top\\
 -A&\frac{1}{\gamma}I
 \end{bmatrix}$, the other algorithm $\eqref{vucondat2}$ can be derived similarly.
-\section{Proof of convergence for async-parallel primal dual coordinate update algorithms}\label{pf:pdasync}
+
+\section{Proof of Convergence for Async-parallel Primal-dual Coordinate Update Algorithms}\label{pf:pdasync}
 Algorithms~\ref{alg:asyn_core} and~\ref{alg:asyn_overlap} differ from that in~\cite{Peng_2015_AROCK} in the following aspects:
 \begin{enumerate}
 \item the operator $\TVC$ is nonexpansive under a norm induced by a symmetric positive definite matrix $M$ (see Appendix~\ref{sec:vc-op}), instead of the standard Euclidean norm;
@@ -193,7 +212,7 @@ We assume the same inconsistent case as in~\cite{Peng_2015_AROCK}, i.e., the rel
 \end{equation}
 where $J(k)\subseteq \{k-1,...,k-\tau\}$ and $\tau$ is the maximum number of other updates to $z$ during the computation of the update. 
 Let $\cS=\cI-\TVC$. %By Lemma~\ref{lemma:a-avg} below, $\TVC$ is nonexpansive under the norm induced by $M$ if and only if $S$ is ${1/2}$-cocoercive under the same norm.
-Then the coordinate update can be rewritten as $z^{k+1}=z^k-\frac{\eta_k}{(m+p)q_{i_k}}\cS_{i_k}\hat{z}^k$, where $\cS_{i}\hat{z}^k$ is just the $i$-th component of $\cS\hat{z}^k$ for Algorithm~\ref{alg:asyn_core}. For Algorithm~\ref{alg:asyn_overlap}, the update is  
+Then the coordinate update can be rewritten as $z^{k+1}=z^k-\frac{\eta_k}{(m+p)q_{i_k}}\cS_{i_k}\hat{z}^k$, where $\cS_{i}\hat{z}^k=(\hat z_1^k,\dots, \hat z_{i-1}^k, (\cS\hat z^k)_i, \hat z_{i+1}^k,\dots,\hat z_{m+p}^k)$  for Algorithm~\ref{alg:asyn_core}. For Algorithm~\ref{alg:asyn_overlap}, the update is  
 \begin{align}\label{eqn:asyn_update_a2}
 z^{k+1}=z^k-\frac{\eta_k}{mq_{i_k}}\cS_{i_k}\hat{z}^k,
 \end{align} where 
@@ -274,7 +293,7 @@ any $z^*\in \mathbf{Fix} \TVC$, we have
 mq_{\min}}-{1\over \eta_k}\right)\|z^k-\bar z^{k+1}\|_M^2
 \end{aligned}
 \end{align}
-where $\mathbb{E}(\cdot\,|\,\cZ^k)$ denotes expectation  conditional on $\cZ^k$ and $\sigma>0$ (to be optimized later).
+where $\mathbb{E}(\cdot\,|\,\cZ^k)$ denotes conditional  expectation  on $\cZ^k$ and $\sigma>0$ (to be optimized later).
 \end{lemma}
 \begin{proof}
 We have
