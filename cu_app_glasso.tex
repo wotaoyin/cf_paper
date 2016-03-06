@@ -45,9 +45,9 @@ Hence, the corresponding coordinate update of \eqref{eq:pd-glasso} is
 {\left\{
 \begin{array}{l}
 \text{if $s_i$  is chosen for some $i \in [m]$, then compute}\\
-\qquad s_i^{k+1}=\,\prj_{B_{\lambda_i}}(s_i^k+\gamma x_i^k) \\
+\quad s_i^{k+1}=\,\prj_{B_{\lambda_i}}(s_i^k+\gamma x_i^k) \\
 \text{if $x_i$  is chosen for some $i \in [m]$, then compute}\\
-\qquad x_i^{k+1}=\,x_i^k-\eta(\nabla_i f(x^k)+(2\prj_{B_{\lambda_i}}(s_i^k+\gamma x_i^k)-s_i^k),\\
+\quad x_i^{k+1}=\,x_i^k-\eta\left(U_i^T \nabla f(x^k)+U_i^T \sum_{j, U_i^T U_j \neq 0} U_j(2\prj_{B_{\lambda_j}}(s_j^k+\gamma x_j^k)-s_j^k)\right),\\
 \end{array}
 \right.
 }\end{equation}
