@@ -26,7 +26,7 @@ scalability & scalable & not scalable\\\hline
 
 Clearly, the strong performance of coordinate
 update methods relies on solving \emph{simple} subproblems. The cost of each subproblem must be proportional to how many coordinates it updates. %We say that a coordinate update subproblem is \emph{computationally worthy}  if its cost is proportionally low.
-When there are totally $m$ coordinates, the cost of updating one coordinate should not exceed $\frac{1}{m}$ of the cost of the full update (made to all the coordinates at once). Otherwise, coordinate update is not \emph{computationally worthy}. For example, let  $f:\RR^n\to \RR$ be  a $C^2$ function, and consider the Newton update  $x^{k+1} \gets x^k - \big(\nabla^2 f(x^k)\big)^{-1}\nabla f(x^k)$. Since updating each $x_i$ (keeping others  fixed) still requires forming the Hessian matrix $\nabla^2 f(x)$ (at least $O(n^2)$ operations) and factorizing it ($O(n^3)$ operations), there is little to save in computation compared to updating all the components of $x$ at once; hence, the Netwon's method is generally not amenable to coordinate update.
+When there are totally $m$ coordinates, the cost of updating one coordinate should not exceed $\frac{1}{m}$ of the cost of the full update (made to all the coordinates at once). Otherwise, coordinate update is not \emph{computationally worthy}. For example, let  $f:\RR^m\to \RR$ be  a $C^2$ function, and consider the Newton update  $x^{k+1} \gets x^k - \big(\nabla^2 f(x^k)\big)^{-1}\nabla f(x^k)$. Since updating each $x_i$ (keeping others  fixed) still requires forming the Hessian matrix $\nabla^2 f(x)$ (at least $O(n^2)$ operations) and factorizing it ($O(n^3)$ operations), there is little to save in computation compared to updating all the components of $x$ at once; hence, the Netwon's method is generally not amenable to coordinate update.
 
 The recent coordinate-update literature has introduced new algorithms. However, they are primarily applied to a few, albeit important, classes of problems  that arise in machine learning. For many complicated problems,  it remains open whether simple subproblems can be obtained. We provide positive answers to several new classes of applications and introduce their coordinate update algorithms. %These problems can have both objective functions and constraints, both separable and non-separable terms, both convex and nonconvex parts, and both simple and composite functions.
 Therefore, the focus of this paper is to build a set of tools for deriving simple subproblems and extending  coordinate updates to new territories of applications.
@@ -46,14 +46,14 @@ In many cases, the operator $\cT$ itself represents an iteration:
 \beq\label{fpi}
 x^{k+1} = \cT x^k
 \eeq
-such that the limit of the sequence $\{x^k\}$  exists and is a fixed point of $\cT$, which is also a solution to the application. We call the scheme~\eqref{fpi} a \emph{full update}, as opposed to updating one $x_i$ at a time. The  scheme~\eqref{fpi} has a number of interesting special cases including  methods of gradient descent, gradient projection, proximal gradient,  operator splitting, and many others.
+such that the limit of the sequence $\{x^k\}$  exists and is a fixed point of $\cT$, which is also a solution to the application or from which a solution to the application can be obtained. We call the scheme~\eqref{fpi} a \emph{full update}, as opposed to updating one $x_i$ at a time. The  scheme~\eqref{fpi} has a number of interesting special cases including  methods of gradient descent, gradient projection, proximal gradient,  operator splitting, and many others.
 
 We study the structures of $\cT$ that make the  following coordinate update algorithm \emph{computationally worthy}
 \beq\label{cuitr}
 %x^{k+1}_i = (\cT x^k)_i\quad\mbox{or}\quad
 x^{k+1}_i = x_i^k - \eta_k (x^k-\cT x^k)_i,
 \eeq
-where  $\eta_k$ is a  step size and $i\in [m] := \{1,\ldots,m\}$ is arbitrary. Specifically, the cost of performing  \eqref{cuitr}  is roughly $\frac{1}{m}$, or lower, of that of performing \eqref{fpi}. We call such $\cT$ a \textbf{coordinate friendly (CF)} operator, which we will formally define.
+where  $\eta_k$ is a  step size and $i\in [m] := \{1,\ldots,m\}$ is arbitrary. Specifically, the cost of performing ~\eqref{cuitr}  is roughly $\frac{1}{m}$, or lower, of that of performing~\eqref{fpi}. We call such $\cT$ a \textbf{Coordinate Friendly (CF)} operator, which we will formally define.
 
 This paper will explore a variety of CF operators. Single CF operators include linear maps, projections to certain simple sets, proximal maps and gradients of (nearly) separable functions, as well as gradients of sparsely supported functions. There are many more composite CF operators, which are built from single CF and non-CF operators under a set of rules.  The fact that some of these operators are CF is not obvious.
 
@@ -109,12 +109,13 @@ x^{k+1}_{i} = x_i^k,&\text{for all } i\not= i_k.
 $$
 Sequential updates have been applied to many problems such as the Gauss-Seidel iteration for solving a linear system of equations, alternating projection \cite{von1949rings,bauschke1993convergence} for finding a point in the intersection of two sets,  ADMM~\cite{glowinski1975ADMM, gabay1976ADMM} for solving monotropic programs, and Douglas-Rachford Splitting (DRS)~\cite{douglas1956DRS}  for finding a zero to the sum of two operators. %(ADMM and DRS also involve additional variables.)
 
-In optimization,  \emph{coordinate descent} algorithms, at each iteration, minimize the function $f(x_1,\ldots,x_m)$ by fixing all but one variable $x_i$. Let $$x_{-i}:=(x_1,\ldots,x_{i-1},x_{i+1},\ldots,x_m)$$
+In optimization,  \emph{coordinate descent} algorithms, at each iteration, minimize the function $f(x_1,\ldots,x_m)$ by fixing all but one variable $x_i$. Let 
+$$x_{i-}:=(x_1,\ldots,x_{i-1}),\quad x_{i+}=(x_{i+1},\ldots,x_m)$$
 collect all but the $i$th coordinate of $x$. Coordinate descent solves one of the following subproblems:
 \begin{subequations}\label{coordes}
 \begin{align}
-(\cT x^k)_i & = \argmin_{x_i}f(x_i,x_{-i}^k),\\
-(\cT x^k)_i & = \argmin_{x_i}f(x_i,x_{-i}^k)+\frac{1}{2\eta_k}\|x_i-x_i^k\|^2,\\
+(\cT x^k)_i & = \argmin_{x_i}f(x_{i-}^k,x_i,x_{i+}^k),\\
+(\cT x^k)_i & = \argmin_{x_i}f(x_{i-}^k,x_i,x_{i+}^k)+\frac{1}{2\eta_k}\|x_i-x_i^k\|^2,\\
 (\cT x^k)_i & = \argmin_{x_i}\,\langle \nabla_i f(x^k),x_i \rangle+\frac{1}{2\eta_k}\|x_i-x_i^k\|^2,\\
 (\cT x^k)_i & = \argmin_{x_i}\,\langle \nabla_i f^{\mathrm{diff}}(x^k),x_i \rangle+f_i^{\mathrm{prox}}(x_i)+\frac{1}{2\eta_k}\|x_i-x_i^k\|^2,
 \end{align}
@@ -127,7 +128,7 @@ which are called \emph{direct} update, \emph{proximal} update,  \emph{gradient} 
 
 The \emph{random} index rule first appeared in~\cite{nesterov2012cd} and then~\cite{richtarik2014iteration, Lu_Xiao_rbcd_2015}. Recently,~\cite{XY_2014_ecd,Xu2015_APG_NTD} compared the convergence speeds of cyclic and stochastic update-orders. The gradient update has been relaxed to  stochastic gradient update for large-scale problems in~\cite{DangLan-SBMD, XY_2015_bsg}.
 
-The \emph{greedy} index rule leads to fewer total iterations but is often impractical since it requires a lot of effort to calculate  scores for all the coordinates. However, there are cases where calculating the scores is inexpensive~\cite{bertsekas1999nonlinear, li2009gcoord, wu2008coordinate} and the save in the total iterations significantly outweighs the extra calculation \cite{tseng2009_CGD, dhillon2011nearest, PYY_2013_GRock, schmidt2014coordinate}.
+The \emph{greedy} index rule leads to fewer iterations but is often impractical since it requires a lot of effort to calculate  scores for all the coordinates. However, there are cases where calculating the scores is inexpensive~\cite{bertsekas1999nonlinear, li2009gcoord, wu2008coordinate} and the save in the total number of iterations significantly outweighs the extra calculation \cite{tseng2009_CGD, dhillon2011nearest, PYY_2013_GRock, schmidt2014coordinate}.
 
 \textbf{A simple example.} We present the coordinate update algorithms under different index rules for solving a simple least squares problem:  %Although our purpose is not to compare different update-orders, we feel necessary to make them concrete for the reader. For simplicity, we adopt the least squares problem
 $$\Min_{x}\, f(x):= \frac{1}{2} \|A x - b\|^2,$$
@@ -155,9 +156,9 @@ x^{k+1}_{i} = x_{i}^k - \eta_k(x^k-\cT x^k)_{i},& i\in \II_k,\\
 x^{k+1}_{i} = x_i^k,&i\not\in \II_k.
 \end{cases}
 $$
-Synchronization across all agents ensures that  all $x_i$ in $\II_k$ are updated and also written to the memory before the next iteration starts. Note that, if $\II_k= [m]$, then all the coordinates are updated and, thus, each iteration reduces to the full update: $x^{k+1} =  x^k - \eta_k(x^k-\cT x^k).$ \cut{\color{red}This, of course, does not mean solving $x=\cT x$ in one step; therefore, do not confuse performing an  update in \eqref{coordes} for all the coordinates in parallel from the joint minimization over all the variables.}
+Synchronization across all agents ensures that  all $x_i$ in $\II_k$ are updated and also written to the memory before the next iteration starts. Note that, if $\II_k= [m]$ for all $k$, then all the coordinates are updated and, thus, each iteration reduces to the full update: $x^{k+1} =  x^k - \eta_k(x^k-\cT x^k).$ \cut{\color{red}This, of course, does not mean solving $x=\cT x$ in one step; therefore, do not confuse performing an  update in~\eqref{coordes} for all the coordinates in parallel from the joint minimization over all the variables.}
 
-\textbf{Async-parallel update.} In this setting, a set of agents  still perform parallel updates, but synchronization is eliminated or weakened. Hence, each agent continuously applies \eqref{fm:async} below, which reads    $x$  from the shared memory and writes $x_i$ back (or through communicating without shared memory):
+\textbf{Async-parallel update.} In this setting, a set of agents  still perform parallel updates, but synchronization is eliminated or weakened. Hence, each agent continuously applies~\eqref{fm:async}, which reads  $x$  from and writes $x_i$ back to the shared memory (or through communicating with other agents without shared memory):
 \beq\label{fm:async} \begin{cases}
 x^{k+1}_{i} = x_{i}^k - \eta_k \left((\cI-\cT) x^{k-d_k}\right)_{i},& i=i_k,\\
 x^{k+1}_{i} = x_i^k,& \text{for all }i\not= i_k.
@@ -203,7 +204,7 @@ For fixed-point problems, async-parallel methods date back to~\cite{Baudet_1978_
 Recently, random coordinate selection appeared in~\cite{Patrick_2015} for fixed-point problems. The works \cite{nedic2001distributed,recht2011hogwild,liu2013asynchronous,liu2014asynchronous,hsieh2015passcode} introduced async-parallel stochastic methods for function minimization.
 For fixed-point problems,~\cite{Peng_2015_AROCK} introduced  async-parallel stochastic methods, as well as several applications.
 
-\subsection{Contributions of this paper}
+\subsection{Contributions of This Paper}
 The paper systematically discusses the CF properties found in both single and composite operators underlying many interesting applications. We introduce approaches to recognize CF operators and develop coordinate-update algorithms based on them.
 We provide a variety of applications to illustrate our approaches.
 In particular, we obtain new coordinate-update algorithms for image deblurring, portfolio optimization, second-order cone programming, as well as matrix decomposition. Our analysis also provides guidance to the implementation of coordinate-update algorithms by specifying how to compute certain operators and maintain certain quantities in memory. We also provide numerical results to illustrate the efficiency of the proposed coordinate update algorithms.

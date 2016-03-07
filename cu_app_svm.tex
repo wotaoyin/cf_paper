@@ -16,13 +16,13 @@ The dual problem of \eqref{eq:ksvm} is
 where $Q_{ij}=\beta_i\beta_j k(a_i,a_j)$, $k(\cdot,\cdot)$ is a so-called \emph{kernel function}, and $e = (1, ..., 1)^\top$. If $\phi(a)=a$, then $k(a_i,a_j)=a_i^\top a_j$.
 
 \subsubsection*{Unbiased case}
-If $y=0$ is enforced in \eqref{eq:ksvm}, then the solution hyperplane $\{w:x^\top w=0\}$ passes through the origin and is called \emph{unbiased}. Consequently, the dual problem \eqref{eq:dksvm} will no longer have the linear constraint $\sum_i \beta_i s_i=0$, leaving it with the coordinate-wise separable box constraints $0\le s_i\le C$.  To solve \eqref{eq:dksvm}, we can apply the FBS operator $\cT$ defined by \eqref{eq:FBS}. Let $d(s):= \frac{1}{2}s^\top Q s- e^\top s$}, $\cA = \prox_{[0, C]}$ and $\cC = \nabla d$.  The coordinate update based on FBS is
+If $y=0$ is enforced in \eqref{eq:ksvm}, then the solution hyperplane $\{w:x^\top w=0\}$ passes through the origin and is called \emph{unbiased}. Consequently, the dual problem \eqref{eq:dksvm} will no longer have the linear constraint $\sum_i \beta_i s_i=0$, leaving it with the coordinate-wise separable box constraints $0\le s_i\le C$.  To solve \eqref{eq:dksvm}, we can apply the FBS operator $\cT$ defined by~\eqref{eq:FBS}. Let $d(s):= \frac{1}{2}s^\top Q s- e^\top s$}, $\cA = \prox_{[0, C]}$, and $\cC = \nabla d$.  The coordinate update based on FBS is
 $$s_i^{k+1}=\prj_{[0,C]}(s_i^k-\gamma_i\nabla_i d(s^k)),$$
 where we can take $\gamma_i=\frac{1}{Q_{ii}}$. 
 
 \subsubsection*{Biased (general) case} In this case, the mode \eqref{eq:ksvm} has $y\in\RR$, so the hyperplane $\{w:x^\top w-y=0\}$ may not pass the origin and is called \emph{biased}. Then,  the dual problem \eqref{eq:dksvm} retains the linear constraint $\sum_i \beta_i s_i=0$. In this case, we apply the primal-dual splitting scheme \eqref{vucondat} or the three-operator splitting scheme \eqref{3s}.
 
-The coordinate update based on the full primal-dual splitting scheme \eqref{vucondat} is:
+The coordinate update based on the full primal-dual splitting scheme~\eqref{vucondat} is:
 \begin{subequations}\label{eq:pd-svm}
 \begin{align}
 t^{k+1}=&\,t^k+\gamma\sum_{i=1}^m \beta_i s_i^k,\label{eq:pd-svm-t}\\
@@ -36,9 +36,9 @@ s_i^{k+1}=&\,\prj_{[0,C]}\left(s_i^k-\eta\big(\nabla_i d(s^k)+\beta_i(2t^{k+1}-t
 \begin{array}{l}
 \text{if }t\text{ is chosen (the index 0), then compute}\\
 \qquad t^{k+1}=\,t^k+\gamma w^k,\\
-\text{if }s_j\text{ is chosen (an index $j \in [m]$), then compute}\\
-\qquad s_j^{k+1}=\,\prj_{[0,C]}\left(s_j^k-\eta\big(q_j^\top s^k-1+\beta_j(2\gamma w^k+t^k)\big)\right)\\
-\qquad w^{k+1}= w^k + \beta_j (s_j^{k+1} - s_j^k).
+\text{if }s_i\text{ is chosen (an index $i \in [m]$), then compute}\\
+\qquad s_i^{k+1}=\,\prj_{[0,C]}\left(s_i^k-\eta\big(q_i^\top s^k-1+\beta_i(2\gamma w^k+t^k)\big)\right)\\
+\qquad w^{k+1}= w^k + \beta_i (s_i^{k+1} - s_i^k).
 \end{array}
 \right.
 }\end{equation}
@@ -52,7 +52,7 @@ s_i^{k+1}=&\,\prj_{[0,C]}\left(s_i^k-\eta\big(\nabla_i d(s^k)+\beta_i(2t^{k+1}-t
 %\end{subequations}
 %In parallel computing, whenever a processor updates some $s_i$, the $w$ variable must be also renewed as $w^{k+1}=w^k+\beta_i(s_i^{k+1}-s_i^k)$.
 
-We can also apply the three-operator splitting  \eqref{3s} as follows. Let {$D_1:=[0,C]^m$ and $D_2:=\{s: \sum_{i=1}^m \beta_i s_i=0\}$. Let $\cA = \prj_{D_2}$, $\cB = \prj_{D_1}$ and $\cC(x) = Qx - e$,  The full update corresponding to $\cT = (I - \eta_k) \cI + \eta_k \TS$ is
+We can also apply the three-operator splitting  \eqref{3s} as follows. Let {$D_1:=[0,C]^m$ and $D_2:=\{s: \sum_{i=1}^m \beta_i s_i=0\}$. Let $\cA = \prj_{D_2}$, $\cB = \prj_{D_1}$, and $\cC(x) = Qx - e$,  The full update corresponding to $\cT = (I - \eta_k) \cI + \eta_k \TS$ is
 \begin{subequations}\label{eq:3op-svm}
 \begin{align}
 s^{k+1}=&\prj_{D_2}(u^k),\label{eq:3op-svm-s}\\

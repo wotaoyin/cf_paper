@@ -8,18 +8,22 @@ Consider that $m$ worker agents and one master agent form a star-shaped network,
 \begin{equation}\label{pro:decentral}
 0\in\underbrace{
 \begin{bmatrix}
-\partial F(x)\\
-0 \\
-0
-\end{bmatrix}}_{\mbox{operator}~\cA}+\underbrace{\begin{bmatrix}
-0 & 0&I\\
-0 & 0 & -e^\top \\
-I & -e & 0
-\end{bmatrix}\begin{bmatrix}
+\partial F&0&0\\
+0&0&0 \\
+0&0&0
+\end{bmatrix}}_{\mbox{operator}~\cA}\begin{bmatrix}
 x\\
 y\\
 s
-\end{bmatrix}}_{\mbox{operator}~\cC},
+\end{bmatrix}+\underbrace{\begin{bmatrix}
+0 & 0&I\\
+0 & 0 & -e^\top \\
+I & -e & 0
+\end{bmatrix}}_{\mbox{operator}~\cC}\begin{bmatrix}
+x\\
+y\\
+s
+\end{bmatrix},
 \end{equation}
 where $s$ is the dual variable.
 
@@ -32,7 +36,7 @@ s_i^{k+1} &= s_i^k-2\gamma x_i^k-\gamma \prox_{\gamma f_i}(x_i^k-\gamma s_i^k)+3
 \end{align}
 \end{subequations}
 where \eqref{fbfs_a} and \eqref{fbfs_c} are applied to all $i\in[m]$.
-Hence, for each $i$, we group  $x_i$ and $s_i$ together and assign them on agent $i$.  {We let the master agent } maintain $\sum_j s_j$ and $\sum_j x_j$. Therefore, {in the FBFS coordinate update, updating any $(x_i,s_i)$ needs only $y$ and $\sum_j s_j$ from the master agent, and updating $y$ is done on the master agent. In synchronous parallel setting, at each iteration, each worker agent $i$ computes $s_i^{k+1}, x_i^{k+1}$, then the master agent collects the updates from all of workers and then updates $y$ and $\sum_j s_j$. The above update can be relaxed to be asynchronous. In this case, the master and worker work concurrently, master agent updates $y$ and $\sum_j s_j$ as soon as it receives the updated $s_i$ and $x_i$ from any of the worker agents. It also periodically broadcast $y$ back to the worker agents.
+Hence, for each $i$, we group  $x_i$ and $s_i$ together and assign them on agent $i$.  {We let the master agent } maintain $\sum_j s_j$ and $\sum_j x_j$. Therefore, {in the FBFS coordinate update, updating any $(x_i,s_i)$ needs only $y$ and $\sum_j s_j$ from the master agent, and updating $y$ is done on the master agent. In synchronous parallel setting, at each iteration, each worker agent $i$ computes $s_i^{k+1}, x_i^{k+1}$, then the master agent collects the updates from all of the worker agents and then updates $y$ and $\sum_j s_j$. The above update can be relaxed to be asynchronous. In this case, the master and worker agents work concurrently, the master agent updates $y$ and $\sum_j s_j$ as soon as it receives the updated $s_i$ and $x_i$ from any of the worker agents. It also periodically broadcasts $y$ back to the worker agents.
 
 %can consider $(x_i,s_i)$ as one coordinate and store each pair of such variables on one agent. Updating $(x_i,s_i)$ will need the latest value of $y$ from the master node only, and updating $y$ will need the latest values all  $(x_i,y_i)$ from all the agents. However, the information needed is just the summation of $x_i$ and $s_i$, which is easy to update.
 
