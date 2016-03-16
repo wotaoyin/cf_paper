@@ -1,0 +1,41 @@
+% !TEX root = ./amsa_main.tex
+\subsubsection{Nonnegative Matrix Factorization}
+Nonnegative matrix factorization (NMF) is an important dimension reduction method for nonnegative data. It was proposed by Paatero and his coworkers in \cite{paatero1994NMF}. Given a nonnegative matrix $A\in\RR^{p\times n}_+$, NMF aims at finding two nonnegative matrices $W\in\RR^{p\times r}_+$ and $H\in\RR^{n\times r}_+$ such that $WH^\top\approx A$, where $r$ is user-specified depending on the applications, and usually $r\ll \min(p,n)$. A widely used model is
+\begin{equation}\label{eq:nmf}
+\begin{aligned}
+&\Min_{W,H}F(W,H):=\frac{1}{2}\|WH^\top-A\|_F^2, \\
+& \St\ W\in\RR^{p\times r}_+,\, H\in \RR^{n\times r}_+. 
+\end{aligned}
+\end{equation}
+Applying the projected gradient method \eqref{eq:proj-grad} to \eqref{eq:nmf}, we have
+\begin{subequations}\label{pg-nmf}
+\begin{align}
+&W^{k+1}=\max\big(0, W^k-\eta_k \nabla_W F(W^k, H^k)\big),\\
+&H^{k+1}=\max\big(0,H^k-\eta_k \nabla_H F(W^k, H^k) \big).
+\end{align}
+\end{subequations}
+In general, we do not know the Lipschitz constant of $\nabla F$, so we have to choose $\eta_k$ by line search such that the Armijo condition is satisfied.
+
+Partitioning the variables into $2r$ block coordinates: $(w_1, \ldots, w_r, h_1,\ldots, h_r)$ where $w_i$ and $h_i$ are the $i$th columns of $W$ and $H$, respectively, we can apply the coordinate update based on the projected-gradient method: 
+\begin{equation}\label{pcg-nmf}
+{\left\{
+\begin{array}{l}
+\text{if $w_{i_k}$  is chosen for some $i_k \in [r]$, then compute}\\
+\qquad w_{i_k}^{k+1}=\max\big(0, w_{i_k}^k-\eta_k\nabla_{w_{i_k}} F(W^k, H^k)\big) \\
+\text{if $h_{i_k-r}$  is chosen for some $i_k \in \{r+1, ..., 2r\}$, then compute}\\
+\qquad h_{i_k-r}^{k+1}=\max\big(0, h_{i_k-r}^k-\eta_k \nabla_{h_{i_k-r}} F(W^k, H^k) \big) 
+\end{array}
+\right.
+}\end{equation}
+It is easy to see that $\nabla_{w_i} F(W^k, H^k)$ and $\nabla_{h_i} F(W^k, H^k)$ are both Lipschitz continuous with constants $\|h_i^k\|_2^2$ and $\|w_i^k\|_2^2$ respectively. Hence, we can set 
+$$\eta_k=\left\{\begin{array}{ll}
+\frac{1}{\|h_{i_k}^k\|_2^2},&\text{ if }1\le i_k\le r,\\[0.1cm]
+\frac{1}{\|w_{i_k-r}^k\|_2^2},&\text{ if }r+1\le i_k\le 2r.
+\end{array}\right.$$
+However, it is possible to have $w_i^k=0$ or $h_i^k=0$ for some $i$ and $k$, and thus the setting in the above formula may have trouble of being divided by zero. To overcome this problem, one can first modify the problem \eqref{eq:nmf} by restricting $W$ to have unit-norm columns and then apply the coordinate update method in \eqref{pcg-nmf}. Note that the modification does not change the optimal value since $WH^\top=(WD)(HD^{-1})^\top$ for any $r\times r$ invertible diagonal matrix $D$. We refer the readers to \cite{XY_2014_ecd} for more details.
+
+Note that
+$\nabla_W F(W,H)= (WH^\top-A)H, \nabla_H F(W,H)= (WH^\top-A)^\top W$
+and 
+$\nabla_{w_i} F(W,H)= (WH^\top-A)h_i, \nabla_{h_i} F(W,H)= (WH^\top-A)^\top w_i,\, \forall i.$
+Therefore, the {coordinate updates given in \eqref{pcg-nmf} are computationally worthy (by maintaining the residual $W^k(H^k)^\top-A$).

@@ -1,0 +1,454 @@
+\section{Some Key Concepts of Operators}\label{sec:op-concept}
+In this section, we go over a few key concepts in monotone operator theory and operator splitting theory.
+\cut{some of them and discuss when they are CF. First, %We first give some definitions.
+}
+
+\begin{definition}[monotone operator]\label{def:max-mon-op}
+A \emph{set-valued} operator $\cT:\HH\rightrightarrows\HH$ is \emph{monotone} if
+$\langle x-y, u-v\rangle\ge 0,\ \forall x,y\in\HH,\, u\in \cT x,\, v\in\cT y.$
+Furthermore, $\cT$ is \emph{maximally monotone} if its graph $\Grph(T)=\{(x,u)\in \HH\times\HH: u\in \cT x\}$ is not strictly contained in the graph of any other monotone operator. 
+\end{definition}
+
+\begin{example}\label{exmp:mon-op}
+An important maximally monotone operator is the subdifferential $\partial f$ of a closed proper convex function $f$.
+\end{example}
+
+\begin{definition}[nonexpansive operator]
+An operator $\cT:\HH\to\HH$ is \emph{nonexpansive} if
+$\|\cT x-\cT y\|\le\|x-y\|,\ \forall x, y\in\HH.$ We say $\cT$ is averaged, or $\alpha$-averaged, if there is one nonexpansive operator $\cR$ such that $\cT=(1-\alpha)\cI+\alpha\cR$ for some $0<\alpha<1$.  A $\frac{1}{2}$-averaged operator $\cT$ is also called \emph{firmly-nonexpansive}.
+%and $\cT$ is \emph{firmly nonexpansive} if
+%$\|u-v\|^2\le\langle u-v,x-y\rangle,\ \forall u\in \cT(x), \forall v\in \cT(y).$ 
+\end{definition}
+By definition, a nonexpansive operator is single-valued. Let $\cT$ be averaged. If $\cT$ has a fixed point, the iteration \eqref{fpi} converges to a fixed point; otherwise, the iteration diverges unboundedly. Now let  $\cT$ be nonexpansive. The damped update of $\cT$: $x^{k+1} = x^k-\eta(x^k- \cT x^k)$, is equivalent to applying the averaged operator $(1-\eta)\cI+\eta\cT$. 
+
+\begin{example}
+A common firmly-nonexpansive operator is the resolvent of a maximally monotone map $\cT$, written as 
+\begin{equation}\label{def-resolvent}\cJ_\cA := (\cI+\cA)^{-1}.
+\end{equation} Given $x\in\HH$, $\cJ_\cA(x) =  \{y:x\in y+\cA y\}$. (By monotonicity of $\cA$, $\cJ_\cA$ is a singleton, and by maximality of $\cA$, $\cJ_\cA(x)$ is well defined for all $x\in\HH$. ) A reflective resolvent is \begin{equation}\label{def-ref}\cR_{\cA}:= 2\cJ_\cA-\cI.
+\end{equation}
+\end{example}
+
+\begin{definition}[proximal map]\label{def-prox-map}
+The proximal map for a function $f$ is a special resolvent defined as:
+\begin{equation}\label{def-prox}\prox_{\gamma f}(y) = \argmin_x \big\{f(x)+\frac{1}{2\gamma}\|x-y\|^2 \big\},
+\end{equation}
+where $\gamma > 0$. The first-order variational condition of the minimization yields $\prox_{\gamma f}(y)=(\cI+\gamma\partial f)^{-1}$; hence, $\prox_{\gamma f}$ is firmly-nonexpansive. When $x\in\RR^m$ and $\prox_{\gamma f}$ can be computed in $O(m)$ or $O(m\log m)$ operations, we call $f$ \emph{proximable}.
+
+Examples of proximable functions include $\ell_1,\ell_2,\ell_\infty$-norms, several matrix norms, the owl-norm \cite{davis2015n}, (piece-wise) linear functions, certain quadratic functions, and many more.
+\end{definition}
+
+\begin{example}
+ A special proximal map is the projection map. Let $X$ be a nonempty closed convex set, and $\iota_S$ be its indicator function. Minimizing $\iota_S(x)$  enforces $x\in S$,  so $\prox_{\gamma \iota_S}$ reduces to the projection map $\prj_{S}$ for any $\gamma>0$. Therefore, $\prj_{S}$ is also firmly nonexpansive.
+ \end{example}
+
+\cut{A firmly nonexpansive operator is always nonexpansive and maximally monotone \cite[Example 20.27]{bauschke2011convex}. }
+
+\begin{definition}[$\beta$-cocoercive operator]
+An operator $\cT:\HH\to\HH$ is \emph{$\beta$-cocoercive} if 
+$\langle x-y, \cT x-\cT y\rangle \ge \beta \|\cT x-\cT y\|^2,\ \forall x,y\in\HH.$ 
+\end{definition}
+
+\begin{example}
+A special example of  cocoercive operator is the gradient of a smooth function. Let $f$ be a differentiable function. Then $\nabla f$ is $\beta$-Lipschitz continuous \emph{if and only if} $\nabla f$ is $\frac{1}{\beta}$-cocoercive \cite[Corollary 18.16]{bauschke2011convex}. \cut{If $\cT$ is $\beta$-cocoercive, $\beta \cT$ must be firmly nonexpansive \cite[Remark 4.24]{bauschke2011convex}, and $\cT$ is maximally monotone.}
+\end{example}
+\cut{
+At last we give a counterexample to show naively extending existing algorithms to coordinate update schemes may result in divergence or wrong solutions.
+\begin{example}
+Consider the problem:
+\begin{equation}
+\begin{array}{l}
+\underset{x_1,x_2\in\RR^m}{\textnormal{minimize  }} ~f(x_1)+g(x_2)\\
+\textnormal{subject to } x_1-x_2=0,
+\end{array}\label{c-e}
+\end{equation}
+We define $x=\begin{bmatrix}
+x_1\\
+x_2
+\end{bmatrix},A=[I_m ~-I_m],F(x)=f(x_1)+g(x_2)$. $\eqref{c-e}$ can be solved by using $\eqref{pdemp}$:
+\begin{equation}
+\left\{
+\begin{array}{l}
+s^{k+1}=s^k+\gamma Ax^k\\
+x^{k+1}=\prox_{\eta F}(x^k-\eta(A^\top s^k+2\gamma A^\top Ax^k))
+\end{array}\label{c-efull}
+\right.
+\end{equation}
+Where $s^k\in \RR^m,k=1,2,\ldots$ is a dual variable.
+Defining $t^k=A^\top s^k$, $\eqref{c-efull}$ can be written as
+\begin{equation}
+\left\{
+\begin{array}{l}
+t^{k+1}=t^k+\gamma A^\top Ax^k\\
+x^{k+1}=\prox_{\eta F}(x^k-\eta(t^k+2\gamma A^\top Ax^k))
+\end{array}\label{c-efull2}
+\right.
+\end{equation}
+Both $\eqref{c-efull}$ and $\eqref{c-efull2}$ (with $t^0=A^\top s^0$) converge in practice and so does coordinate update versions of $\eqref{c-efull}$. But our experiments show that coordinate update versions of $\eqref{c-efull2}$ do not converge to the solution of problem $\eqref{c-e}$. A key factor is that with full update versions of $\eqref{c-efull}$ and $\eqref{c-efull2}$, as well as coordinate update versions of $\eqref{c-efull}$, $t^k$ always stay in the image of $A^\top $. But with coordinate update versions of $\eqref{c-efull2}$, $t^k$ do not always stay in the image of $A^\top $, which causes trouble.
+\end{example}
+}
+\section{Derivation of ADMM from the DRS Update}\label{sec:drs-admm}
+We derive the ADMM update in \eqref{eq:admmx-y} from the DRS update \begin{subequations}\label{eqop}
+\begin{align}
+s^k=&\ \cJ_{\eta \cB}(t^k),\label{eqop-s}\\
+t^{k+1}=&\ \left(\frac{1}{2}(2\cJ_{\eta\cA}-\cI)\circ(2\cJ_{\eta \cB}-\cI)+\frac{1}{2}\cI\right)(t^k)\label{eqop-t},
+\end{align}
+\end{subequations} 
+where $\cA=-\partial f^*(-\cdot)$ and $\cB=\partial g^*$.
+
+
+Note \eqref{eqop-s} is equivalent to $t^k\in s^k+\eta \partial g^*(s^k)$, i.e., there is a $y^k\in \partial g^*(s^k)$ such that $t^k = s^k+\eta y^k$, so
+\begin{equation}\label{tempeq1}
+t^k-\eta y^k=s^k\in\partial g(y^k).
+\end{equation} 
+In addition, \eqref{eqop-t} can be written as
+\begin{align}
+t^{k+1}=&\ \cJ_{\eta\cA}(2s^k-t^k)+t^k-s^k\cr
+=&\ s^k+(\cJ_{\eta\cA}-\cI)(2s^k-t^k)\cr
+=&\ s^k+(\cI-(\cI+\eta\partial f^*)^{-1})(t^k-2s^k)\cr
+=&\ s^k+\eta(\eta\cI+\partial f)^{-1}(t^k-2s^k)\cr
+=&\ s^k+\eta(\eta\cI+\partial f)^{-1}(\eta y^k-s^k),\label{tempeq2}
+\end{align} 
+where in the fourth equality, we have used the Moreau's Identity \cite{rockafellar1997convex}: $(\cI+\partial h)^{-1}+(\cI+\partial h^*)^{-1}=\cI$ for any closed convex function $h$. Let
+\begin{equation}\label{up-x}
+x^{k+1}=(\eta\cI+\partial f)^{-1}(\eta y^k-s^k)=(\cI+\frac{1}{\eta}\partial f)^{-1}(y^k-\frac{1}{\eta}s^k).
+\end{equation}
+Then \eqref{tempeq2} becomes
+\begin{equation*}
+t^{k+1}=s^k+\eta x^{k+1},
+\end{equation*}
+and 
+\begin{equation}\label{up-s}
+s^{k+1}\overset{\eqref{tempeq1}}=t^{k+1}-\eta y^{k+1}=s^k+\eta x^{k+1}-\eta y^{k+1},
+\end{equation}
+which together with $s^{k+1}\in\partial g(y^{k+1})$ gives
+\begin{equation}\label{up-y}
+y^{k+1}=(\eta\cI+\partial g)^{-1}(s^k+\eta x^{k+1})=(\cI+\frac{1}{\eta}\partial g)^{-1}(x^{k+1}+\frac{1}{\eta}s^k).
+\end{equation}
+Hence, from \eqref{up-x}, \eqref{up-s}, and \eqref{up-y}, the ADMM update in \eqref{eq:admmx-y} is equivalent to the DRS update in \eqref{eqop} with $\eta=\frac{1}{\gamma}$.
+\section{Representing the Condat-V\~{u} Algorithm as a Nonexpansive Operator}\label{sec:vc-op}
+We show how to derive the Condat-V\~{u} algorithm $\eqref{vucondat}$ by applying a forward-backward operator to the optimality condition $\eqref{pdkkt}$:
+%\begin{equation}
+%0\in\underbrace{\begin{bmatrix}
+%\nabla f(x)\\
+%0
+%\end{bmatrix}}_{\mbox{operator}~\cA}+\underbrace{
+%\begin{bmatrix}
+%\partial g(x)\\
+%\partial h^*(s)
+%\end{bmatrix}+\begin{bmatrix}
+%0&A^\top\\
+%-A&0
+%\end{bmatrix}\begin{bmatrix}
+%x\\
+%s
+%\end{bmatrix}}_{\mbox{operator}~\cB}.
+%\end{equation} 
+
+\begin{equation}
+0\in\bigg(\underbrace{\begin{bmatrix}
+\nabla f & 0\\
+0 & 0
+\end{bmatrix}}_{\mbox{operator}~\cA}+\underbrace{
+\begin{bmatrix}
+\partial g\\
+\partial h^*
+\end{bmatrix}+\begin{bmatrix}
+0&A^\top\\
+-A&0
+\end{bmatrix}}_{\mbox{operator}~\cB}\bigg) \underbrace{\begin{bmatrix}
+x\\
+s
+\end{bmatrix}}_{z},
+\end{equation}
+
+It can be written as $0\in\cA z+\cB z$ after we define $z=\begin{bmatrix}x\\ s\end{bmatrix}$. Let $M$ be a symmetric positive definite matrix, we have
+\begin{align*}
+&0\in\cA z+\cB z\\
+\Leftrightarrow& Mz-\cA z \in Mz+\cB z\\
+\Leftrightarrow& z-M^{-1}\cA z \in z+M^{-1}\cB z\\
+\Leftrightarrow& z=(\cI+M^{-1}\cB)^{-1}\circ(\cI-M^{-1}\cA)z.
+\end{align*}
+Convergence and other results can be found in \cite{davis2014convergence}. The last equivalent relation is due to $M^{-1}\cB$ being a maximally monotone operator under the norm induced by $M$. We let $$M=\begin{bmatrix}
+\frac{1}{\eta}I&A^\top\\
+A&\frac{1}{\gamma}I
+\end{bmatrix}\succ 0$$
+and iterate $$z^{k+1}=\cT z^k=(\cI+M^{-1}\cB)^{-1}\circ(\cI-M^{-1}\cA)z^k.$$
+We have $Mz^{k+1}+{\cB}z^{k+1}= Mz^k-\cA z^k$:
+$$\left\{\begin{array}{ll}
+\frac{1}{\eta}x^k  +A^\top s^{k}- \nabla f(x^k)&\in \frac{1}{\eta}x^{k+1} + A^\top s^{k+1}+A^\top s^{k+1}+\partial g (x^{k+1}),\\ 
+\frac{1}{\gamma}s^k + A~ x^{k~}&\in \frac{1}{\gamma}s^{k+1}+ A~ x^{k+1~} -A ~x^{k+1} ~+\partial h^*(s^{k+1}),
+\end{array}\right.$$
+which is equivalent to
+$$\left\{
+\begin{array}{l}
+s^{k+1}=\prox_{\gamma h^*} (s^k+\gamma Ax^k),\\
+x^{k+1}=\prox_{\eta g}(x^k-\eta(\nabla f(x^k)+A^\top(2s^{k+1}-s^k))).
+\end{array}
+\right.$$
+Now we derived the Condat-V\~{u} algorithm. With proper choices of $\eta$ and $\gamma $, the forward-backward operator $\cT=(\cI+M^{-1}\cB)^{-1}\circ(\cI-M^{-1}\cA)$ can be shown to be $\alpha$-averaged if we use the inner product $\langle z_1,z_2\rangle_M=z_1^\top Mz_2$ and norm $\|z\|_M=\sqrt{z^\top Mz}$ on the space of $z=\begin{bmatrix}x\\ s\end{bmatrix}$. More details can be found in~\cite{davis2014convergence}.
+
+If we change the matrix $M$ to $\begin{bmatrix}
+\frac{1}{\eta}I&-A^\top\\
+-A&\frac{1}{\gamma}I
+\end{bmatrix}$, the other algorithm $\eqref{vucondat2}$ can be derived similarly.
+
+\section{Proof of Convergence for Async-parallel Primal-dual Coordinate Update Algorithms}\label{pf:pdasync}
+Algorithms~\ref{alg:asyn_core} and~\ref{alg:asyn_overlap} differ from that in~\cite{Peng_2015_AROCK} in the following aspects:
+\begin{enumerate}
+\item the operator $\TVC$ is nonexpansive under a norm induced by a symmetric positive definite matrix $M$ (see Appendix~\ref{sec:vc-op}), instead of the standard Euclidean norm;
+\item the coordinate updates are no longer orthogonal to each other under the norm induced by $M$;
+\item the block coordinates may overlap each other.
+\end{enumerate}
+Because of these differences, we make two major modifications to the proof in~\cite[Section 3]{Peng_2015_AROCK}: (i) adjusting parameters in~\cite[Lemma 2]{Peng_2015_AROCK} and modify its proof to accommodate for the new norm; (2) modify the inner product and induced norm used in \cite[Theorem 2]{Peng_2015_AROCK} and adjust the constants in \cite[Theorems 2 and 3]{Peng_2015_AROCK}.
+
+%In order to state these modifications, we introduce some notation first. %Since $\hat{z}^k_i$ can be related to $z_i^k$ through the interim changes applied to $z_i$, we let $J_i(k)\subset \{k-1,...,k-\tau\}$ be the index set of these interim changes. We have
+%\begin{equation}
+%\hat{z}_i^k=z_i^k+\sum_{d\in J_i(k)}(z_i^d-z_i^{d+1}).
+%\end{equation}
+%Since the global counter is increased after each coordinate update, updates to $z_i$ and $z_j$, $\forall i\neq j$, must occur at different $k$'s and thus $J_i(k)\cap J_j(k)=\emptyset,\forall i\neq j$. Therefore, by letting $J(k):=\cup_iJ_i(k)$ and noticing $(z_i^d-z_i^{d+1})=0$ for $d\in J_j(k)$ where $j\neq i$, we have
+We assume the same inconsistent case as in~\cite{Peng_2015_AROCK}, i.e., the relationship between $\hat z^k$ and $z^k$ is
+\begin{equation}
+\hat{z}^k=z^k+\sum_{d\in J(k)}(z^d-z^{d+1}),
+\end{equation}
+where $J(k)\subseteq \{k-1,...,k-\tau\}$ and $\tau$ is the maximum number of other updates to $z$ during the computation of the update. 
+Let $\cS=\cI-\TVC$. %By Lemma~\ref{lemma:a-avg} below, $\TVC$ is nonexpansive under the norm induced by $M$ if and only if $S$ is ${1/2}$-cocoercive under the same norm.
+Then the coordinate update can be rewritten as $z^{k+1}=z^k-\frac{\eta_k}{(m+p)q_{i_k}}\cS_{i_k}\hat{z}^k$, where $\cS_{i}\hat{z}^k=(\hat z_1^k,\dots, \hat z_{i-1}^k, (\cS\hat z^k)_i, \hat z_{i+1}^k,\dots,\hat z_{m+p}^k)$  for Algorithm~\ref{alg:asyn_core}. For Algorithm~\ref{alg:asyn_overlap}, the update is  
+\begin{align}\label{eqn:asyn_update_a2}
+z^{k+1}=z^k-\frac{\eta_k}{mq_{i_k}}\cS_{i_k}\hat{z}^k,
+\end{align} where 
+%With the definition of $S$, in both Algorithm \ref{alg:asyn_core} and~\ref{alg:asyn_overlap} the coordinate changes at iteration $k$ can be written as $z^{k+1}=z^k-\frac{\eta_k}{(m+p)q_{i_k}}S_{i_k}\hat{z}^k$ ($\frac{\eta_k}{mq_{i_k}}$ for Algorithm~\ref{alg:asyn_overlap}), where in Algorithm \ref{alg:asyn_core}, $S_{i}\hat{z}^k$ is just the $i$-th component of $S\hat{z}^k$ and in Algorithm \ref{alg:asyn_overlap}, $\forall 1\leq i\leq m$,
+$$\cS_{i}\hat{z}^k=\begin{bmatrix}
+0&&&&&&&&&\\
+&\ddots&&&&&&&&\\
+&&0&&&&&&&\\
+&&&\cI_{\HH_i}&&&&&&\\
+&&&&0&&&&&\\
+&&&&&\ddots&&&&\\
+&&&&&&0&&&\\
+&&&&&&&\rho_{i,1}\cI_{\GG_1}&&\\
+&&&&&&&&\ddots&\\
+&&&&&&&&&\rho_{i,p}\cI_{\GG_p}
+\end{bmatrix}\cS\hat{z}^k.$$
+%The next lemma is due to simple calculation.
+Let $\lambda_{\max}$ and $\lambda_{\min}$ be the
+maximal and minimal eigenvalues of the matrix $M$, respectively, and $\kappa=\frac{\lambda_{\max}}{\lambda_{\min}}$ be the condition number.
+Then we have the following lemma.
+\begin{lemma}
+For both Algorithms~\ref{alg:asyn_core} and~\ref{alg:asyn_overlap},
+\begin{align}
+\sum_{i}\cS_i\hat{z}^k&=\cS\hat{z}^k,\\
+\sum_{i}\|\cS_i\hat{z}^k\|_M^2&\leq \kappa\|\cS\hat{z}^k\|_M^2,\label{eqn:bound_lemma1}
+\end{align}
+where $i$ runs from $1$ to $m+p$ for Algorithm~\ref{alg:asyn_core} and $1$ to $m$ for Algorithm~\ref{alg:asyn_overlap}.
+\end{lemma}
+\begin{proof} The first part comes immediately from the definition of $\cS$ for both algorithms. For the second part, we have
+\begin{align}
+\sum_{i}\|\cS_i\hat{z}^k\|_M^2&\leq \sum_{i} \lambda_{\max}\|\cS_i\hat{z}^k\|^2 = \lambda_{\max}\|\cS\hat{z}^k\|^2\leq {\lambda_{\max}\over\lambda_{\min}}\|\cS\hat{z}^k\|^2_M,
+\end{align}
+for Algorithm~\ref{alg:asyn_core}. For Algorithm~\ref{alg:asyn_overlap}, the equality is replaced by ``$\leq$".
+\end{proof}
+
+
+At last we define
+\begin{align}\label{eqn:def_bar_x}
+\bar{z}^{k+1} := z^k - \eta_k \cS\hat{z}^{k},
+\end{align}
+$q_{\min}=\min_iq_i>0$, and $|J(k)|$ be the number of elements in $J(k)$. 
+It is shown in~\cite{davis2014convergence} that with proper choices of $\eta$ and $\gamma$, $\TVC$ is nonexpansive under the norm induced by $M$. Then Lemma~\ref{lemma:a-avg} shows that $\cS$ is 1/2-cocoercive under the same norm.
+\begin{lemma}\label{lemma:a-avg} An operator $\cT:\FF\to\FF$ is nonexpansive under the induced norm by $M$ if and only if $\cS = \cI - \cT$ is {${1}/{2}$-cocoercive} under the same norm, i.e.,
+\begin{equation}\label{eqn:alpha_avg}
+\langle z-\tilde{z},\cS z- \cS\tilde{z}\rangle_M \ge \frac{1}{2}\|\cS z- \cS\tilde{z}\|_M^2,\quad
+{\forall~z,\tilde{z}\in\FF}.
+\end{equation}
+\end{lemma}
+The proof is the same as that of \cite[Proposition 4.33]{bauschke2011convex}. 
+
+We state the complete theorem for Algorithm~\ref{alg:asyn_overlap}. The theorem for Algorithm~\ref{alg:asyn_core} is similar (we need to change $m$ to $m+p$ when necessary).
+\begin{thm}\label{thm:async-convergence2}
+Let $Z^*$ be the set of optimal solutions of~\eqref{pdproblem} and $(z^k)_{k\geq0}\subset \FF$ be the sequence generated by Algorithm~\ref{alg:asyn_overlap} (with proper choices of $\eta$ and $\gamma$ such that $\TVC$ is nonexpansive under the norm induced by $M$), under the following conditions:
+\begin{enumerate}[(i)]
+\item $f,g,h^*$ are closed proper convex functions. In addition, $f$ is differentiable and $\nabla f$ is Lipschitz continuous with $\beta$;
+%\item the delay for every coordinate is bounded by a positive number $\tau$, i.e. for every $1\leq i\leq m$, $\hat{z}^{k}_{i}=z_i^{k-d_{i}^k}$ for some $0\leq d_{i}^k\leq\tau$;
+\item $\eta_k
+\in [\eta_{\min}, \eta_{\max}]$ for certain $0<\eta_{\max}<\frac{mq_{\min}}{2\tau
+\sqrt{\kappa q_{\min}}+\kappa}$ and any $0<\eta_{\min}\leq\eta_{\max}$.
+\end{enumerate}
+Then $(z^k)_{k\geq 0}$ converges to a $Z^*$-valued random variable with probability 1.
+\end{thm}
+The proof directly follows~\cite[Section 3]{Peng_2015_AROCK}. Here we only present the key modifications. Interested readers are referred to~\cite{Peng_2015_AROCK} for the complete procedure.
+ 
+The next lemma shows that the conditional expectation of the distance between $z^{k+1}$ 
+and any $z^*\in \mathbf{Fix} \TVC=Z^*$ for given $\cZ^k=\{z^0,z^1,\cdots,z^k\}$ has an
+upper bound that depends on $\cZ^k$ and $z^*$ only.
+\begin{lemma}\label{lemma:fund}
+Let $(z^k)_{k\geq 0}$ be the sequence generated by Algorithm
+\ref{alg:asyn_overlap}.  Then for
+any $z^*\in \mathbf{Fix} \TVC$, we have
+% for both consistent read and inconsistent read
+\begin{align}\label{eqn:fund_inquality0}
+\begin{aligned}
+\mathbb{E}\big(\|z^{k+1} - z^* \|_M^2 \,\big|\, \cZ^k\big)  \leq & \|z^{k} - z^*
+\|_M^2  +{\sigma\over m}\sum_{d\in J(k)}\|z^d-z^{d+1}\|_M^2\\
++& {1\over m}\left({{|J(k)|}\over \sigma}+{\kappa\over
+mq_{\min}}-{1\over \eta_k}\right)\|z^k-\bar z^{k+1}\|_M^2
+\end{aligned}
+\end{align}
+where $\mathbb{E}(\cdot\,|\,\cZ^k)$ denotes conditional  expectation  on $\cZ^k$ and $\sigma>0$ (to be optimized later).
+\end{lemma}
+\begin{proof}
+We have
+\begin{equation}\label{eqn:equality_inconsistent}
+\begin{aligned}
+&\mathbb{E}\left(\|z^{k+1} - z^*\|_M^2\,|\,\cZ^k\right)\\
+\overset{\eqref{eqn:asyn_update_a2}}=&\mathbb{E}\left(\|z^{k}  -
+\textstyle\frac{\eta_k}{mq_{i_k}}\cS_{i_k} \hat{z}^{k}- z^*
+\|_M^2\,|\,\cZ^k\right)\\
+=& \|z^k -
+z^*\|_M^2+\mathbb{E}\left(\textstyle\frac{2\eta_k}{mq_{i_k}} \left\langle
+\cS_{i_k} \hat{z}^{k}, z^* - z^k \right\rangle_M +
+\textstyle\frac{\eta_k^2}{m^2q_{i_k}^2}
+\|\cS_{i_k}\hat{z}^{k}\|_M^2\,\big|\,\cZ^k\right)\\
+=&\|z^k -
+z^*\|_M^2+\textstyle\frac{2\eta_k}{m} \sum_{i=1}^m\left\langle \cS_i
+\hat{z}^{k}, z^* - z^k \right\rangle_M +
+\frac{\eta_k^2}{m^2}\sum_{i=1}^m\frac{1}{q_i}\|\cS_i\hat{z}^{k}\|_M^2\\
+=&\|z^k
+- z^*\|_M^2+\textstyle\frac{2\eta_k}{m} \left\langle \cS \hat{z}^{k}, z^* - z^k
+\right\rangle_M +\frac{\eta_k^2}{m^2} \sum_{i=1}^m\frac{1}{q_i}
+\|\cS_i\hat{z}^{k}\|_M^2,
+\end{aligned}
+\end{equation}
+where the third equality holds because the probability of choosing $i$ is $q_i$.
+
+Note that
+\begin{equation}\label{term2}
+\begin{aligned}
+\textstyle\sum_{i=1}^m\frac{1}{q_i} \|\cS_i\hat{z}^{k}\|_M^2&\le\frac{1}{q_{\min}}
+\sum_{i=1}^m\|\cS_i\hat{z}^{k}\|_M^2\overset{\eqref{eqn:bound_lemma1}}{\leq}
+\frac{\kappa}{q_{\min}} \sum_{i=1}^m\|\cS\hat{z}^{k}\|^2_M\\
+%&\leq\frac{\lambda_{\max}^2}{q_{\min}}
+%\|S\hat{z}^{k}\|^2\overset{\eqref{eqn:def_bar_x}}{=}
+%\begin{array}{l}\frac{\lambda_{\max}^2}{\eta_k^2q_{\min}}\end{array}\|z^k-\bar{z}^{k+1}\|^2
+%\\
+&\overset{\eqref{eqn:def_bar_x}}{=}\frac{\kappa}{\eta_k^2q_{\min}}\|z^k-\bar{z}^{k+1}\|_M^2,
+%=\frac{\kappa^2}{\eta_k^2q_{\min}}\|z^k-\bar{z}^{k+1}\|_M^2,
+\end{aligned}
+\end{equation}
+and
+\begin{equation}\label{term1}
+\begin{aligned}
+&\langle \cS \hat{z}^{k}, z^* - z^k \rangle_M\\
+=&\textstyle\langle \cS \hat{z}^{k},z^* - \hat{z}^k + \sum_{d\in J(k)} (z^{d} -
+z^{d+1})\rangle_M\cr \overset{\eqref{eqn:def_bar_x}}=&\textstyle\langle \cS
+\hat{z}^{k}, z^* - \hat{z}^k\rangle_M + \frac{1}{\eta_k}\sum_{d\in J(k)}\langle
+z^k-\bar{z}^{k+1}, z^{d} - z^{d+1}\rangle_M\cr \le&\textstyle \langle \cS
+\hat{z}^{k}-\cS z^*, z^* - \hat{z}^k\rangle_M+\frac{1}{2\eta_k}\sum_{d\in
+J(k)}\big(\frac{1}{\sigma}\|z^k-\bar{z}^{k+1}\|_M^2+ \sigma\|z^{d} -
+z^{d+1}\|_M^2\big)\cr \overset{\eqref{eqn:alpha_avg}}\le&\textstyle
+-\frac{1}{2}\|\cS \hat{z}^{k}\|_M^2+\frac{1}{2\eta_k}\sum_{d\in
+J(k)}(\frac{1}{\sigma}\|z^k-\bar{z}^{k+1}\|_M^2+ \sigma\|z^{d} -
+z^{d+1}\|_M^2)\cr
+\overset{\eqref{eqn:def_bar_x}}=&\textstyle-\frac{1}{2\eta_k^2}\|z^k-\bar{z}^{k+1}\|_M^2+
+\frac{|J(k)|}{2\sigma\eta_k}\|z^k-\bar{z}^{k+1}\|_M^2+\frac{\sigma}{2\eta_k}\sum_{d\in
+J(k)}\|z^{d} - z^{d+1}\|_M^2,
+\end{aligned}
+\end{equation}
+where the first inequality follows from the Young's inequality. Plugging~\eqref{term2} and~\eqref{term1} into~\eqref{eqn:equality_inconsistent} gives the desired result.\hfill\end{proof}
+
+Let $\FF^{\tau+1}=\prod_{i=0}^{\tau}\FF$ be a product space and $\langle\cdot\, |\,\cdot \rangle$ be the induced  inner product:
+$$\langle (z^0,\ldots,z^{\tau})\,|\,(\tilde{z}^0,\ldots,\tilde{z}^{\tau})\rangle=\sum_{i=0}^{\tau}\langle z^i,\tilde{z}^i\rangle_M,\quad\forall (z^0,\ldots,z^{\tau}), (\tilde{z}^0,\ldots,\tilde{z}^{\tau})\in\FF^{\tau+1}.$$ 
+Define a $(\tau+1)\times(\tau+1)$ matrix $U'$ by 
+\begin{equation*}%\label{eqn:M_p}
+U':=\begin{bmatrix}1 & 0 & \cdots &0\\
+0 & 0 &\cdots & 0\\ \vdots &\vdots & \ddots & \vdots\\
+0 & 0 &\cdots & 0 \end{bmatrix}
++\sqrt{\frac{q_{\min}}{\kappa}}\begin{bmatrix} \tau & -\tau &  & \\
+-\tau & 2\tau-1 & 1-\tau & \\
+ & 1-\tau & 2\tau-3 & 2-\tau  & \\
+ & & \ddots & \ddots & \ddots &\\
+ & & & -2 & 3  & -1 \\
+ & & & &-1 & 1
+\end{bmatrix},
+\end{equation*}
+and let $U=U'\otimes \cI_\FF$. Here $\otimes$ represents the Kronecker product. For a given $(y^0,\cdots,y^\tau)\in\FF^{\tau+1}$, $(z^0,\cdots,z^\tau)=U(y^0,\cdots,y^\tau)$ is given by:
+\begin{align*}
+&z^0=\textstyle
+y^0+\tau\sqrt{\frac{q_{\min}}{\kappa}} (y^0-y^1),\\
+&z^i =
+\textstyle\sqrt{\frac{q_{\min}}{\kappa}}((i-\tau-1)y^{i-1}+(2\tau-2i+1)y^i+(i-\tau)y^{i+1}),\text{ if } 1\le i\le \tau-1,\\
+&z^{\tau}=\textstyle\sqrt{\frac{q_{\min}}{\kappa}} (y^{\tau}-y^{\tau-1}).
+\end{align*} 
+Then $U$ is a self-adjoint and positive definite linear operator since $U'$ is
+symmetric and positive definite, and we define $\langle\cdot\, |\,
+\cdot\rangle_U=\langle\cdot\, |\, U\cdot\rangle$ as the $U$-weighted inner
+product and $\|\cdot\|_U$ the induced norm.
+ 
+Let 
+\begin{equation*}%\label{eqn:def_x_k}
+\vz^k=(z^k,z^{k-1},\ldots,z^{k-\tau})\in \FF^{\tau+1},~k\ge 0,~\vz^* =(z^*,\ldots,z^*)\in\vZ^*\subseteq\FF^{\tau+1},
+%\vx^k=\begin{bmatrix}x^k\\ x^{k-1}\\\vdots\\ x^{k-\tau}\end{bmatrix}\in \cH^{\tau+1},~k=0,1,\ldots,\quad\mbox{and}\quad \vx^* = \begin{bmatrix}x^*\\ x^*\\\vdots\\ x^*\end{bmatrix}\in \vX^* \subseteq\cH^{\tau+1},
+\end{equation*}
+where $z^{k}=z^{0}$ for $k<0$. With
+\begin{equation}\label{eqn:xi}
+\textstyle \xi_k(\vz^*) := \|\vz^k-\vz^*\|_U^2=\|z^{k} - z^*\|_M^2 +
+\sqrt{q_{\min}\over \kappa}\sum_{i=k-\tau}^{k-1} (i-(k-\tau)+1) \|
+z^{i} - z^{i+1}\|_M^2,
+\end{equation}
+we have the following fundamental inequality:
+\begin{thm}[fundamental inequality]\label{thm:fund_inquality}
+Let $(z^k)_{k\geq 0}$ be the sequence generated by Algorithm~\ref{alg:asyn_overlap}. Then for any $\vz^*\in\vZ^*$, it holds that %the following fundamental inequality% for both consistent read and inconsistent read
+\begin{equation*}%\label{eqn:fund_inquality}
+\begin{aligned}
+\mathbb{E}\left(\xi_{k+1}(\vz^*) \,\big|\, \cZ^k\right)  
+\leq  \xi_k(\vz^*)  + \frac{1}{m}
+\left(\frac{2\tau\sqrt{\kappa}}{m\sqrt{q_{\min}}} +
+{\kappa\over mq_{\min}} - \frac{1}{ \eta_k}\right)
+\|\bar{z}^{k+1} - z^k \|_M^2.
+\end{aligned}
+\end{equation*}
+\end{thm}
+\begin{proof}Let $\sigma=m\sqrt{\frac{q_{\min}}{\kappa}}$. We have 
+\begin{align*}
+~&\mathbb{E} (\xi_{k+1}(\vz^*) | \cZ^k)  \\
+\overset{\eqref{eqn:xi}}= & \textstyle \mathbb{E} (\|z^{k+1} - z^*\|_M^2| \cZ^k)
++ \sigma\sum_{i=k+1-\tau}^{k} \frac{i-(k-\tau)}{m} \mathbb{E} (\| z^{ i} -
+z^{i+1}\|_M^2 | \cZ^k) \\
+ %=&  \mathbb{E} (\|z^{k+1} - z^*\|^2| \cZ^k) + \frac{\tau}{m} \mathbb{E} (\| z^{k } - z^{k+1}\|^2 | \cZ^k) + \sum_{i=k+1-\tau}^{k-1} \frac{i-(k-\tau)}{m} \| z^{i} - z^{i+1}\|^2 \\
+  \overset{\eqref{eqn:asyn_update_a2}}= & \textstyle\mathbb{E} (\|z^{k+1} -
+  z^*\|_M^2| \cZ^k) + \frac{\sigma\tau}{m}
+  \mathbb{E}(\frac{\eta_k^2}{m^2q_{i_k}^2}\| S_{i_k}\hat z^k\|_M^2|\cZ^k) + 
+  \sigma\sum_{i=k+1-\tau}^{k-1} \frac{i-(k-\tau)}{m} \| z^{i} - z^{i+1}\|_M^2\\
+          \le & \textstyle\mathbb{E} (\|z^{k+1} - z^*\|_M^2| \cZ^k) +
+          \frac{\sigma\tau\kappa}{m^3q_{\min}} \| z^{k } -
+          \bar{z}^{k+1}\|_M^2 + \sigma\sum_{i=k+1-\tau}^{k-1} \frac{i-(k-\tau)}{m} \| z^{i} -
+          z^{i+1}\|_M^2\\
+  \overset{\eqref{eqn:fund_inquality0}}\leq &\textstyle\|z^k - z^*\|_M^2 +
+  \frac{1}{m} \left({|J(k)|\over \sigma} +
+  \frac{\sigma\tau\kappa}{m^2q_{\min}} +
+  {\kappa\over mq_{\min}} - \frac{1}{\eta_k}\right) \|z^k -
+  \bar{z}^{k+1}\|_M^2   \\
+&\textstyle+\frac{\sigma}{m}\sum_{d\in J(k)}\|{z}^{d} - {z}^{d+1}\|_M^2 + 
+\sigma\sum_{i=k+1-\tau}^{k-1} \frac{i-(k-\tau)}{m} \| z^{i} - z^{i+1}\|_M^2\\
+ \leq &\textstyle\|z^k - z^*\|_M^2 + \frac{1}{m} \left({\tau\over \sigma} +
+ \frac{\sigma\tau\kappa}{m^2q_{\min}} +
+ {\kappa\over mq_{\min}} - \frac{1}{ \eta_k}\right) \|z^k -
+ \bar{z}^{k+1}\|_M^2   \\
+&\textstyle+\frac{\sigma}{m}\sum_{i=k-\tau}^{k - 1}\|{z}^{i} - {z}^{i+1}\|_M^2 + 
+\sigma\sum_{i=k+1-\tau}^{k-1} \frac{i-(k-\tau)}{m} \| z^{i} - z^{i+1}\|_M^2\\
+%& =  \|x^k - x^*\|^2 + \frac{1}{m} (|J(k)| + \frac{\tau}{m} + {1\over mp_{\min}} - \frac{1}{\alpha \eta_k}) \|x^k - \bar{x}^{k+1}\|^2   \\
+%~~~&+ \frac{1}{m} \|x^{k - \tau} - x^{k- \tau +1}\|^2 + \sum_{i=k+1-\tau}^{k-1} \frac{i-(k-\tau)+1}{m} \| x^{i} - x^{i+1}\|^2 \\
+%& =  \|x^k - x^*\|^2 + \frac{1}{m} (|J(k)| + \frac{\tau}{m^2p_{\min}} + {1\over mp_{\min}} - \frac{1}{\alpha \eta_k}) \|x^k - \bar{x}^{k+1}\|^2  + \sum_{i=k-\tau}^{k-1} \frac{i-(k-\tau)+1}{m} \| z^{i} - z^{i+1}\|^2 \\
+ \overset{\eqref{eqn:xi}}= &\textstyle\xi_k(\vx^*)  + \frac{1}{m}
+ \left(\frac{2\tau\sqrt{\kappa}}{m\sqrt{q_{\min}}} +
+ {\kappa\over mq_{\min}} - \frac{1}{ \eta_k}\right) \|z^k -
+ \bar{z}^{k+1}\|_M^2.
+\end{align*}
+The first inequality follows from the computation of the conditional expectation on $\cZ^k$
+and~\eqref{term2}, the third inequality holds because
+$J(k)\subset\{k-1,k-2,\cdots,k-\tau\}$, and the last equality uses
+$\sigma=m\sqrt{\frac{q_{\min}}{\kappa}}$, which minimizes ${\tau\over
+\sigma} + \frac{\sigma\tau\kappa}{m^2q_{\min}}$ over
+$\sigma>0$.
+Hence, the desired inequality holds.
+\hfill\end{proof}
+

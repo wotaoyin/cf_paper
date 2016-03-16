@@ -1,0 +1,283 @@
+
+%% macros for commenting
+\usepackage{mathtools}
+\usepackage[normalem]{ulem} % to use \sout
+%\usepackage{algorithm,algorithmic}
+%\usepackage{graphicx, subfigure}
+\usepackage{subcaption}
+%\usepackage{url}
+\usepackage{enumerate}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{multirow}
+
+
+%% a light-weight algorithm environment
+\newtheorem{algo}{Algorithm}
+
+%% highlighting and commenting
+\newcommand{\outline}[1]{{\color{brown}#1}}
+\newcommand{\rev}[1]{{\color{blue}#1}}
+\newcommand{\commwy}[1]{{\color{red}(#1 -- Wotao)}} % Wotao Yin's comments
+\newcommand{\commyx}[1]{{\color{red}(#1 -- Yangyang)}} % Yangyang Xu's comments
+\newcommand{\commzp}[1]{{\color{red}(#1 -- Zhimin)}} % Yangyang Xu's comments
+\newcommand{\commtw}[1]{{\color{red}(#1 -- Tianyu)}} 
+\newcommand{\commrw}[1]{{\color{red}(#1 -- Reviewer)}} % Yangyang Xu's comments
+\newcommand{\remove}[1]{{}}
+\newcommand{\cut}[1]{}
+
+%% macros for letters
+
+\newcommand{\va}{{\mathbf{a}}}
+\newcommand{\vb}{{\mathbf{b}}}
+\newcommand{\vc}{{\mathbf{c}}}
+\newcommand{\vd}{{\mathbf{d}}}
+\newcommand{\ve}{{\mathbf{e}}}
+\newcommand{\vf}{{\mathbf{f}}}
+\newcommand{\vg}{{\mathbf{g}}}
+\newcommand{\vh}{{\mathbf{h}}}
+\newcommand{\vi}{{\mathbf{i}}}
+\newcommand{\vj}{{\mathbf{j}}}
+\newcommand{\vk}{{\mathbf{k}}}
+\newcommand{\vl}{{\mathbf{l}}}
+\newcommand{\vm}{{\mathbf{m}}}
+\newcommand{\vn}{{\mathbf{n}}}
+\newcommand{\vo}{{\mathbf{o}}}
+\newcommand{\vp}{{\mathbf{p}}}
+\newcommand{\vq}{{\mathbf{q}}}
+\newcommand{\vr}{{\mathbf{r}}}
+\newcommand{\vs}{{\mathbf{s}}}
+\newcommand{\vt}{{\mathbf{t}}}
+\newcommand{\vu}{{\mathbf{u}}}
+\newcommand{\vv}{{\mathbf{v}}}
+\newcommand{\vw}{{\mathbf{w}}}
+\newcommand{\vx}{{\mathbf{x}}}
+\newcommand{\vy}{{\mathbf{y}}}
+\newcommand{\vz}{{\mathbf{z}}}
+%
+%\newcommand{\ta}{{\tilde{a}}}
+%\newcommand{\tb}{{\tilde{b}}}
+%\newcommand{\tc}{{\tilde{c}}}
+%\newcommand{\td}{{\tilde{d}}}
+%\newcommand{\te}{{\tilde{e}}}
+%\newcommand{\tf}{{\tilde{f}}}
+%\newcommand{\tg}{{\tilde{g}}}
+%\newcommand{\th}{{\tilde{h}}}
+%\newcommand{\ti}{{\tilde{i}}}
+%\newcommand{\tj}{{\tilde{j}}}
+%\newcommand{\tk}{{\tilde{k}}}
+%\newcommand{\tl}{{\tilde{l}}}
+%\newcommand{\tm}{{\tilde{m}}}
+%\newcommand{\tn}{{\tilde{n}}}
+%\newcommand{\to}{{\tilde{o}}}
+%\newcommand{\tp}{{\tilde{p}}}
+%\newcommand{\tq}{{\tilde{q}}}
+%\newcommand{\tr}{{\tilde{r}}}
+%\newcommand{\ts}{{\tilde{s}}}
+%\newcommand{\tt}{{\tilde{t}}}
+%\newcommand{\tu}{{\tilde{u}}}
+\newcommand{\tv}{{\tilde{v}}}
+\newcommand{\tw}{{\tilde{w}}}
+%\newcommand{\tx}{{\tilde{x}}}
+%\newcommand{\ty}{{\tilde{y}}}
+\newcommand{\tz}{{\tilde{z}}}
+\newcommand{\umu}{\overline{M}}
+\newcommand{\lmu}{\underline{M}}
+
+\newcommand{\vA}{{\mathbf{A}}}
+\newcommand{\vB}{{\mathbf{B}}}
+\newcommand{\vC}{{\mathbf{C}}}
+\newcommand{\vD}{{\mathbf{D}}}
+\newcommand{\vE}{{\mathbf{E}}}
+\newcommand{\vF}{{\mathbf{F}}}
+\newcommand{\vG}{{\mathbf{G}}}
+\newcommand{\vH}{{\mathbf{H}}}
+\newcommand{\vI}{{\mathbf{I}}}
+\newcommand{\vJ}{{\mathbf{J}}}
+\newcommand{\vK}{{\mathbf{K}}}
+\newcommand{\vL}{{\mathbf{L}}}
+\newcommand{\vM}{{\mathbf{M}}}
+\newcommand{\vN}{{\mathbf{N}}}
+\newcommand{\vO}{{\mathbf{O}}}
+\newcommand{\vP}{{\mathbf{P}}}
+\newcommand{\vQ}{{\mathbf{Q}}}
+\newcommand{\vR}{{\mathbf{R}}}
+\newcommand{\vS}{{\mathbf{S}}}
+\newcommand{\vT}{{\mathbf{T}}}
+\newcommand{\vU}{{\mathbf{U}}}
+\newcommand{\vV}{{\mathbf{V}}}
+\newcommand{\vW}{{\mathbf{W}}}
+\newcommand{\vX}{{\mathbf{X}}}
+\newcommand{\vY}{{\mathbf{Y}}}
+\newcommand{\vZ}{{\mathbf{Z}}}
+
+\newcommand{\cA}{{\mathcal{A}}}
+\newcommand{\cB}{{\mathcal{B}}}
+\newcommand{\cC}{{\mathcal{C}}}
+\newcommand{\cD}{{\mathcal{D}}}
+\newcommand{\cE}{{\mathcal{E}}}
+\newcommand{\cF}{{\mathcal{F}}}
+\newcommand{\cG}{{\mathcal{G}}}
+\newcommand{\cH}{{\mathcal{H}}}
+\newcommand{\cI}{{\mathcal{I}}}
+\newcommand{\cJ}{{\mathcal{J}}}
+\newcommand{\cK}{{\mathcal{K}}}
+\newcommand{\cL}{{\mathcal{L}}}
+\newcommand{\cM}{{\mathcal{M}}}
+\newcommand{\cN}{{\mathcal{N}}}
+\newcommand{\cO}{{\mathcal{O}}}
+\newcommand{\cP}{{\mathcal{P}}}
+\newcommand{\cQ}{{\mathcal{Q}}}
+\newcommand{\cR}{{\mathcal{R}}}
+\newcommand{\cS}{{\mathcal{S}}}
+\newcommand{\cT}{{\mathcal{T}}}
+\newcommand{\cU}{{\mathcal{U}}}
+\newcommand{\cV}{{\mathcal{V}}}
+\newcommand{\cW}{{\mathcal{W}}}
+\newcommand{\cX}{{\mathcal{X}}}
+\newcommand{\cY}{{\mathcal{Y}}}
+\newcommand{\cZ}{{\mathcal{Z}}}
+
+\newcommand{\ri}{{\mathrm{i}}}
+\newcommand{\rr}{{\mathrm{r}}}
+
+
+%% macros for math notions and operators
+
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\HH}{\mathbb{H}}
+\newcommand{\II}{\mathbb{I}}
+\newcommand{\JJ}{\mathbb{J}}
+\newcommand{\DD}{\mathbb{D}}
+\newcommand{\GG}{\mathbb{G}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\renewcommand{\SS}{{\mathbb{S}}}
+\newcommand{\SSp}{\mathbb{S}_{+}}
+\newcommand{\SSpp}{\mathbb{S}_{++}}
+\newcommand{\sign}{\mathrm{sign}}
+\newcommand{\vzero}{\mathbf{0}}
+\newcommand{\vone}{{\mathbf{1}}}
+
+%%Probability symbols.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\mkT}{\mathfrak{T}}
+\newcommand{\mkS}{\mathfrak{S}}
+\newcommand{\mkQ}{\mathfrak{Q}}
+\newcommand{\pr}{\mathrm{prod}}
+
+\newcommand{\st}{{\text{s.t.}}} % subject to
+\newcommand{\St}{{\mathrm{subject~to}}} % subject to
+\newcommand{\op}{{\mathrm{op}}} % subscript for operator norm
+\newcommand{\opt}{{\mathrm{opt}}} % subscript for optimal solution
+%\newcommand{\supp}{{\mathrm{supp}}} % support
+\newcommand{\Prob}{{\mathrm{Prob}}} % probability
+\newcommand{\Diag}{{\mathrm{Diag}}} % vector -> diagonal matrix
+%\newcommand{\diag}{{\mathrm{diag}}} % matrix diagonal -> vector
+\newcommand{\dom}{{\mathrm{dom}}} % domain
+\newcommand{\range}{{\mathrm{range}}} % domain
+%\newcommand{\grad}{{\nabla}}    % gradient
+\newcommand{\tr}{{\mathrm{tr}}} % trace
+\newcommand{\TV}{{\mathrm{TV}}} % total variation
+\newcommand{\Proj}{{\mathrm{Proj}}}
+\newcommand{\prj}{{\mathbf{proj}}}
+\newcommand{\prox}{\mathbf{prox}}
+\newcommand{\reflh}{\refl^{\bH}}
+\newcommand{\proxh}{\prox^{\bH}}
+\newcommand{\minimize}{\text{minimize}}
+\newcommand{\bgamma}{\boldsymbol{\gamma}}
+\newcommand{\bsigma}{\boldsymbol{\sigma}}
+\newcommand{\bomega}{\boldsymbol{\omega}}
+\newcommand{\blambda}{\boldsymbol{\lambda}}
+\newcommand{\bH}{\vH}
+\newcommand{\bbH}{\mathbb{H}}
+\newcommand{\bB}{\boldsymbol{\cB}}
+\newcommand{\Tau}{\mathrm{T}}
+\newcommand{\tnabla}{\widetilde{\nabla}}
+\newcommand{\TS}{{\cT_{\mathrm{3S}}}}
+\newcommand{\TFBS}{{\cT_{\mathrm{FBS}}}}
+\newcommand{\TBFS}{{\cT_{\mathrm{BFS}}}}
+\newcommand{\TDRS}{{\cT_{\mathrm{DRS}}}}
+\newcommand{\TPRS}{{\cT_{\mathrm{PRS}}}}
+\newcommand{\TFBFS}{{\cT_{\mathrm{FBFS}}}}
+\newcommand{\TFDRS}{{\cT_{\mathrm{FDRS}}}}
+\newcommand{\TVC}{{\cT_{\textnormal{CV}}}}
+\newcommand{\best}{\mathrm{best}}
+\newcommand{\kbest}{k_{\best}}
+\newcommand{\diff}{\mathrm{diff}}
+\newcommand{\xbar}{\bar{x}}
+\newcommand{\xgbar}{\bar{x}_g}
+\newcommand{\xfbar}{\bar{x}_f}
+\newcommand{\xihat}{\hat{\xi}}
+\newcommand{\xg}{x_g}
+\newcommand{\xf}{x_f}
+\newcommand{\du}{\mathrm{d}u}
+\newcommand{\dy}{\mathrm{d}y}
+\newcommand{\kconvergence}{\stackrel{k \rightarrow \infty}{\rightarrow }}
+\newcommand{\Grph}{\mathrm{Grph}}
+\DeclareMathOperator{\shrink}{shrink} % shrinkage
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\Min}{minimize}
+\DeclareMathOperator*{\Max}{maximize}
+\DeclareMathOperator*{\Fix}{Fix}
+\DeclareMathOperator*{\zer}{zer}    % the set of zeros of an operator
+\DeclareMathOperator*{\nablah}{\nabla^{\bH}}
+\DeclareMathOperator*{\gra}{gra}
+\DeclarePairedDelimiter{\dotpb}{\langle}{\rangle_{\bH}}
+\DeclarePairedDelimiter{\dotpv}{\langle}{\rangle_{\vH}}
+\DeclareMathOperator*{\as}{a.s.}
+\newcommand{\nops}[2]{\ensuremath{\mathfrak{M}\left[{#1}\mapsto {#2}\right]}}
+
+
+%% macros for environments math equations
+
+\newcommand{\MyFigure}[1]{../fig/#1}
+
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+
+\newcommand{\bdm}{\begin{displaymath}}
+\newcommand{\edm}{\end{displaymath}}
+
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+
+\newcommand{\bfl}{\begin{flushleft}}
+\newcommand{\efl}{\end{flushleft}}
+
+\newcommand{\bt}{\begin{tabbing}}
+\newcommand{\et}{\end{tabbing}}
+
+\newcommand{\beqn}{\begin{align}}
+\newcommand{\eeqn}{\end{align}}
+
+\newcommand{\beqs}{\begin{align*}} % no equation numbers
+\newcommand{\eeqs}{\end{align*}}  % no equation numbers
+
+%% macros for theorem-like environments
+\newtheorem{assumption}{Assumption}
+
+%\newtheorem{theorem}{Theorem}
+% \newtheorem{proof}{Proof}
+
+%% AMSA theorem
+\ifamsa
+    \newtheorem{condition}{Condition}
+    \newtheorem{rul}{Rule}
+    \newtheorem{definition}{Definition}
+    \newtheorem{corollary}{Corollary}
+    \newtheorem{remark}{Remark}
+    \newtheorem{lemma}{Lemma}
+    \newtheorem{proposition}{Proposition}
+    \newtheorem{example}{Example}
+\fi
+
+%\newtheorem{example}[remark]{Example}
+
+
+

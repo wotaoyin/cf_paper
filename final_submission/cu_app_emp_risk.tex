@@ -1,0 +1,24 @@
+% !TEX root = ./amsa_main.tex
+\subsubsection{Empirical Risk Minimization (ERM)}
+We consider the following regularized empirical risk minimization problem
+\begin{equation}\label{prob:erm}
+\Min_{x\in\RR^m}~ \frac{1}{p}\sum_{j=1}^p\phi_j(a_j^\top x)+f(x)+g(x),
+\end{equation}
+where $a_j$'s are sample vectors, $\phi_j$'s are loss functions, and $f+g$ is a regularization function. We assume that $f$ is differentiable and $g$ is proximable. Examples of~\eqref{prob:erm} include linear SVM, regularized logistic regression, ridge regression, and Lasso. Further information on ERM can be found in \cite{hastie2005elements}. The need for coordinate update algorithms arises in many applications of~\eqref{prob:erm} where the number of samples or the dimension of $x$ is large. 
+
+We define $A=[a_1^\top;a_2^\top;\dots,a_p^\top]$ and $h(y):=\frac{1}{p}\sum_{j=1}^p\phi_j(y_j)$. Hence, $h(Ax)=\frac{1}{p}\sum_{j=1}^p\phi_j(a_j^\top x)$, and problem~\eqref{prob:erm} reduces to form~\eqref{pdproblem}.
+We can apply the primal-dual update scheme to solve this problem, for which we introduce the dual variable $s = (s_1, ..., s_p)^\top$. We use $p+1$ coordinates, where the $0$th coordinate is $x\in\RR^m$ and the $j$th coordinate is $s_j$, $j\in [p]$. The operator $\cT$ is given in~\eqref{vucondat2}. At each iteration, a coordinate is updated:
+\begin{equation}
+{\left\{
+\begin{array}{l}
+\text{if }x\text{ is chosen (the index 0), then compute}\\
+\qquad {x}^{k+1}=\prox_{\eta g}(x^k-\eta(\nabla f(x^k)+A^\top s^k)),\\
+\text{if }s_j\text{ is chosen (an index $j \in [p]$), then compute}\\
+\qquad\tilde{x}^{k+1}=\prox_{\eta g}(x^k-\eta(\nabla f(x^k)+A^\top s^k)),\\
+\qquad\text{and}\\
+\qquad{s}_j^{k+1}=\frac{1}{p}\prox_{p\gamma \phi_j^*} (ps_j^k+p\gamma a_j^\top(2\tilde{x}^{k+1}-x^k)).
+\end{array}
+\right.
+}\end{equation}
+
+We maintain $A^\top s\in \RR^m$ in the memory. Depending on the structure of $\nabla f$, we can compute it each time or maintain it. When $\prox_g\in\cF_1$, we can consider breaking $x$ into coordinates $x_i$'s and also select an index $i$ to update $x_i$ at each time.

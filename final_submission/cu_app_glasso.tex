@@ -1,0 +1,54 @@
+% !TEX root = ./amsa_main.tex
+\subsubsection{Group Lasso}\label{sec:glasso}
+The group Lasso regression problem \cite{YL2006GrpLasso} is 
+\begin{equation}\label{eq:glasso}
+\Min_{x\in\RR^n}  f(x)+\sum_{i=1}^m\lambda_i\|x_i\|_2,
+\end{equation} 
+where $ f$ is a differentiable convex function, often bearing the form $\frac{1}{2}\|Ax-b\|_2^2$, and $x_i\in \RR^{n_i}$ is a subvector of $x\in\RR^n$ supported on $\II_i\subset [n]$, and $\cup_i \II_i= [n]$. If $\II_i\cap \II_j =\emptyset, \,\forall i\neq j$, it is called \emph{non-overlapping group Lasso}, and if there are two different groups $\II_i$ and $\II_j$ with a non-empty intersection, it is called \emph{overlapping group Lasso}. The model finds a coefficient vector $x$ that minimizes the fitting (or loss) function $f(x)$ and that is group sparse: all but a few $x_i$'s are zero.  
+
+Let $U_i$ be formed by the columns of the identity matrix $I$ corresponding to the indices in $\II_i$, and let $U=[U_1^\top;\ldots;U_m^\top]\in\RR^{(\Sigma_i n_i)\times n}$. Then, $x_i=U_i^\top x$. Let $h_i(y_i)=\lambda_i\|y_i\|_2,\,y_i\in\RR^{n_i}$ for $i \in [m]$, and $h(y)=\sum_{i=1}^m h_i(y_i)$ for $y=[y_1;\ldots;y_m]\in\RR^{\Sigma_i n_i}$. In this way, \eqref{eq:glasso} becomes
+\begin{equation}\label{eq:glasso2}
+\Min_x f(x)+h(Ux).
+\end{equation}
+
+\subsubsection*{Non-overlapping case~\cite{YL2006GrpLasso}} In this case, we have $\II_i\cap \II_j =\emptyset, \,\forall i\neq j$, and can apply the FBS scheme \eqref{eq:FBS} to \eqref{eq:glasso2}. Specifically, let $\cT_1=\partial (h\circ U)$ and $\cT_2=\nabla f$. The FBS full update is 
+$$x^{k+1}=\cJ_{\gamma \cT_1}\circ(\cI-\gamma\cT_2)(x^k).$$
+The corresponding coordinate update is the following
+\begin{equation}\label{update-nonlap-gl}
+{\left\{
+\begin{array}{l}
+\text{if }i \in [m]\text{ is chosen, then compute}\\
+\qquad x_i^{k+1}=\argmin_{x_i}\frac{1}{2}\|x_i-x_i^k+\gamma_i \nabla_i f(x^k)\|_2^2+ \gamma_i h_i(x_i),\\
+\end{array}
+\right.
+}\end{equation}
+where the step size can be taken to be $\gamma_i=\frac{1}{\|A_{:,i}\|^2}$. When $\nabla f$ is either cheap or easy-to-maintain,  the coordinate update in \eqref{update-nonlap-gl} is inexpensive.
+
+\subsubsection*{Overlapping case~\cite{jacob2009group}} This case allows $\II_i\cap \II_j \neq\emptyset$ for some $i\neq j$, causing the evaluation of $\cJ_{\gamma\cT_1}$ to be generally difficult. However, we can apply the primal-dual update \eqref{vucondat} to this problem as
+\begin{subequations}\label{eq:pd-glasso}
+\begin{align}
+s^{k+1}=&\,\prox_{\gamma h^*} (s^k+\gamma U x^k),\label{eq:pd-glasso-s}\\
+x^{k+1}=&\,x^k-\eta(\nabla f(x^k)+U^\top(2s^{k+1}-s^k))\DIFaddbegin \DIFadd{,}\DIFaddend \label{eq:pd-glasso-x}
+\end{align}
+where $s$ is the dual variable. 
+\end{subequations}
+Note that 
+$$h^*(s)=\left\{
+\begin{array}{ll}
+0,&\mbox{if }\|s_i\|_2\le \lambda_i,\,\forall i,\\
++\infty,&\mbox{otherwise,}
+\end{array}
+\right.$$
+is cheap.
+Hence, the corresponding coordinate update of \eqref{eq:pd-glasso} is
+\begin{equation}\label{update-lap-gs}
+{\left\{
+\begin{array}{l}
+\text{if $s_i$  is chosen for some $i \in [m]$, then compute}\\
+\quad s_i^{k+1}=\,\prj_{B_{\lambda_i}}(s_i^k+\gamma x_i^k) \\
+\text{if $x_i$  is chosen for some $i \in [m]$, then compute}\\
+\quad x_i^{k+1}=\,x_i^k-\eta\left(U_i^T \nabla f(x^k)+U_i^T \sum_{j, U_i^T U_j \neq 0} U_j(2\prj_{B_{\lambda_j}}(s_j^k+\gamma x_j^k)-s_j^k)\right),\\
+\end{array}
+\right.
+}\end{equation}
+where $B_\lambda$ is the Euclidean ball of radius $\lambda$. When $\nabla f$ is easy-to-maintain, the coordinate update in \eqref{update-lap-gs} is inexpensive. To the best of our knowledge, the coordinate update method~\eqref{update-lap-gs} is new. 

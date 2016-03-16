@@ -1,0 +1,6 @@
+% !TEX root = ./amsa_main.tex
+\section{Applications}\label{sec:applications}
+In this section, we provide examples to illustrate how to develop coordinate update algorithms based on CF operators. The applications are categorized into five different areas. The first subsection discusses three well-known machine learning problems: empirical risk minimization, Support Vector Machine (SVM), and group Lasso. The second subsection  discusses image processing problems including image deblurring, image denoising, and  Computed Tomography (CT) image recovery. The remaining subsections provide applications in finance, distributed computing as well as certain stylized optimization models. Several applications are treated with coordinate update algorithms for the first time. 
+
+
+For each problem, we describe the operator $\cT$ and how to efficiently calculate $(\cT x)_i$. The final algorithm is obtained after plugging the update in a coordinate update framework in \S\ref{sec:literature} along with  parameter initialization, an index selection rule, as well as some termination criteria.

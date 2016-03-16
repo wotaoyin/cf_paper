@@ -1,0 +1,59 @@
+% !TEX root = ./amsa_main.tex
+\subsubsection{Portfolio Optimization}
+Assume that we have one unit of capital and $m$ assets to invest on. The $i$th asset has an expected return rate $\xi_i\ge 0$\cut{ for $i\in[m]$}. Our goal is to find a portfolio with the minimal risk such that the expected return is no less than $c$. This problem can be formulated as
+
+\begin{equation*}
+\begin{array}{l}
+\displaystyle
+\Min_x ~ \frac{1}{2} x^\top Q x, \\
+\displaystyle
+\text{subject to}~ x\ge0, \sum_{i=1}^m x_i\le 1,\, \sum_{i=1}^m\xi_i x_i\ge c,
+\end{array}
+\end{equation*}
+where the objective function is a measure of risk, and the last constraint imposes that the expected return is at least $c$. Let $a_1=e/\sqrt{m}$, $b_1=1/\sqrt{m}$, $a_2=\xi/\|\xi\|_2$, and $b_2=c/\|\xi\|_2$, where $e = (1, \dots, 1)^\top, \xi = (\xi_1, \dots, \xi_m)^\top$. The above problem is rewritten as
+\begin{equation}\label{eq:portfolio}
+\Min_x \frac{1}{2} x^\top Q x,\ \text{subject to }\ x\ge0, ~a_1^\top x\le b_1,\, a_2^\top x\ge b_2.
+\end{equation}
+We apply the three-operator splitting scheme \eqref{3s} to \eqref{eq:portfolio}. Let $f(x)=\frac{1}{2}x^\top Q x$, $D_1=\{x: x\ge 0\}$, $D_2=\{x: a_1^\top x \le b_1,\, a_2^\top x\ge b_2\}$, $D_{21}=\{x: a_1^\top x=b_1\}$, and $D_{22}=\{x: a_2^\top x=b_2\}$. Based on \eqref{3s}, the full update is
+\begin{subequations}\label{eq:3op-portfolio}
+\begin{align}
+y^{k+1}=&\prj_{D_2}(x^k),\\
+x^{k+1}=&x^k+\eta_k\big(\prj_{D_1}(2y^{k+1}-x^k-\gamma \nabla f(y^{k+1}))-y^{k+1}\big), \end{align}
+\end{subequations}
+where $y$ is an intermediate variable. As the projection to $D_1$ is simple, we discuss how to evaluate the projection to $D_2$. Assume that $a_1$ and $a_2$ are neither perpendicular nor co-linear, i.e., $a_1^\top a_2\neq 0$ and $a_1\neq \lambda a_2$ for any scalar $\lambda$. In addition, assume $a_1^\top a_2>0$ for simplicity. Let $a_3=a_2-\frac{1}{a_1^\top a_2} a_1$, $b_3=b_2-\frac{1}{a_1^\top a_2} b_1$, $a_4=a_1-\frac{1}{a_1^\top a_2} a_2$, and $b_4=b_1-\frac{1}{a_1^\top a_2} b_2$. Then we can partition the whole space into four areas by the four hyperplanes $a_i^\top x=b_i$, $i=1,\ldots,4$. Let $P_i=\{x: a_i^\top x\le b_i, a_{i+1}^\top x\ge b_{i+1}\},\, i=1,2,3$ and $P_4=\{x: a_4^\top x\le b_4, a_1^\top x\ge b_1\}$. Then
+$$\prj_{D_2}(x)=\left\{
+\begin{array}{ll}
+x, & \text{ if }x\in P_1,\\
+\prj_{D_{22}}(x), &\text{ if }x\in P_2,\\
+\prj_{D_{21}\cap D_{22}}(x), & \text{ if }x\in P_3,\\
+\prj_{D_{21}}(x), & \text{ if }x\in P_4.
+\end{array}
+\right.$$
+Let $w_i=a_i^\top x-b_i, i=1,2$, and maintain $w_1,w_2$. Let $\tilde{a}_2=\frac{a_2-a_1(a_1^\top a_2)}{1-(a_1^\top a_2)^2}$, $\tilde{a}_1=\frac{a_1-a_2(a_1^\top a_2)}{1-(a_1^\top a_2)^2}$. Then
+\begin{align*}
+&\prj_{D_{21}}(x)=x-w_1a_1,\\
+&\prj_{D_{22}}(x)=x-w_2a_2,\\
+&\prj_{D_{21}\cap D_{22}}(x)=x-w_1 \tilde{a}_1-w_2\tilde{a}_2,
+\end{align*}
+%
+%
+%Let $w_i=a_i^\top x, i=1,2$, and maintain $w_1,w_2$. Let $\tilde{a}_2=\frac{a_2-a_1(a_1^\top a_2)}{\|a_2-a_1(a_1^\top a_2)\|_2}$ and $\tilde{b}_2=\frac{b_2-b_1(a_1^\top a_2)}{\|a_2-a_1(a_1^\top a_2)\|_2}$. Then $\tilde{A}=[a_1,\tilde{a}_2]$ is orthonormal, and $D_{21}\cap D_{22}=\{x: \tilde{A}^\top x=\tilde{b}=[b_1;\tilde{b}_2]\}$. Let $\tilde{x}=\tilde{A}\tilde{b}\in D_{21}\cap D_{22}$. Then
+%\begin{align*}
+%&\prj_{D_{21}}(x)=(I-a_1a_1^\top)(x-\tilde{x})+\tilde{x}=x-w_1a_1+b_1a_1,\\
+%&\prj_{D_{22}}(x)=(I-a_2a_2^\top)(x-\tilde{x})+\tilde{x}=x-w_2a_2+b_2a_2,\\
+%&\prj_{D_{21}\cap D_{22}}(x)=(I-\tilde{A}\tilde{A}^\top)(x-\tilde{x})+\tilde{x}=x-w_1 a_1-\tilde{w}_2\tilde{a}_2+\tilde{x},
+%\end{align*}
+%where $\tilde{w}_2=\frac{w_2-w_1(a_1^\top a_2)}{\|a_2-a_1(a_1^\top a_2)\|_2}$.
+Hence, the coordinate update of~\eqref{eq:3op-portfolio} is
+\begin{subequations}\label{eq:3op-portfolio2}
+\begin{align}
+x^k\in P_1:\ x_i^{k+1}= & \textstyle (1-\eta_k)x_i^k+\eta_k\max(0, x_i^k-\gamma q_i^\top x^k),\\
+x^k\in P_2:\  x_i^{k+1}= & \textstyle (1-\eta_k)x_i^k+\eta_kw_2^k(a_2)_i+\eta_k\max\left(0, \right.\nonumber\\
+&\textstyle \left.x_i^k-\gamma q_i^\top x^k-w_2^k(2(a_{2})_i-\gamma q_i^\top a_2)\right),\\
+x^k\in P_3:\ x_i^{k+1}= &\textstyle  (1-\eta_k)x_i^k+\eta_k\left(w_1^k (\tilde{a}_{1})_i+w_2^k(\tilde{a}_{2})_i\right)+\eta_k\max\left(0,\right.\nonumber\\
+&\textstyle \left.x_i^k-\gamma q_i^\top x^k-w_1^k (2(\tilde{a}_{1})_i-\gamma q_i^\top \tilde{a}_1)-{w}_2^k(2(\tilde{a}_{2})_i-\gamma q_i^\top \tilde{a}_2)\right),\\
+x^k\in P_4:\ x_i^{k+1}= &\textstyle  (1-\eta_k)x_i^k+\eta_k w_1^k(a_{1})_i+\eta_k\max\left(0, \right.\nonumber\\
+&\textstyle \left.x_i^k-\gamma q_i^\top x^k-w_1^k(2(a_{1})_i-\gamma q_i^\top a_1)\right),
+\end{align}
+\end{subequations}
+where $q_i$ is the $i$th column of $Q$. At each iteration, we select $i \in [m]$, and perform an update to $x_i$ according to~\eqref{eq:3op-portfolio2} based on where $x^k$ is. We then renew $w_j^{k+1}=w_j^k+a_{ij}(x_i^{k+1}-x_i^k), j=1,2$. Note that checking $x^k$ in some $P_j$ requires only $O(1)$ operations by using $w_1$ and $w_2$, so the coordinate update in \eqref{eq:3op-portfolio2} is inexpensive.
