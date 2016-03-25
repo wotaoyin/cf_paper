@@ -306,13 +306,13 @@ x-\eta(\nabla f(x)+A^\top s+2\gamma A^\top Ax-2\gamma A^\top b)
 %All the above schemes have provable convergence but we neglect them due to the purpose of this paper. The efficiency of the schemes are increasing from the first one to the last one since less and less information is discarded. When $m_j=1$ for every $j$, the second and the third scheme will be the same
 %\end{remark}
 \subsection{Overlapping-Block Coordinate Updates}\label{sec:overlap}
-{In the coordinate update scheme proposed in \S\ref{sec:pdcu}, updating $x_i$ involves computing $s^{k+1}$, because the variables   $x_i$'s and $s_j$'s are coupled through the matrix $A$. However, once $x_i^{k+1}$ is obtained, $s^{k+1}$  is discarded. It is not used to update $s$ or  cached for further use. This subsection introduces ways to utilize the otherwise wasted computation. %(see the proof of Proposition \ref{prop1}, item 1). 
+{In the coordinate update scheme based on \eqref{vucondat}, if we select $x_i$ to update then we must first compute $s^{k+1}$, because the variables   $x_i$'s and $s_j$'s are coupled through the matrix $A$. However, once $x_i^{k+1}$ is obtained, $s^{k+1}$  is discarded. It is not used to update $s$ or  cached for further use. This subsection introduces ways to utilize the otherwise wasted computation. %(see the proof of Proposition \ref{prop1}, item 1). 
 %Such wasteful effort is a result that  $x_i$'s and $s_j$'s are coupled through the matrix $A$.
 
 We define, for each $i$,  $\JJ(i)\subset [p]$ as the set of indices $ j$ such that $A^\top_{i,j}\neq 0$, and, for each $j$,  $\II(j)\subset [m]$ as the set of indices of $i$ such that $A^\top_{i,j}\neq 0$. We also let $m_j:=|\II(j)|$, and assume $m_j\neq 0,\forall j \in [p]$ without loss of generality.
 %otherwise we can simply delete the $j$th column of $A$ without affecting the solution of problem $\eqref{pdproblem}$.
 
-We arrange the coordinates of $z=[x;s]$ into $m$ (overlapping) blocks. The $i$th block consists of the coordinate $x_i$ and  $s_j$ for all $j\in\JJ(i)$. We propose a block coordinate update scheme based on~\eqref{vucondat}. Because the blocks overlap, the $s_j$ update is relaxed with parameters $\rho_{i,j}\ge 0$ (see~\eqref{pdoverlap} below) that satisfy  $\sum_{i\in \II(j)}\rho_{i,j}=1,~~\forall j \in [p],$ so that the aggregated effect is to update $s_j$ without scaling. (Following the
+We arrange the coordinates of $z=[x;s]$ into $m$ overlapping blocks. The $i$th block consists of the coordinate $x_i$ and  all $s_j$'s for $j\in\JJ(i)$. This way, each $s_j$ may appear in more than one block. We propose a block coordinate update scheme based on~\eqref{vucondat}. Because the blocks overlap, each $s_j$ may be updated in multiple blocks, so the $s_j$ update is relaxed with parameters $\rho_{i,j}\ge 0$ (see~\eqref{pdoverlap} below) that satisfy  $\sum_{i\in \II(j)}\rho_{i,j}=1,~~\forall j \in [p].$ The aggregated effect is to update $s_j$ without scaling. (Following the
 %Krasnosel'ski$\breve{\text{i}}$-Mann
 KM iteration~\cite{krasnosel1955two}, we can also assign a relaxation parameter $\eta_k$ for the $x_i$ update; then, the $s_j$ update should be relaxed with $\rho_{i,j}\eta_k$.)
 
@@ -340,7 +340,7 @@ The use of relaxation parameters $\rho_{i,j}$ makes our scheme different from th
 \end{remark}
 Following the assumptions and arguments in \S$\ref{sec:pdcu}$, if we maintain $Ax$, the cost for each block coordinate update is $O(p)+\nops{x}{\nabla_i f(x)}$, which is $O(\frac{1}{m}\nops{z}{\TVC z})$. Therefore the coordinate update scheme \eqref{pdoverlap} is computationally worthy.
 
-Typical choices of $\rho_{i,j}$ include: (1) one of the $\rho_{i,j}$'s is 1 for each $j$, others all equal to 0. This can be viewed as assigning $s_j$ fully to a block containing $x_i$.
+Typical choices of $\rho_{i,j}$ include: (1) one of the $\rho_{i,j}$'s is 1 for each $j$, others all equal to 0. This can be viewed as assigning  the update of $s_j$ fully to a block containing $x_i$.
 %\begin{equation}
 %\left\{
 %\begin{array}{l}
@@ -352,7 +352,7 @@ Typical choices of $\rho_{i,j}$ include: (1) one of the $\rho_{i,j}$'s is 1 for 
 %\end{array}
 %\right.
 %\end{equation}
-(2) $\rho_{i,j}=\frac{1}{m_j}$ for all $i\in\II(j)$.
+(2) $\rho_{i,j}=\frac{1}{m_j}$ for all $i\in\II(j)$. This approach averages the updates of $s_j$ over all related blocks.
 %\end{enumerate}
 %\begin{equation}
 %\left\{
