@@ -21,7 +21,7 @@ This subsection studies a few classes of CF operators and then formally defines 
 
 In the example below,  we let $A_{i,:}$ and $A_{:,j}$ be the $i$th row and $j$th column of a matrix $A$, respectively. Let $A^\top$ be the transpose of $A$ and $A^\top_{i,:}$ be $(A^\top)_{i,:}$, i.e., the $i$th row of the transpose of $A$.
 
-\begin{example}[least squares]\label{ex:lsq1}
+\begin{example}[least squares I]\label{ex:lsq1}
 Consider the least squares problem
 \begin{equation}
 \Min_{x} f(x):=\frac{1}{2} \|A x - b\|^2,\label{lsq}
@@ -49,8 +49,8 @@ $$\nops{x}{(\cT x)_i}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg).$$
 We can implement the coordinate update in Example~\ref{ex:lsq1} in a different manner by maintaining the result $\cT x^k$ in the memory. This approach works when $m=\Theta(p)$ or $p\gg m$. The full update~\eqref{eq:LSfull} is unchanged.
 At each coordinate update, from the maintained quantity $\cT x^k$, we immediately obtain $x_{i_k}^{k+1}=(\cT x^k )_{i_k}$. But we need to update $\cT x^k$ to $\cT x^{k+1}$.
 Since $x^{k+1}$ and $x^k$  differ only over  the coordinate $i_k$, this update can be computed as  
-$$\cT x^{k+1} =\cT x^k + (x^{k+1}_{i_k}-x^k_{i_k})(A^\top A)_{:,i_k},  $$
-which is a scalar-vector multiplication followed by a vector addition, taking only $O(m)$ operations. Computing $\cT x^{k+1}$ from scratch involves  a matrix-vector multiplication, taking $O(\nops{x}{\cT (x)})=O(m^2)$ operations. 
+$$\cT x^{k+1}=\cT x^k+x^{k+1}-x^k-\eta(x_{i_k}^{k+1}-x_{i_k}^k)(A^\top A)_{:,i_k} , $$
+which is a scalar-vector multiplication followed by vector addition, taking only $O(m)$ operations. Computing $\cT x^{k+1}$ from scratch involves  a matrix-vector multiplication, taking $O(\nops{x}{\cT (x)})=O(m^2)$ operations. 
 Therefore,
 $$\nops{\{ x^k,\cT x^k, x^{k+1}\}}{ \cT x^{k+1}}= O\bigg(\frac{1}{m}\DIFdelbegin  \nops{x^{k+1}}{\cT  x^{k+1}} \bigg).$$
 \end{example}
@@ -80,7 +80,7 @@ Combining Type-I and Type-II CF operators with the last example, we arrive at th
 %given any $x\in\HH$ and an arbitrary $i\in[m]$, the coordinate update from $x$ to $x^+$ where $x^+_i = (\cT x)_i$ and $x_{j}^+=x_{j}$ for $j\not=i$, satisfies
 \begin{equation}\label{op-cuf} \nops{\{x,\cM(x)\}}{\{x^+,\cM(x^+)\}}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg),
 \end{equation}
-where $\cM(x)$ is some quantity maintained in the memory to facilitate each coordinate update and refreshed to $\cM(x^+)$. $\cM(x)$ can be empty, i.e., besides $x$, no other varying quantity is maintained.
+where $\cM(x)$ is some quantity maintained in the memory to facilitate each coordinate update and refreshed to $\cM(x^+)$. $\cM(x)$ can be empty, i.e., except $x$, no other varying quantity is maintained.
 \end{definition}
 
 \cut{\begin{definition}[CF operator]
@@ -162,7 +162,7 @@ Another important subclass of CF operators are operators $\cT:\HH\to\HH$ where  
 \cut{We divide the operators into three categories base on the dependency of other coordinates when updating one coordinate.}
 \begin{itemize}
 \item \emph{separable operator:} $\cT\in\cC_1$ if, for any index $i$, there exists $\cT_i: \HH_i \rightarrow \HH_i$ such that $(\cT x)_i = \cT_i x_i$, that is,   $(\cT x)_i$ only depends on $x_i$.
-\item \emph{nearly-separable operator:} $\cT\in \cC_2$ if, for any index $i$, there exists $\cT_i$ and index set $I_i$ such that $(\cT x)_i = \cT_i(\{x_j\}_{j\in I_i})$ with $|I_i| \ll m$, that is, each $(\cT x)_i$ depends on a few  coordinates of $x$.
+\item \emph{nearly-separable operator:} $\cT\in \cC_2$ if, for any index $i$, there exists $\cT_i$ and index set $\mathbb{I}_i$ such that $(\cT x)_i = \cT_i(\{x_j\}_{j\in \mathbb{I}_i})$ with $|\mathbb{I}_i| \ll m$, that is, each $(\cT x)_i$ depends on a few  coordinates of $x$.
 \item \emph{non-separable operator:} $\cC_3:=\mathfrak{T}\setminus(\cC_1\cup \cC_2)$. If $\cT\in\cC_3$, there exists some  $i$ such that $(\cT x)_i$ depends on many coordinates of $x$.
 \end{itemize}
 \end{definition}
@@ -395,7 +395,7 @@ Consider for $a,x\in\RR^m$, $$f(x):=\frac{1}{2}\big(\max(0,1-\beta a^\top x)\big
 Let us maintain $\cM(x)=a^\top x$. For arbitrary $x$ and $i$,  let $$x^+_i:=(\cT x)_i=-\beta \max(0,1-\beta a^\top x) a_i$$ and $x^+_j:=x_j,\,\forall j\neq i$. Then, computing $x^+_i$ from $x$ and $a^\top x$ takes $O(1)$ (as $a^\top x$ is maintained), and computing $a^\top x^+$ from $x^+_i-x_i$ and $a^\top x$ costs $O(1)$. Formally, we have
 \begin{align*}
 &\nops{\{x,a^\top x\}}{\{x^+,a^\top x^+\}}\\
-=&\nops{\{x,a^\top x\}}{x^+}+\nops{\{a^\top x,x^+_i-x_i\}}{a^\top x^+}\\
+\le&\nops{\{x,a^\top x\}}{x^+}+\nops{\{a^\top x,x^+_i-x_i\}}{a^\top x^+}\\
 =&O(1)+O(1)=O(1).
 \end{align*}
 On the other hand, $\nops{x}{\cT x}=O(m)$. Therefore,~\eqref{op-cuf} holds, and $\cT$ defined in~\eqref{qhlossT} is CF.

@@ -44,11 +44,11 @@ There are many popular operator-splitting based algorithms, e.g., proximal gradi
 
 \subsection{Combinations of Operators}\label{sc:comb}
 We start by an example with numerous applications. It is a generalization of Example~\ref{ex:qhloss}.
-\begin{example}[scalar map pre-composing affine function]\label{exp:log-grad} Let $a_j\in \RR^m, b_j\in \RR$, and $\phi_j:\RR\to \RR$ be differentiable functions, $j \in [p]$. Let $$f(x)=\sum_{j=1}^p \phi_j(a_j^\top x +b_j).$$ Assume that evaluating $\phi'_j$ costs $O(1)$ for each $j$. Then, $\nabla f$ is CF. Indeed, let $$\cT_1 y:=A^\top y,\quad \cT_2 y := \Diag(\phi_1'(y_1),\ldots,\phi_p'(y_p)), \quad \cT_3 x := Ax+b,$$ 
-where $A=[a_1^\top; a_2^\top; \ldots,a_p^\top]\in \RR^{p\times m}$ and $b=[b_1;b_2;\ldots;b_p]\in\RR^{p\times 1}$. Then we have $\nabla f(x)= \cT_1\circ\cT_2\circ\cT_3 x$. For any $x$ and $i\in[m]$, let $x^+_i=\nabla_i f(x)$ and $x^+_j=x_j,\forall j\neq i$, and let $\cM(x):=\cT_3 x$. We can first compute $\cT_2\circ\cT_3 x$ from $\cT_3 x$ for $O(p)$ operations, then compute $\nabla_i f(x)$ and thus $x^+$ from $\{x, \cT_2\circ\cT_3 x\}$ for  $O(p)$ operations, and finally update the maintained $\cT_3 x$ to $\cT_3 x^+$ from $\{x, x^+,\cT_3 x\}$ for another $O(p)$ operations. Formally,
+\begin{example}[scalar map pre-composing affine function]\label{exp:log-grad} Let $a_j\in \RR^m, b_j\in \RR$, and $\phi_j:\RR\to \RR$ be differentiable functions, $j \in [p]$. Let $$f(x)=\sum_{j=1}^p \phi_j(a_j^\top x +b_j).$$ Assume that evaluating $\phi'_j$ costs $O(1)$ for each $j$. Then, $\nabla f$ is CF. Indeed, let $$\cT_1 y:=A^\top y,\quad \cT_2 y := [\phi_1'(y_1);\ldots;\phi_p'(y_p)], \quad \cT_3 x := Ax+b,$$ 
+where $A=[a_1^\top; a_2^\top; \ldots; a_p^\top]\in \RR^{p\times m}$ and $b=[b_1;b_2;\ldots;b_p]\in\RR^{p\times 1}$. Then we have $\nabla f(x)= \cT_1\circ\cT_2\circ\cT_3 x$. For any $x$ and $i\in[m]$, let $x^+_i=\nabla_i f(x)$ and $x^+_j=x_j,\forall j\neq i$, and let $\cM(x):=\cT_3 x$. We can first compute $\cT_2\circ\cT_3 x$ from $\cT_3 x$ for $O(p)$ operations, then compute $\nabla_i f(x)$ and thus $x^+$ from $\{x, \cT_2\circ\cT_3 x\}$ for  $O(p)$ operations, and finally update the maintained $\cT_3 x$ to $\cT_3 x^+$ from $\{x, x^+,\cT_3 x\}$ for another $O(p)$ operations. Formally,
 \begin{align*}
 &\nops{\{x,\cT_3 x\}}{\{x^+, \cT_3x^+\}}\cr
-=& \nops{\cT_3x}{\cT_2\circ\cT_3 x}+\nops {\{x,\cT_2\circ\cT_3 x\}}{x^+}+\nops{\{x,\cT_3 x, x^+\}}{\{\cT_3x^+\}}\cr
+\le& \nops{\cT_3x}{\cT_2\circ\cT_3 x}+\nops {\{x,\cT_2\circ\cT_3 x\}}{x^+}+\nops{\{x,\cT_3 x, x^+\}}{\{\cT_3x^+\}}\cr
 =& O(p) + O(p) +O(p)=O(p).\nonumber
 \end{align*}
 Since $\nops{x}{\nabla f(x)}=O(pm)$, therefore

@@ -22,7 +22,7 @@ The corresponding coordinate update is the following
 \end{array}
 \right.
 }\end{equation}
-where the step size can be taken to be $\gamma_i=\frac{1}{\|A_{:,i}\|^2}$. When $\nabla f$ is either cheap or easy-to-maintain,  the coordinate update in \eqref{update-nonlap-gl} is inexpensive.
+where $\nabla_i f(x^k)$ is the partial derivative of $f$ with respect to $x_i$ and the step size can be taken to be $\gamma_i=\frac{1}{\|A_{:,i}\|^2}$. When $\nabla f$ is either cheap or easy-to-maintain,  the coordinate update in \eqref{update-nonlap-gl} is inexpensive.
 
 \subsubsection*{Overlapping case~\cite{jacob2009group}} This case allows $\II_i\cap \II_j \neq\emptyset$ for some $i\neq j$, causing the evaluation of $\cJ_{\gamma\cT_1}$ to be generally difficult. However, we can apply the primal-dual update \eqref{vucondat} to this problem as
 \begin{subequations}\label{eq:pd-glasso}

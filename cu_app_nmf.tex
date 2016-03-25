@@ -1,6 +1,6 @@
 % !TEX root = ./amsa_main.tex
 \subsubsection{Nonnegative Matrix Factorization}
-Nonnegative matrix factorization (NMF) is an important dimension reduction method for nonnegative data. It was proposed by Paatero and his coworkers in \cite{paatero1994NMF}. Given a nonnegative matrix $A\in\RR^{p\times n}_+$, NMF aims at finding two nonnegative matrices $W\in\RR^{p\times r}_+$ and $H\in\RR^{n\times r}_+$ such that $WH^\top\approx A$, where $r$ is user-specified depending on the applications, and usually $r\ll \min(p,n)$. A widely used model is
+Nonnegative Matrix Factorization (NMF) is an important dimension reduction method for nonnegative data. It was proposed by Paatero and his coworkers in \cite{paatero1994NMF}. Given a nonnegative matrix $A\in\RR^{p\times n}_+$, NMF aims at finding two nonnegative matrices $W\in\RR^{p\times r}_+$ and $H\in\RR^{n\times r}_+$ such that $WH^\top\approx A$, where $r$ is user-specified depending on the applications, and usually $r\ll \min(p,n)$. A widely used model is
 \begin{equation}\label{eq:nmf}
 \begin{aligned}
 &\Min_{W,H}F(W,H):=\frac{1}{2}\|WH^\top-A\|_F^2, \\
@@ -21,9 +21,9 @@ Partitioning the variables into $2r$ block coordinates: $(w_1, \ldots, w_r, h_1,
 {\left\{
 \begin{array}{l}
 \text{if $w_{i_k}$  is chosen for some $i_k \in [r]$, then compute}\\
-\qquad w_{i_k}^{k+1}=\max\big(0, w_{i_k}^k-\eta_k\nabla_{w_{i_k}} F(W^k, H^k)\big) \\
+\qquad w_{i_k}^{k+1}=\max\big(0, w_{i_k}^k-\eta_k\nabla_{w_{i_k}} F(W^k, H^k)\big); \\
 \text{if $h_{i_k-r}$  is chosen for some $i_k \in \{r+1, ..., 2r\}$, then compute}\\
-\qquad h_{i_k-r}^{k+1}=\max\big(0, h_{i_k-r}^k-\eta_k \nabla_{h_{i_k-r}} F(W^k, H^k) \big) 
+\qquad h_{i_k-r}^{k+1}=\max\big(0, h_{i_k-r}^k-\eta_k \nabla_{h_{i_k-r}} F(W^k, H^k) \big). 
 \end{array}
 \right.
 }\end{equation}
