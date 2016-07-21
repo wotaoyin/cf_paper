@@ -65,7 +65,9 @@ The operators $\cT_2$ and $\cT_3$ in the above example are prototypes of \emph{c
 
 \begin{definition}[easy-to-maintain operator]
 %If $\cT$ maps from $\HH$ to a different space $\GG$ and it satisfies~\eqref{op-cuf2}, we call it
-For a composite operator $\cT=\cT_1 \circ\cdots \circ \cT_p$, an operator $\cT_j:\HH\to\GG$ is \emph{easy-to-maintain}, if for any $x,i,x^+$ satisfying~\eqref{singleupdate}, $\nops{\{ x,\cT_j x, x^+\}}{\cT_j x^+}$ is less than or equal to the number of remaining coordinate-update operations, in order of magnitude, \emph{or} belongs to $O(\frac{1}{\dim \GG}\nops{x^+}{\cT x^+})$.
+For a composite operator $\cT=\cT_1 \circ\cdots \circ \cT_p$, %an operator $\cT_j:\HH\to\GG$ is \emph{easy-to-maintain}, if for any $x,i,x^+$ satisfying~\eqref{singleupdate}, $\nops{\{ x,\cT_j x, x^+\}}{\cT_j x^+}$
+the operator $\cT_p:\HH\to\GG$ is \emph{easy-to-maintain}, if for any $x,i,x^+$ satisfying~\eqref{singleupdate}, $\nops{\{ x,\cT_p x, x^+\}}{\cT_p x^+}$
+is less than or equal to the number of remaining coordinate-update operations, in order of magnitude, \emph{or} belongs to $O(\frac{1}{\dim \GG}\nops{x^+}{\cT x^+})$.
 \end{definition}
 \cut{\begin{example}[projection to the Euclidean ball]\label{ex:projball}
 Let $B_2=\{x\in\RR^m:\|x\|_2\leq r\}$ and $$\cT x:=\prj_{B_2}(x).$$ By definition, %$\cT(x)=\argmin_y \{\|y-x\|_2:\|y\|_2\le r\}$
