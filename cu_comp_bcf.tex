@@ -44,15 +44,15 @@ There are many popular operator-splitting based algorithms, e.g., proximal gradi
 
 \subsection{Combinations of Operators}\label{sc:comb}
 We start by an example with numerous applications. It is a generalization of Example~\ref{ex:qhloss}.
-\begin{example}[scalar map pre-composing affine function]\label{exp:log-grad} Let $a_j\in \RR^m, b_j\in \RR$, and $\phi_j:\RR\to \RR$ be differentiable functions, $j \in [p]$. Let $$f(x)=\sum_{j=1}^p \phi_j(a_j^\top x +b_j).$$ Assume that evaluating $\phi'_j$ costs $O(1)$ for each $j$. Then, $\nabla f$ is CF. Indeed, let $$\cT_1 y:=A^\top y,\quad \cT_2 y := \Diag(\phi_1'(y_1),\ldots,\phi_p'(y_p)), \quad \cT_3 x := Ax+b,$$ 
-where $A=[a_1^\top; a_2^\top; \ldots,a_p^\top]\in \RR^{p\times m}$ and $b=[b_1;b_2;\ldots;b_p]\in\RR^{p\times 1}$. Then we have $\nabla f(x)= \cT_1\circ\cT_2\circ\cT_3 x$. For any $x$ and $i\in[m]$, let $x^+_i=\nabla_i f(x)$ and $x^+_j=x_j,\forall j\neq i$, and let $\cM(x):=\cT_3 x$. We can first compute $\cT_2\circ\cT_3 x$ from $\cT_3 x$ for $O(p)$ operations, then compute $\nabla_i f(x)$ and thus $x^+$ from $\{x, \cT_2\circ\cT_3 x\}$ for  $O(p)$ operations, and finally update the maintained $\cT_3 x$ to $\cT_3 x^+$ from $\{x, x^+,\cT_3 x\}$ for another $O(p)$ operations. Formally,
+\begin{example}[scalar map pre-composing affine function]\label{exp:log-grad} Let $a_j\in \RR^m, b_j\in \RR$, and $\phi_j:\RR\to \RR$ be differentiable functions, $j \in [p]$. Let $$f(x)=\sum_{j=1}^p \phi_j(a_j^\top x +b_j).$$ Assume that evaluating $\phi'_j$ costs $O(1)$ for each $j$. Then, $\nabla f$ is CF. Indeed, let $$\cT_1 y:=A^\top y,\quad \cT_2 y := [\phi_1'(y_1);\ldots;\phi_p'(y_p)], \quad \cT_3 x := Ax+b,$$
+where $A=[a_1^\top; a_2^\top; \ldots; a_p^\top]\in \RR^{p\times m}$ and $b=[b_1;b_2;\ldots;b_p]\in\RR^{p\times 1}$. Then we have $\nabla f(x)= \cT_1\circ\cT_2\circ\cT_3 x$. For any $x$ and $i\in[m]$, let $x^+_i=\nabla_i f(x)$ and $x^+_j=x_j,\forall j\neq i$, and let $\cM(x):=\cT_3 x$. We can first compute $\cT_2\circ\cT_3 x$ from $\cT_3 x$ for $O(p)$ operations, then compute $\nabla_i f(x)$ and thus $x^+$ from $\{x, \cT_2\circ\cT_3 x\}$ for  $O(p)$ operations, and finally update the maintained $\cT_3 x$ to $\cT_3 x^+$ from $\{x, x^+,\cT_3 x\}$ for another $O(p)$ operations. Formally,
 \begin{align*}
 &\nops{\{x,\cT_3 x\}}{\{x^+, \cT_3x^+\}}\cr
-=& \nops{\cT_3x}{\cT_2\circ\cT_3 x}+\nops {\{x,\cT_2\circ\cT_3 x\}}{x^+}+\nops{\{x,\cT_3 x, x^+\}}{\{\cT_3x^+\}}\cr
+\le& \nops{\cT_3x}{\cT_2\circ\cT_3 x}+\nops {\{x,\cT_2\circ\cT_3 x\}}{x^+}+\nops{\{x,\cT_3 x, x^+\}}{\{\cT_3x^+\}}\cr
 =& O(p) + O(p) +O(p)=O(p).\nonumber
 \end{align*}
 Since $\nops{x}{\nabla f(x)}=O(pm)$, therefore
-$\nabla f= \cT_1\circ\cT_2\circ\cT_3$ is CF. 
+$\nabla f= \cT_1\circ\cT_2\circ\cT_3$ is CF.
 
 If $p=m$, $\cT_1,\cT_2,\cT_3$ all map from $\RR^m$ to $\RR^m$. Then, it is easy to check that $\cT_1$ is Type-I CF, $\cT_2$ is separable, and $\cT_3$ is Type-II CF. The last one is crucial since not maintaining $\cT_3 x$ would disqualify $\cT$ from CF. Indeed, to obtain $(\cT x)_i$, we must multiply $A_i^\top$ to all the entries of $\cT_2\circ\cT_3 x$, which in turn needs all the entries of $\cT_3 x$, computing which from scratch would cost $O(pm)$.
 
@@ -64,8 +64,10 @@ The operators $\cT_2$ and $\cT_3$ in the above example are prototypes of \emph{c
 \end{definition}
 
 \begin{definition}[easy-to-maintain operator]
-%If $\cT$ maps from $\HH$ to a different space $\GG$ and it satisfies~\eqref{op-cuf2}, we call it 
-For a composite operator $\cT=\cT_1 \circ\cdots \circ \cT_p$, an operator $\cT_j:\HH\to\GG$ is \emph{easy-to-maintain}, if for any $x,i,\delta_i,x^+$ satisfying~\eqref{singleupdate}, $\nops{\{ x,\cT_j x, x^+\}}{\cT_j x^+}$ is less than or equal to the number of remaining coordinate-update operations, in order of magnitude, \emph{or} belongs to $O(\frac{1}{\dim \GG}\nops{x^+}{\cT x^+})$.  
+%If $\cT$ maps from $\HH$ to a different space $\GG$ and it satisfies~\eqref{op-cuf2}, we call it
+For a composite operator $\cT=\cT_1 \circ\cdots \circ \cT_p$, %an operator $\cT_j:\HH\to\GG$ is \emph{easy-to-maintain}, if for any $x,i,x^+$ satisfying~\eqref{singleupdate}, $\nops{\{ x,\cT_j x, x^+\}}{\cT_j x^+}$
+the operator $\cT_p:\HH\to\GG$ is \emph{easy-to-maintain}, if for any $x,i,x^+$ satisfying~\eqref{singleupdate}, $\nops{\{ x,\cT_p x, x^+\}}{\cT_p x^+}$
+is less than or equal to the number of remaining coordinate-update operations, in order of magnitude, \emph{or} belongs to $O(\frac{1}{\dim \GG}\nops{x^+}{\cT x^+})$.
 \end{definition}
 \cut{\begin{example}[projection to the Euclidean ball]\label{ex:projball}
 Let $B_2=\{x\in\RR^m:\|x\|_2\leq r\}$ and $$\cT x:=\prj_{B_2}(x).$$ By definition, %$\cT(x)=\argmin_y \{\|y-x\|_2:\|y\|_2\le r\}$
@@ -155,10 +157,10 @@ Case & $\cT_1\in$ & $\cT_2\in$ & $~(\cT_1\circ\cT_2)\in ~$& Example\\\hline\hlin
 %When we consider whether an operator is coordinate update friendly or not, we only have to consider the more complicate operator if the computation
 %\end{remark}
 
-Next, we discuss how $\cT_1\circ \cT_2$ inherits the CF properties from $\cT_1$ and $\cT_2$. For simplicity, we only use matrix-vector multiplication as examples to illustrate the ideas; more interesting examples will be given later.%where at least one operator in the composition is non-separable. 
+Next, we discuss how $\cT_1\circ \cT_2$ inherits the CF properties from $\cT_1$ and $\cT_2$. For simplicity, we only use matrix-vector multiplication as examples to illustrate the ideas; more interesting examples will be given later.%where at least one operator in the composition is non-separable.
 \begin{itemize}
 
-\item If $\cT_1$ is separable or nearly-separable ($\cC_1\cup\cC_2$), then as long as $\cT_2$ is CF ($\cF$), $\cT_1\circ\cT_2$ remains CF. In addition, if $\cT_2$ is Type-I CF ($\cF_1$), so is $\cT_1\circ\cT_2$. 
+\item If $\cT_1$ is separable or nearly-separable ($\cC_1\cup\cC_2$), then as long as $\cT_2$ is CF ($\cF$), $\cT_1\circ\cT_2$ remains CF. In addition, if $\cT_2$ is Type-I CF ($\cF_1$), so is $\cT_1\circ\cT_2$.
 \begin{example}\label{exp:sp-dens}
 Let $A\in\RR^{m\times m}$ be \emph{sparse} and $B\in\RR^{m\times m}$ \emph{dense}. Then $\cT_1 x=Ax$ is nearly-separable and $\cT_2 x=Bx$ is Type-I CF\footnote{For this example, one can of course pre-compute $AB$ and claim that $(\cT_1\circ\cT_2)$ is Type-I CF. Our arguments keep $A$ and $B$ separate and only use the nearly-separability of $\cT_1$ and Type-I CF property of $\cT_2$, so our result holds for any such composition even when $\cT_1$ and $\cT_2$ are nonlinear.}.  For any $i$, let $\II_i$ index the set of nonzeros on the $i$th row of $A$. We first compute $(Bx)_{\II_i}$, which costs $O(|\II_i|m)$, and then $a_{i,\II_i} (Bx)_{\II_i}$, which costs $O(|\II_i|)$, where $a_{i,\II_i}$ is formed by the nonzero entries on the $i$th row of $A$. Assume $O(|\II_i|)=O(1),\,\forall i$. We have, from the above discussion, that $\nops{x}{(\cT_1\circ\cT_2 x)_i}=O(m)$,
 while $\nops{x}{\cT_1\circ\cT_2 x}=O(m^2)$. Hence, $\cT_1\circ\cT_2$ is Type-I CF.
@@ -172,7 +174,7 @@ Note that, if $\cT_2$ is nearly-separable, we do not always have CF properties f
 
 \item Assume that $\cT_1$ is Type-I CF ($\cF_1$). If $\cT_2$ is Type-II CF ($\cF_2$), then $\cT_1\circ\cT_2$ is CF ($\cF$).
 \begin{example}\label{den-den}
-Let $A,B\in\RR^{m\times m}$ be dense. Then $\cT_1 x=Ax$ is Type-I CF and $\cT_2 x=Bx$ Type-II CF (by maintaining $Bx$; see {Example \ref{ex:lsq2}}). For any $x$ and $i$, let $x^+$ satisfy~\eqref{singleupdate}. Maintaining $\cT_2 x$, we can compute $(\cT_1\circ\cT_2 x)_j$ for $O(m)$ operations for any $j$ and update $\cT_2 x^+$ for $O(m)$ operations. On the other hand, computing $\cT_1\circ\cT_2 x^+$ without maintaining $\cT_2 x$ takes $O(m^2)$ operations. 
+Let $A,B\in\RR^{m\times m}$ be dense. Then $\cT_1 x=Ax$ is Type-I CF and $\cT_2 x=Bx$ Type-II CF (by maintaining $Bx$; see {Example \ref{ex:lsq2}}). For any $x$ and $i$, let $x^+$ satisfy~\eqref{singleupdate}. Maintaining $\cT_2 x$, we can compute $(\cT_1\circ\cT_2 x)_j$ for $O(m)$ operations for any $j$ and update $\cT_2 x^+$ for $O(m)$ operations. On the other hand, computing $\cT_1\circ\cT_2 x^+$ without maintaining $\cT_2 x$ takes $O(m^2)$ operations.
 \end{example}
 
 %\item Consider the case where $\cT_1$ is non-separable.  There are two sub-cases. (a): If $\cT_1$ is CF, then if $\cT_2$ is separable and we maintain $\cT_2 x$, $\cT_1\circ \cT_2$ remains CF. Indeed, suppose that $x$ changes to $\tilde x = x+\eta e_i$. Then, only one coordinate of $\cT_2 x$ becomes different, allowing a quick update to $\cT \tilde x=\cT_1(\cT_2 \tilde x)$. (b): If $\cT_1$ is Type-I CF, then \emph{only if} $\cT_2$ is easy-to-compute, does $\cT=\cT_1\circ \cT_2$ remain CF; see Cases 6 and 7 in Table \ref{table:comp-op}. \cut{If $\cT_1 y = Ay+b$ (which is CF) where $\cA\in\RR^{m\times m}$, then \emph{only if} $\cT_2$ is  easy-to-update or is easy-to-compute (specifically, $\nops{x}{T_2x}\le O(m)$), is $\cT=\cT_1\circ \cT_2$ remain CF. Indeed, since $(\cT x)_i = a_i^\top (\cT_2 x)+b_i$, we must be able to update $\cT_2 x$ or compute it quickly.}
@@ -183,7 +185,7 @@ Let $A,B\in\RR^{m\times m}$ be dense. Then $\cT_1 x=Ax$ is Type-I CF and $\cT_2 
 We will see more examples of the above cases in the rest of the paper.
 \cut{
 \rev{\subsection{Demonstration with Logistic Regression}
-In this subsection, we compare the efficiency of three coordinate update schemes (cyclic, cyclic permutation, and random) with the full gradient descent method for solving the regularized logistic regression problem 
+In this subsection, we compare the efficiency of three coordinate update schemes (cyclic, cyclic permutation, and random) with the full gradient descent method for solving the regularized logistic regression problem
 \begin{equation}\label{eqn:l2_log}
 \Min_{x} \frac{\lambda}{2} \|x\|_2^2 + \sum_{i = 1}^p \log\left(1 + \exp(- b_i \cdot a_i^\top x)\right).
 \end{equation}
@@ -191,11 +193,11 @@ The goal of this experiment is to show the efficiency of the coordinate update m
 \begin{equation}\label{eqn:gd_for_log_loss}
 x^{k+1} = x^k - \eta_k \left(\lambda  x^k + \sum_{i = 1}^p \frac{-b_i}{1 + \exp{(b_i \cdot a_i^\top  x^k)}} a_i\right),
 \end{equation}
-where $\eta_k$ is the step size. The update~\eqref{eqn:gd_for_log_loss} can be treated as a combination of the four operators ($\cI, A, A^\top, \cT$), i.e., 
+where $\eta_k$ is the step size. The update~\eqref{eqn:gd_for_log_loss} can be treated as a combination of the four operators ($\cI, A, A^\top, \cT$), i.e.,
 \begin{equation}\label{eqn:log-reg-update}
 x^{k + 1} = (1 - \lambda \eta_k) \cI x^k + \eta_k A^\top \circ \cT \circ A x^k,
 \end{equation}
-where $\cT(y) = (\frac{b_1}{1 + \exp(b_1 \cdot y_1)}, ..., \frac{b_p}{1 + \exp(b_p \cdot y_p)})^\top$ and $A = (a_1,  ..., a_p)^\top \in \RR^{p \times m}$. As explained in Example \ref{exp:log-grad}, the update~\eqref{eqn:log-reg-update} is CF if $Ax^k$ is maintained. It is worth mentioning that greedy coordinate update with Gauss-Southwell rule is not an efficient choice for solving~\eqref{eqn:l2_log}, since the complexity of computing the scores is $O(mp)$ even though $Ax^k$ is maintained. We test~\eqref{eqn:log-reg-update} with $A$ and $x$ generated with standard normal distribution, and $b = \sign (Ax)$. We set $m = p = 100$, and set $\lambda = 0$ and $\lambda = 1$ for the first and the second experiment respectively. When $\lambda = 0$, the objective is convex, but not strongly convex, so Figure \ref{fig:log_a} shows that all of the methods converge with sublinear rate. When $\lambda = 1$, the objective function is strongly convex, all methods converge with linear rate as shown in Figure \ref{fig:log_b}. In both scenarios, coordinate update methods converge faster than the full gradient descent method. 
+where $\cT(y) = (\frac{b_1}{1 + \exp(b_1 \cdot y_1)}, ..., \frac{b_p}{1 + \exp(b_p \cdot y_p)})^\top$ and $A = (a_1,  ..., a_p)^\top \in \RR^{p \times m}$. As explained in Example \ref{exp:log-grad}, the update~\eqref{eqn:log-reg-update} is CF if $Ax^k$ is maintained. It is worth mentioning that greedy coordinate update with Gauss-Southwell rule is not an efficient choice for solving~\eqref{eqn:l2_log}, since the complexity of computing the scores is $O(mp)$ even though $Ax^k$ is maintained. We test~\eqref{eqn:log-reg-update} with $A$ and $x$ generated with standard normal distribution, and $b = \sign (Ax)$. We set $m = p = 100$, and set $\lambda = 0$ and $\lambda = 1$ for the first and the second experiment respectively. When $\lambda = 0$, the objective is convex, but not strongly convex, so Figure \ref{fig:log_a} shows that all of the methods converge with sublinear rate. When $\lambda = 1$, the objective function is strongly convex, all methods converge with linear rate as shown in Figure \ref{fig:log_b}. In both scenarios, coordinate update methods converge faster than the full gradient descent method.
 \begin{figure}[!htbp] \centering
     \begin{subfigure}[b]{0.48\linewidth}
         \includegraphics[width=50mm]{./figs/log_randn_matrix_lambda_0_cropped.pdf}

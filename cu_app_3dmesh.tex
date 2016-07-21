@@ -3,7 +3,7 @@ Following an example in~\cite{repetti2015random}, we consider a 3D mesh describe
 \begin{equation}
 \Min_{x} ~\sum_{i=1}^n f_i(x_i)+\sum_{i=1}^n g_i(x_i)+\sum_{i} \sum_{j\in \cV_{i}} h_{i,j}(x_{i}-x_{j}),
 \end{equation}
-where $f_i$'s are differentiable data fidelity terms, $g_i$'s are box constraints, and $\sum_{i} \sum_{j\in \cV_{i}}h_{i,j}(x_{i}-x_{j})$ is the total variation on the mesh.
+where $f_i$'s are differentiable data fidelity terms, $g_i$'s are the indicator functions of box constraints, and $\sum_{i} \sum_{j\in \cV_{i}}h_{i,j}(x_{i}-x_{j})$ is the total variation on the mesh.
 
 We introduce a dual variable $s$ with coordinates $s_{i,j}$, for all ordered pairs of adjacent nodes $(i,j)$, and, based on the overlapping-block coordinate updating scheme $\eqref{pdoverlap}$, perform coordinate update:
 \begin{equation}
