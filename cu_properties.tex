@@ -77,7 +77,7 @@ Combining Type-I and Type-II CF operators with the last example, we arrive at th
 
 \begin{definition}[CF operator]
 We say that an operator $\cT:\HH\to\HH$ is \emph{CF} if, for any $i,x$ and $x^+:=\big(x_1,\ldots,(\cT x)_i,\ldots,x_m\big)$,
-%for any $x,i,\delta_i,x^+$ satisfying~\eqref{singleupdate}, 
+%for any $x,i,\delta_i,x^+$ satisfying~\eqref{singleupdate},
 the following holds
 %given any $x\in\HH$ and an arbitrary $i\in[m]$, the coordinate update from $x$ to $x^+$ where $x^+_i = (\cT x)_i$ and $x_{j}^+=x_{j}$ for $j\not=i$, satisfies
 \begin{equation}\label{op-cuf} \nops{\{x,\cM(x)\}}{\{x^+,\cM(x^+)\}}= O\bigg(\frac{1}{m}\nops{x}{\cT x}\bigg),
@@ -266,7 +266,7 @@ Here, $\prox_{\gamma f} (x)$ ($\gamma >0$) is the \emph{proximal operator} that 
 \begin{example}[projection to box constraints]\label{exp:proj-box}
 %\commwy{Please move this example to below $\cC_1$. Use the box constraint example instead of $\ell_\infty$ ball since the latter is a special example. Also, please add a proposition that $\cC_1\cup\cC_2\subset\cE$, which is obvious.}
 Consider the ``box" set $B:=\{x:a_i\leq x_i\leq b_i,~i \in [m]\}\subset\RR^m$. Then, the projection operator $\prj_{B}$ is separable. Indeed,
-$$\big(\prj_{B}(x)\big)_i=\max(b_i,\,\min(a_i,\, x_i)).$$
+$$\big(\prj_{B}(x)\big)_i=\min(b_i,\,\max(a_i,\, x_i)).$$
 %\begin{equation}
 %\big(\prj_{B}(x)\big)_i =
 %\left\{
